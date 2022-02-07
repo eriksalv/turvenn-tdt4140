@@ -10,6 +10,7 @@ cache:
 
 stages:
   - build
+  - test_frontend
 
 build:
   stage: build
@@ -17,3 +18,10 @@ build:
     - "cd frontend; yarn install"
     - "cd .."
     - "cd backend; yarn install"
+
+test_frontend:
+  stage: test_frontend
+  needs: [build]
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  script:
+    - "cd frontend; yarn test"
