@@ -4,6 +4,7 @@ services:
   - postgres:14.1
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - frontend/node_modules/
     - backend/node_modules/
