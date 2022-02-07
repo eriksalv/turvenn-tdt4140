@@ -1,3 +1,9 @@
+[![pipeline status](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/badges/master/pipeline.svg)](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/-/commits/master) 
+
+
+[![coverage report](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/badges/master/coverage.svg)](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/master)
+
+
 # Gruppe 57
 
 ## Frontend
