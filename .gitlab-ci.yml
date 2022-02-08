@@ -25,4 +25,4 @@ test_frontend:
   needs: [build]
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   script:
-    - "cd frontend; yarn test --coverage"
+    - "cd frontend; yarn install; yarn test --coverage"
