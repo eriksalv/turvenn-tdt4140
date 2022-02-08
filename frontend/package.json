@@ -20,7 +20,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\" --config",
+    "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
     "format:write": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\""
   },
   "browserslist": {
