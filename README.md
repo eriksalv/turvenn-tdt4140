@@ -1,7 +1,7 @@
-[![pipeline status](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/badges/master/pipeline.svg)](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/-/commits/master) 
+[![pipeline status](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/badges/main/pipeline.svg)](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/-/commits/main) 
 
 
-[![coverage report](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/badges/master/coverage.svg)](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/master)
+[![coverage report](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/badges/main/coverage.svg)](https://gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-4/gruppe_57/turvenn/main)
 
 
 # Gruppe 57
