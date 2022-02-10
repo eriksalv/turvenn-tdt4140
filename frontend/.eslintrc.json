@@ -1,0 +1,19 @@
+{
+  "env": {
+    "es6": true,
+    "es2021": true,
+    "jest/globals": true,
+    "browser": true
+  },
+  "extends": ["airbnb", "plugin:react/recommended", "prettier"],
+  "plugins": ["jest", "prettier"],
+  "rules": {
+    "prettier/prettier": "warn",
+    "no-unused-vars": "warn",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-console": "off",
+    "func-names": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off"
+  }
+}
