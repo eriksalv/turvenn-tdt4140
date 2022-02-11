@@ -6,7 +6,7 @@
   "author": "Andreas Netteland",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon -L  server.js",
     "db:migrate": "docker exec backend sequelize db:migrate",
     "db:migrate:undo:all": "docker exec backend sequelize db:migrate:undo:all",
     "lint": "eslint .",
