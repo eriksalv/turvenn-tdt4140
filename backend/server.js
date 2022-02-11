@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyparser = require('body-parser');
-const Sequelize = require('sequelize');
-const config = require('./config/config.json').development;
+const { sequelize } = require('./models');
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
-exports.sequelize = sequelize;
+// const main = async () => {
+//   await sequelize.sync();
+// };
+
+// main();
 
 sequelize
   .authenticate()
@@ -14,8 +16,6 @@ sequelize
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
   });
-
-console.log('Det funker nå?');
 
 const app = express();
 const PORT = 4000;
