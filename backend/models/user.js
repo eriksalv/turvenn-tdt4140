@@ -1,5 +1,7 @@
 'use strict';
 
+// Add validations in model files
+
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -15,12 +17,21 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
-      email: { type: DataTypes.STRING, primaryKey: true, unique: true }
+      firstName: { type: DataTypes.STRING, allowNull: false },
+      lastName: { type: DataTypes.STRING, allowNull: false },
+      email: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false,
+        validate: {
+          isEmail: true
+        }
+      },
+      password: DataTypes.STRING
     },
     {
       sequelize,
+      tableName: 'users',
       modelName: 'User'
     }
   );
