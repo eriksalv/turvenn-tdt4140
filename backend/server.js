@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyparser = require('body-parser');
+const config = require('./config/config.json').development;
+
+export const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 const app = express();
 const PORT = 4000;
@@ -7,7 +10,7 @@ const PORT = 4000;
 app.use(bodyparser.json({ limit: '50mb' }));
 app.use(bodyparser.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
+app.use('/user', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', req.header('Origin'));
   res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Headers', 'content-type');
@@ -16,7 +19,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.send({ status: 'ok' });
+  res.status(200).send({ status: 'ok' });
 });
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
