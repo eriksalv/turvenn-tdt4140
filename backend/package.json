@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon server.js",
+    "db:migrate": "docker exec backend sequelize db:migrate",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
