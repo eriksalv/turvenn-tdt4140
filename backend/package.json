@@ -8,6 +8,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "db:migrate": "docker exec backend sequelize db:migrate",
+    "db:migrate:undo:all": "docker exec backend sequelize db:migrate:undo:all",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
