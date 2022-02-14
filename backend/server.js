@@ -2,20 +2,7 @@ const express = require('express');
 const bodyparser = require('body-parser');
 const { sequelize } = require('./models');
 
-// const main = async () => {
-//   await sequelize.sync();
-// };
-
-// main();
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch((error) => {
-    console.error('Unable to connect to the database:', error);
-  });
+const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = 4000;
@@ -39,4 +26,14 @@ app.get('/', (req, res) => {
   res.status(200).send({ status: 'ok' });
 });
 
-app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
+app.use(errorHandler);
+
+sequelize
+  .authenticate()
+  .then(() => {
+    app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
+    console.log('Connection has been established successfully.');
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error);
+  });

@@ -8,8 +8,6 @@ const login = async (userData) => {
     localStorage.setItem('user', JSON.stringify(res.data));
   }
 
-  console.log(res);
-
   return res.data;
 };
 
