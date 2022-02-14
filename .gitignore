@@ -2,4 +2,8 @@ frontend/node_modules
 backend/node_modules
 coverage
 .env
+<<<<<<< HEAD
 /frontend/target/npmlist.json
+=======
+target
+>>>>>>> e42f1eb23b914a26c5a12dd7bc9da52dd3418384

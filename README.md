@@ -39,3 +39,32 @@ For å installere node og npm, se nodejs.org.
 Etter disse er installert, kan du installere yarn med å skrive `npm i -g yarn` i terminalen/powershell.
 
 Til slutt kan du da installere modulene med å skrive `yarn` også i terminal/powershell.
+
+## Formattering og kodekvalitet
+
+Til formattering og kodekvalitet brukes henholdsvis Prettier og ESLint.
+
+### Formatter kode
+
+`
+yarn format:write
+`
+
+### Sjekk kodekvalitet
+
+`
+yarn lint
+`
+
+Anbefaler også å installere eslint og prettier extensions i VSCode, og sette formatOnSave instillingen til true i VSCode.
+
+- https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+- https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+
+### I settings.json
+
+```javascript
+"editor.formatOnSave": true
+```
+
+

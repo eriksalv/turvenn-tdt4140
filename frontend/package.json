@@ -17,13 +17,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
+    "format:write": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\""
   },
   "browserslist": {
     "production": [
@@ -41,7 +39,17 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "babel-jest": "^27.5.0",
+    "eslint": "8.2.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-jest": "^26.1.0",
+    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "7.28.0",
+    "eslint-plugin-react-hooks": "4.3.0",
     "jest": "^27.5.0",
+    "prettier": "^2.5.1",
     "react-test-renderer": "^17.0.2"
   }
 }
