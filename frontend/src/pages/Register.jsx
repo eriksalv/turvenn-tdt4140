@@ -1,15 +1,18 @@
+import { TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { register } from "../features/auth/authSlice";
 
 function Register() {
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmedPassword: "",
   });
 
-  const { email, password, confirmedPassword } = formData;
+  const { firstName, lastName, email, password, confirmedPassword } = formData;
 
   const dispatch = useDispatch();
 
@@ -35,31 +38,48 @@ function Register() {
     <main>
       <h1>Bli en Turvenn: {message}</h1>
       <form onSubmit={onSubmit}>
-        <label htmlFor="email">Epost</label>
-        <input
-          type="text"
-          value={email}
-          id="email"
-          name="email"
-          onChange={onChange}
-        />
-        <label htmlFor="password">Passord</label>
-        <input
-          type="password"
-          value={password}
-          id="password"
-          name="password"
-          onChange={onChange}
-        />
-        <label htmlFor="confirmedPassword">Bekreft Passord</label>
-        <input
-          type="password"
-          value={confirmedPassword}
-          id="confirmedPassword"
-          name="confirmedPassword"
-          onChange={onChange}
-        />
-        <button>Registrer deg</button>
+        <div className="info">
+          <TextField 
+            label="Fornavn" 
+            variant="filled" 
+            required
+            value={firstName}
+            />
+          <TextField 
+            label="Etternavn" 
+            variant="filled" 
+            required
+            value={lastName}
+            />
+          <TextField 
+            label="Email" 
+            variant="filled" 
+            type="email" 
+            required
+            value={email}
+            />
+          <TextField 
+            label="Passord" 
+            variant="filled" 
+            type="password" 
+            required
+            value={password}
+            />
+          <TextField 
+          label="Bekreft passord" 
+          variant="filled" 
+          type="password" 
+          required
+          value={confirmedPassword}/>
+        </div>
+        
+        
+        
+        <div className="Register">
+          <button type="submit" variant="contained" color="primary">
+            Registrer deg
+          </button>
+        </div>
       </form>
     </main>
   );
