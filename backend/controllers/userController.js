@@ -26,7 +26,8 @@ const registerUser = asyncHandler(async (req, res) => {
         email: newUser.email,
         firstName: newUser.firstName,
         lastName: newUser.lastName
-      }
+      },
+      token: 'some token'
     });
   } catch (error) {
     console.log(error);
@@ -51,14 +52,13 @@ const loginUser = asyncHandler(async (req, res) => {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName
-        }
+        },
+        token: 'some token'
       })
     }
     else {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-
-
   } catch (error) {
     console.log(error);
     res.status(401).json(error);
