@@ -1,4 +1,6 @@
-import { TextField } from "@mui/material";
+import { inputUnstyledClasses } from "@mui/base";
+import { TextField, Grid, Paper, Avatar, Button } from "@mui/material";
+import { padding } from "@mui/system";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { register } from "../features/auth/authSlice";
@@ -20,6 +22,9 @@ function Register() {
     (state) => state.auth
   );
 
+  const paperStyle = {padding:20, height:'70vh', width:280, margin:'20px auto'};
+  const inputStyle = {margin: '0px 0px 20px'}
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -30,57 +35,80 @@ function Register() {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(
-      `Email: ${email}, Password: ${password}, Confirmed Password: ${confirmedPassword}`
+      `First Name: ${firstName}, Last Name: ${lastName}, Email: ${email}, Password: ${password}, Confirmed Password: ${confirmedPassword}`
     );
   };
 
   return (
+    
     <main>
-      <h1>Bli en Turvenn: {message}</h1>
-      <form onSubmit={onSubmit}>
-        <div className="info">
-          <TextField 
-            label="Fornavn" 
-            variant="filled" 
-            required
-            value={firstName}
-            />
-          <TextField 
-            label="Etternavn" 
-            variant="filled" 
-            required
-            value={lastName}
-            />
-          <TextField 
-            label="Email" 
-            variant="filled" 
-            type="email" 
-            required
-            value={email}
-            />
-          <TextField 
-            label="Passord" 
-            variant="filled" 
-            type="password" 
-            required
-            value={password}
-            />
-          <TextField 
-          label="Bekreft passord" 
-          variant="filled" 
-          type="password" 
-          required
-          value={confirmedPassword}/>
-        </div>
+      <Grid>
+        <Paper elevation={10} style={paperStyle}>
+          <Grid align='center'>
+            <Avatar>T</Avatar>
+            <h2>Bli en Turvenn: {message}</h2>
+          </Grid >
+          <Grid className="flex-container">
+            <form onSubmit={onSubmit}>
+                <TextField 
+                  label='Fornavn' 
+                  placeholder='Skriv inn fornavn'
+                  required
+                  fullWidth
+                  value={firstName}
+                  style={inputStyle}
+                />
+                <TextField 
+                  label='Etternavn' 
+                  placeholder='Skriv inn etternavn' 
+                  required
+                  fullWidth
+                  value={lastName}
+                  style={inputStyle}
+                />
+                <TextField 
+                label="Email" 
+                  type="email" 
+                  placeholder='Skriv inn email'
+                  required
+                  fullWidth
+                  value={email}
+                  style={inputStyle}
+                />
+                <TextField 
+                  label="Passord" 
+                  type="password" 
+                  placeholder='Velg passord'
+                  required
+                  fullWidth
+                  value={password}
+                  style={inputStyle}
+                />
+                <TextField 
+                label="Bekreft passord" 
+                type="password" 
+                placeholder='Bekreft valgt passord'
+                required
+                fullWidth
+                value={confirmedPassword}
+                style={inputStyle}
+                />
+                
+                <Button type="submit" variant="contained" fullWidth>
+                  Registrer deg
+                </Button>
+                
+            </form>
+          </Grid>
+        </Paper>
+      </Grid>
+      
+      
         
         
         
-        <div className="Register">
-          <button type="submit" variant="contained" color="primary">
-            Registrer deg
-          </button>
-        </div>
-      </form>
+        
+       
     </main>
   );
 }
