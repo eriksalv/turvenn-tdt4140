@@ -12,13 +12,13 @@ const initialState = {
   message: 'test'
 };
 
-export const register = createAsyncThunk('/auth/register', async (user, thunkAPI) => {
+export const register = createAsyncThunk('/auth/register', async (userData, thunkAPI) => {
   console.log(user);
 });
 
-export const login = createAsyncThunk('/auth/login', async (user, thunkAPI) => {
+export const login = createAsyncThunk('/auth/login', async (userData, thunkAPI) => {
   try {
-    return await authService.login(user);
+    return await authService.login(userData);
   } catch (error) {
     console.log(error);
     return thunkAPI.rejectWithValue('Noe gikk galt!');
@@ -31,7 +31,7 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state, action) => {
+      .addCase(login.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(login.fulfilled, (state, action) => {

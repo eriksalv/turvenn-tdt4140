@@ -11,7 +11,7 @@ function Login() {
   const { email, password } = formData;
 
   const dispatch = useDispatch();
-  const { user, isLoading, isError, isSuccess, message } = useSelector(state => state.auth);
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -36,7 +36,9 @@ function Login() {
         <input type="text" value={email} id="email" name="email" onChange={onChange} />
         <label htmlFor="password">Passord</label>
         <input type="password" value={password} id="password" name="password" onChange={onChange} />
-        <button className="btn btn-success">Logg inn</button>
+        <button className="btn btn-success" type="submit">
+          Logg inn
+        </button>
       </form>
     </div>
   );

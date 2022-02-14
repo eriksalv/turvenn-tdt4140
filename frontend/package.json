@@ -27,8 +27,8 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix",
+    "lint": "eslint . --ext js,jsx",
+    "lint:fix": "eslint --fix --ext js,jsx",
     "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
     "format:write": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\""
   },

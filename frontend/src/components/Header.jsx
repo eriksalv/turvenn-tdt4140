@@ -11,11 +11,8 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const pathMatchRoute = (route) => {
-    if (route === location.pathname) {
-      return true;
-    }
-  };
+  const pathMatchRoute = (route) => route === location.pathname;
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

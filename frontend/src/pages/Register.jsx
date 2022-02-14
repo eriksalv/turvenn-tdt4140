@@ -43,7 +43,7 @@ function Register() {
           name="confirmedPassword"
           onChange={onChange}
         />
-        <button>Registrer deg</button>
+        <button type="submit">Registrer deg</button>
       </form>
     </main>
   );
