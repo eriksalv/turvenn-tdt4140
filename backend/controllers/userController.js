@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
-const { User } = require('../models');
 const bcrypt = require('bcryptjs');
+const { User } = require('../models');
 
 const getUsers = asyncHandler(async (req, res) => {
   try {
@@ -39,13 +39,9 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ where: { email } });
-    
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-    
-    if (await bcrypt.compare(password, user.password)) {
-      res.status(200).json({
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return res.status(200).json({
         message: 'User login successfull',
         user: {
           id: user.id,
@@ -54,14 +50,12 @@ const loginUser = asyncHandler(async (req, res) => {
           lastName: user.lastName
         },
         token: 'some token'
-      })
+      });
     }
-    else {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
+    return res.status(401).json({ message: 'Invalid credentials' });
   } catch (error) {
     console.log(error);
-    res.status(401).json(error);
+    return res.status(401).json(error);
   }
 });
 

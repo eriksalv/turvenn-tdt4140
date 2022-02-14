@@ -10,8 +10,8 @@
     "db:migrate": "docker exec backend sequelize db:migrate",
     "db:migrate:undo": "docker exec backend sequelize db:migrate:undo",
     "db:migrate:undo:all": "docker exec backend sequelize db:migrate:undo:all",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix",
+    "lint": "eslint . --ext js,jsx",
+    "lint:fix": "eslint --fix --ext js,jsx",
     "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
     "format:write": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\""
   },
