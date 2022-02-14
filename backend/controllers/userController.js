@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const { User } = require('../models');
+const bcrypt = require('bcryptjs');
 
 const getUsers = asyncHandler(async (req, res) => {
   try {
@@ -14,11 +15,14 @@ const getUsers = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
   try {
-    // Create user in db, adding encryption to password later
-    const newUser = await User.create({ email, firstName, lastName, password });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await User.create({ email, firstName, lastName, password: hashedPassword });
     res.status(201).json({
       message: 'User created successfully',
       user: {
+        id: newUser.id,
         email: newUser.email,
         firstName: newUser.firstName,
         lastName: newUser.lastName
@@ -30,7 +34,39 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ where: { email } });
+    
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    
+    if (await bcrypt.compare(password, user.password)) {
+      res.status(200).json({
+        message: 'User login successfull',
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName
+        }
+      })
+    }
+    else {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(401).json(error);
+  }
+});
+
 module.exports = {
   getUsers,
-  registerUser
+  registerUser,
+  loginUser
 };
