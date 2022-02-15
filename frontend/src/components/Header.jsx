@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,12 +7,19 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { logout } from '../features/auth/authSlice';
 
 function Header() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
+  const { user } = useSelector((state) => state.auth);
 
   const pathMatchRoute = (route) => route === location.pathname;
+
+  const onLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -23,7 +31,11 @@ function Header() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             News
           </Typography>
-          <Button color="inherit">Login</Button>
+          {user && (
+            <Button color="inherit" onClick={onLogout}>
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
