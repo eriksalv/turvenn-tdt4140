@@ -3,8 +3,6 @@ import { TextField, Grid, Paper, Avatar, Button } from '@mui/material';
 import { padding } from '@mui/system';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { register } from '../features/auth/authSlice';
 
 function Register() {

@@ -42,9 +42,11 @@ function Login() {
   };
 
   const onSubmit = (e) => {
+    console.log('clicked');
     e.preventDefault();
 
     const userData = { email, password };
+    console.log(userData);
 
     dispatch(login(userData));
   };
@@ -72,10 +74,16 @@ function Login() {
             <TextField required id="email" label="Email" variant="outlined" onChange={onChange} />
           </Grid>
           <Grid item xs={12}>
-            <TextField required id="password" label="Passord" type="password" />
+            <TextField required id="password" label="Passord" type="password" onChange={onChange} />
           </Grid>
           <Grid item xs={5}>
-            <Button variant="contained" id="onSubmit" color="success">
+            <Button
+              onClick={onSubmit}
+              variant="contained"
+              type="submit"
+              id="onSubmit"
+              color="success"
+            >
               Logg inn
             </Button>
           </Grid>
