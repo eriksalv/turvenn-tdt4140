@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/users', require('./routes/user'));
+app.use('/api/trips', require('./routes/trip'));
 
 app.get('/', (req, res) => {
   res.status(200).send({ status: 'ok' });
