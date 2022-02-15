@@ -1,8 +1,7 @@
-import { inputUnstyledClasses } from '@mui/base';
 import { TextField, Grid, Paper, Avatar, Button } from '@mui/material';
-import { padding } from '@mui/system';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { register } from '../features/auth/authSlice';
 
 function Register() {
@@ -20,7 +19,12 @@ function Register() {
 
   const { user, isLoading, isError, message } = useSelector((state) => state.auth);
 
-  const paperStyle = { padding: 20, height: '70vh', width: 280, margin: '20px auto' };
+  const paperStyle = {
+    padding: 20,
+    height: 500,
+    width: 350,
+    margin: '20px auto'
+  };
   const inputStyle = { margin: '0px 0px 20px' };
 
   const onChange = (e) => {
@@ -42,8 +46,7 @@ function Register() {
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
-            <Avatar>T</Avatar>
-            <h2>Bli en Turvenn: {message}</h2>
+            <h2>Bli en Turvenn</h2>
           </Grid>
           <Grid className="flex-container">
             <form onSubmit={onSubmit}>
@@ -51,16 +54,19 @@ function Register() {
                 label="Fornavn"
                 placeholder="Skriv inn fornavn"
                 required
+                onChange={onChange}
                 fullWidth
-                value={firstName}
+                id="firstName"
                 style={inputStyle}
               />
               <TextField
+                required
+                id="lastName"
+                fullWidth
                 label="Etternavn"
                 placeholder="Skriv inn etternavn"
-                required
-                fullWidth
-                value={lastName}
+                variant="outlined"
+                onChange={onChange}
                 style={inputStyle}
               />
               <TextField
@@ -68,8 +74,9 @@ function Register() {
                 type="email"
                 placeholder="Skriv inn email"
                 required
+                onChange={onChange}
                 fullWidth
-                value={email}
+                id="email"
                 style={inputStyle}
               />
               <TextField
@@ -77,8 +84,9 @@ function Register() {
                 type="password"
                 placeholder="Velg passord"
                 required
+                onChange={onChange}
                 fullWidth
-                value={password}
+                id="password"
                 style={inputStyle}
               />
               <TextField
@@ -86,14 +94,22 @@ function Register() {
                 type="password"
                 placeholder="Bekreft valgt passord"
                 required
+                onChange={onChange}
                 fullWidth
-                value={confirmedPassword}
+                id="comfirmedPassword"
                 style={inputStyle}
               />
 
-              <Button type="submit" variant="contained" fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                color="success"
+                onClick={onSubmit}
+              >
                 Registrer deg
               </Button>
+              <Link to="/">Allerede bruker? Logg inn</Link>
             </form>
           </Grid>
         </Paper>
