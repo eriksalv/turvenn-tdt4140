@@ -1,48 +1,50 @@
-import { inputUnstyledClasses } from "@mui/base";
-import { TextField, Grid, Paper, Button } from "@mui/material";
-import { padding } from "@mui/system";
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { register } from "../features/auth/authSlice";
-import { Link } from "react-router-dom";
+import { TextField, Grid, Paper, Avatar, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { register } from '../features/auth/authSlice';
 
 function Register() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmedPassword: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmedPassword: ''
   });
 
   const { firstName, lastName, email, password, confirmedPassword } = formData;
 
   const dispatch = useDispatch();
 
-  const { user, isLoading, isError, message } = useSelector(
-    (state) => state.auth
-  );
+  const { user, isLoading, isError, message } = useSelector((state) => state.auth);
 
   const paperStyle = {
     padding: 20,
     height: 500,
     width: 350,
-    margin: "20px auto",
+    margin: '20px auto'
   };
-  const inputStyle = { margin: "0px 0px 20px" };
+  const inputStyle = { margin: '0px 0px 20px' };
 
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.id]: e.target.value,
+      [e.target.id]: e.target.value
     }));
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(
-      `First Name: ${firstName}, Last Name: ${lastName}, Email: ${email}, Password: ${password}, Confirmed Password: ${confirmedPassword}`
-    );
+
+    const userData = { email, password, firstName, lastName };
+
+    if (password !== confirmedPassword) {
+      toast.error('Passordene var ikke like');
+    } else {
+      dispatch(register(userData));
+    }
   };
 
   return (
@@ -60,12 +62,12 @@ function Register() {
                 required
                 onChange={onChange}
                 fullWidth
-                id = "fornavn"
+                id="firstName"
                 style={inputStyle}
               />
               <TextField
                 required
-                id="lastname"
+                id="lastName"
                 fullWidth
                 label="Etternavn"
                 placeholder="Skriv inn etternavn"
@@ -100,7 +102,7 @@ function Register() {
                 required
                 onChange={onChange}
                 fullWidth
-                id="ComfirmedPassword"
+                id="confirmedPassword"
                 style={inputStyle}
               />
 
@@ -109,6 +111,7 @@ function Register() {
                 variant="contained"
                 fullWidth
                 color="success"
+                onClick={onSubmit}
               >
                 Registrer deg
               </Button>
