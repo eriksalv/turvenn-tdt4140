@@ -1,6 +1,7 @@
 import { TextField, Grid, Paper, Avatar, Button } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { register } from '../features/auth/authSlice';
 
@@ -36,9 +37,14 @@ function Register() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(
-      `First Name: ${firstName}, Last Name: ${lastName}, Email: ${email}, Password: ${password}, Confirmed Password: ${confirmedPassword}`
-    );
+
+    const userData = { email, password, firstName, lastName };
+
+    if (password !== confirmedPassword) {
+      toast.error('Passordene var ikke like');
+    } else {
+      dispatch(register(userData));
+    }
   };
 
   return (
@@ -96,7 +102,7 @@ function Register() {
                 required
                 onChange={onChange}
                 fullWidth
-                id="comfirmedPassword"
+                id="confirmedPassword"
                 style={inputStyle}
               />
 
