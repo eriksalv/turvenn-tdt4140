@@ -1,8 +1,12 @@
+import { login, reset } from '../features/auth/authSlice';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { login, reset } from '../features/auth/authSlice';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -52,31 +56,33 @@ function Login() {
 
   return (
     <div>
-      <h1 className="">Logg inn</h1>
       <form onSubmit={onSubmit}>
-        <label htmlFor="email">Epost</label>
-        <input
-          type="email"
-          value={email}
-          id="email"
-          name="email"
-          onChange={onChange}
-          placeholder="Skriv inn eposten din"
-          required
-        />
-        <label htmlFor="password">Passord</label>
-        <input
-          type="password"
-          value={password}
-          id="password"
-          name="password"
-          onChange={onChange}
-          placeholder="Skriv inn passordet ditt"
-          required
-        />
-        <button className="btn btn-success" type="submit">
-          Logg inn
-        </button>
+        <Grid
+          container
+          spacing={2}
+          columnSpacing={{ xs: 0, sm: 0, md: 0 }}
+          direction="column"
+          alignItems="center"
+        >
+          <Grid item xs={12}>
+            <h1 className="">Logg inn</h1>
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField required id="email" label="Email" variant="outlined" onChange={onChange} />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField required id="password" label="Passord" type="password" />
+          </Grid>
+          <Grid item xs={5}>
+            <Button variant="contained" id="onSubmit" color="success">
+              Logg inn
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Link to="/register">Registrer bruker</Link>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );
