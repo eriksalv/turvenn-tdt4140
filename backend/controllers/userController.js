@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const { User } = require('../models');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const getUsers = async (req, res, next) => {
   try {
@@ -10,6 +12,21 @@ const getUsers = async (req, res, next) => {
     res.status(500);
     return next(new Error('Something went wrong'));
   }
+};
+
+/**
+ * @desc   Get current user
+ * @route  /api/users/login
+ * @access Private
+ */
+const getLogin = async (req, res, next) => {
+  const user = {
+    id: req.user.id,
+    email: req.user.email,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName
+  };
+  res.status(200).json(user);
 };
 
 const registerUser = async (req, res, next) => {
@@ -42,7 +59,7 @@ const registerUser = async (req, res, next) => {
         firstName: newUser.firstName,
         lastName: newUser.lastName
       },
-      token: 'some token'
+      token: generateToken(newUser.id)
     });
   } catch (error) {
     // Database couldn't save user
@@ -65,15 +82,23 @@ const loginUser = async (req, res, next) => {
         firstName: user.firstName,
         lastName: user.lastName
       },
-      token: 'some token'
+      token: generateToken(user.id)
     });
   }
   res.status(401);
   next(new Error('Invalid credentials'));
 };
 
+const generateToken = (id) => {
+  const jwtSecret = process.env.JWT_SECRET || 'abc123';
+  return jwt.sign({ id }, jwtSecret, {
+    expiresIn: '1h'
+  });
+};
+
 module.exports = {
   getUsers,
   registerUser,
-  loginUser
+  loginUser,
+  getLogin
 };

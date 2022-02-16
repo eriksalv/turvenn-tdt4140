@@ -5,6 +5,7 @@
     "jest/globals": true,
     "browser": true
   },
+  "endOfLine": "auto",
   "extends": ["airbnb", "plugin:react/recommended", "prettier"],
   "plugins": ["jest", "prettier"],
   "rules": {
