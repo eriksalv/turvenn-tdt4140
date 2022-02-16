@@ -7,7 +7,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { logout } from '../features/auth/authSlice';
+import { useEffect } from 'react';
+import { logout, reset } from '../features/auth/authSlice';
 
 function Header() {
   const navigate = useNavigate();
@@ -17,8 +18,20 @@ function Header() {
 
   const pathMatchRoute = (route) => route === location.pathname;
 
+  useEffect(() => {
+    // Redirect to login when user is null
+    if (!user) {
+      navigate('/');
+    }
+  }, [user]);
+
   const onLogout = () => {
     dispatch(logout());
+    dispatch(reset());
+  };
+
+  const onLogin = () => {
+    navigate('/');
   };
 
   return (
@@ -31,9 +44,13 @@ function Header() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             News
           </Typography>
-          {user && (
+          {user ? (
             <Button color="inherit" onClick={onLogout}>
-              Logout
+              Logg Ut
+            </Button>
+          ) : (
+            <Button color="inherit" onClick={onLogin}>
+              Logg Inn
             </Button>
           )}
         </Toolbar>

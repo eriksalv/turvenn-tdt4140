@@ -8,7 +8,7 @@ const login = async (userData) => {
     localStorage.setItem('user', JSON.stringify(res.data.user));
   }
 
-  return res.data;
+  return res.data.user;
 };
 
 const register = async (userData) => {
@@ -16,7 +16,7 @@ const register = async (userData) => {
   if (res.data.user) {
     localStorage.setItem(`user`, JSON.stringify(res.data.user));
   }
-  return res.data;
+  return res.data.user;
 };
 
 const logout = () => {
