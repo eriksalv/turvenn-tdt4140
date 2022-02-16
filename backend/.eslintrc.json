@@ -5,7 +5,6 @@
   },
   "extends": ["airbnb-base", "plugin:node/recommended", "prettier"],
   "plugins": ["jest", "prettier"],
-  "endOfLine": "auto",
   "rules": {
     "prettier/prettier": ["warn", { "endOfLine": "auto" }],
     "no-unused-vars": "warn",

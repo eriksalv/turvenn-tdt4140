@@ -12,6 +12,7 @@ const protect = async (req, res, next) => {
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       // Get token from header
+      // eslint-disable-next-line prefer-destructuring
       token = req.headers.authorization.split(' ')[1];
       // Verify token
       const jwtSecret = process.env.JWT_SECRET || 'abc123';

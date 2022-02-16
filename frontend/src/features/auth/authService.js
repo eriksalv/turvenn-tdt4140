@@ -4,8 +4,8 @@ const baseUrl = 'api/users';
 
 const login = async (userData) => {
   const res = await axios.post(`${baseUrl}/login`, userData);
-  if (res.data) {
-    localStorage.setItem('user', JSON.stringify(res.data));
+  if (res.data.user) {
+    localStorage.setItem('user', JSON.stringify(res.data.user));
   }
 
   return res.data;
@@ -13,8 +13,8 @@ const login = async (userData) => {
 
 const register = async (userData) => {
   const res = await axios.post(`${baseUrl}`, userData);
-  if (res.data) {
-    localStorage.setItem(`user`, JSON.stringify(res.data));
+  if (res.data.user) {
+    localStorage.setItem(`user`, JSON.stringify(res.data.user));
   }
   return res.data;
 };

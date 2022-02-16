@@ -1,8 +1,15 @@
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
-const { User } = require('../models');
 const jwt = require('jsonwebtoken');
+const { User } = require('../models');
 require('dotenv').config();
+
+const generateToken = (id) => {
+  const jwtSecret = process.env.JWT_SECRET || 'abc123';
+  return jwt.sign({ id }, jwtSecret, {
+    expiresIn: '1h'
+  });
+};
 
 const getUsers = async (req, res, next) => {
   try {
@@ -57,9 +64,9 @@ const registerUser = async (req, res, next) => {
         id: newUser.id,
         email: newUser.email,
         firstName: newUser.firstName,
-        lastName: newUser.lastName
-      },
-      token: generateToken(newUser.id)
+        lastName: newUser.lastName,
+        accessToken: generateToken(newUser.id)
+      }
     });
   } catch (error) {
     // Database couldn't save user
@@ -80,20 +87,13 @@ const loginUser = async (req, res, next) => {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
-        lastName: user.lastName
-      },
-      token: generateToken(user.id)
+        lastName: user.lastName,
+        accessToken: generateToken(user.id)
+      }
     });
   }
   res.status(401);
   next(new Error('Invalid credentials'));
-};
-
-const generateToken = (id) => {
-  const jwtSecret = process.env.JWT_SECRET || 'abc123';
-  return jwt.sign({ id }, jwtSecret, {
-    expiresIn: '1h'
-  });
 };
 
 module.exports = {

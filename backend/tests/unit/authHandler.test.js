@@ -42,14 +42,12 @@ describe('Auth Handler - protect', () => {
   });
 
   it('should call next with no arguments if token is valid', async () => {
-    User.findByPk = jest.fn().mockImplementationOnce(() => {
-      return {
-        id: 1,
-        email: 'test@test.com',
-        firstName: 'John',
-        lastName: 'Snow'
-      };
-    });
+    User.findByPk = jest.fn().mockImplementationOnce(() => ({
+      id: 1,
+      email: 'test@test.com',
+      firstName: 'John',
+      lastName: 'Snow'
+    }));
     req.headers.authorization = 'Bearer token';
 
     await protect(req, res, next);

@@ -49,9 +49,9 @@ describe('User Controller - Login', () => {
         id: 1,
         email: 'test@test.com',
         firstName: 'John',
-        lastName: 'Doe'
-      },
-      token: 'supersecrettoken'
+        lastName: 'Doe',
+        accessToken: 'supersecrettoken'
+      }
     });
   });
 });
