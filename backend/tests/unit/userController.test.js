@@ -1,5 +1,5 @@
 const { User } = require('../../models');
-const { loginUser } = require('../../controllers/userController');
+const { loginUser, getLogin } = require('../../controllers/userController');
 
 describe('User Controller - Login', () => {
   let req;
@@ -39,7 +39,7 @@ describe('User Controller - Login', () => {
       password: '123456'
     }));
 
-    await loginUser(req, res, () => {});
+    await loginUser(req, res, next);
 
     expect(User.findOne).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
@@ -51,7 +51,7 @@ describe('User Controller - Login', () => {
         firstName: 'John',
         lastName: 'Doe'
       },
-      token: 'some token'
+      token: 'supersecrettoken'
     });
   });
 });
@@ -66,4 +66,32 @@ describe('User Controller - Register', () => {
 
 describe('User Controller - getUsers', () => {
   it.todo('should return all users with status 200');
+});
+
+describe('User Controller - getLogin', () => {
+  let req;
+  let res;
+  let next;
+  beforeEach(() => {
+    req = {
+      user: {
+        id: 1,
+        email: 'test@test.com',
+        firstName: 'Tester',
+        lastName: 'Test'
+      }
+    };
+    res = {
+      status: jest.fn().mockImplementation(() => res),
+      json: jest.fn()
+    };
+    next = jest.fn();
+  });
+
+  it('should return the requested user with status 200', async () => {
+    await getLogin(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(req.user);
+  });
 });
