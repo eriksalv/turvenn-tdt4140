@@ -42,6 +42,7 @@ module.exports = {
   // ],
   collectCoverageFrom: [
     '**/*.js',
+    '!routes/*.js',
     '!**/types.js',
     '!config/*.js',
     '!**/node_modules/**',

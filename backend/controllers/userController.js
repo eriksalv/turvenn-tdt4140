@@ -1,19 +1,18 @@
-const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
-const { User } = require('../models');
 const { validationResult } = require('express-validator');
+const { User } = require('../models');
 
-const getUsers = asyncHandler(async (req, res) => {
+const getUsers = async (req, res, next) => {
   try {
     const users = await User.findAll({ attributes: ['email', 'firstName', 'lastName'] });
     res.status(200).json(users);
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    res.status(500);
+    return next(new Error('Something went wrong'));
   }
-});
+};
 
-const registerUser = asyncHandler(async (req, res) => {
+const registerUser = async (req, res, next) => {
   const { email, firstName, lastName, password } = req.body;
 
   const errors = validationResult(req);
@@ -21,13 +20,13 @@ const registerUser = asyncHandler(async (req, res) => {
   // Validation
   if (!errors.isEmpty() || !firstName || !lastName || !email || !password) {
     res.status(400);
-    throw new Error('Validation failed for submitted data');
+    return next(new Error('Validation failed for submitted data'));
   }
 
   // Check if user already exists
   if (await User.findOne({ where: { email } })) {
     res.status(400);
-    throw new Error('User already exists');
+    return next(new Error('User already exists'));
   }
 
   try {
@@ -48,11 +47,11 @@ const registerUser = asyncHandler(async (req, res) => {
   } catch (error) {
     // Database couldn't save user
     res.status(400);
-    throw new Error('Invalid user data');
+    next(new Error('Invalid user data'));
   }
-});
+};
 
-const loginUser = asyncHandler(async (req, res) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ where: { email } });
 
@@ -70,8 +69,8 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   }
   res.status(401);
-  throw new Error('Invalid credentials');
-});
+  next(new Error('Invalid credentials'));
+};
 
 module.exports = {
   getUsers,

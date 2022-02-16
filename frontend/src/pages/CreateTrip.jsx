@@ -11,7 +11,7 @@ import {
   MenuItem
 } from '@mui/material';
 
-function OpprettTur() {
+function CreateTrip() {
   const [formData, setFormData] = useState({
     destination: '',
     startpoint: '',
@@ -120,4 +120,4 @@ function OpprettTur() {
   );
 }
 
-export default OpprettTur;
+export default CreateTrip;
