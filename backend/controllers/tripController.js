@@ -20,10 +20,10 @@ const getTrips = async (req, res, next) => {
 };
 
 const createTrip = async (req, res, next) => {
-  const { name, start, goal, date, difficulty, duration, description, userId } = req.body;
-  try {
-    const findUser = await User.findByPk(userId);
+  const { name, start, goal, date, difficulty, duration, description } = req.body;
+  const userId = req.user.id;
 
+  try {
     const newTrip = await Trip.create({
       name,
       start,
@@ -32,7 +32,7 @@ const createTrip = async (req, res, next) => {
       difficulty,
       duration,
       description,
-      userId: findUser.id
+      userId
     });
     return res.status(201).json({
       message: 'Trip created successfully',
