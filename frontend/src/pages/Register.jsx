@@ -1,4 +1,4 @@
-import { TextField, Grid, Paper, Avatar, Button } from '@mui/material';
+import { TextField, Grid, Paper, Button } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
