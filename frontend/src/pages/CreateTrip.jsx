@@ -7,7 +7,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  styled
 } from '@mui/material';
 
 function CreateTrip() {
@@ -22,6 +23,13 @@ function CreateTrip() {
 
   const { goal, start, date, difficulty, duration, description } = formData;
   const paperStyle = { padding: 20, width: 900, margin: '20px auto' };
+
+  const Img = styled('img')({
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%'
+  });
 
   const onChange = (e) => {
     console.log(e.target.value);
@@ -54,7 +62,7 @@ function CreateTrip() {
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={4}>
-              Bilde
+              <Img alt="logo" src="../Turvenn-logo.png" />
             </Grid>
             <Grid item xs={8}>
               <form onSubmit={onSubmit}>
@@ -115,12 +123,13 @@ function CreateTrip() {
                   margin="normal"
                   onChange={onChange}
                 />
-                <textarea
+                <TextField
                   id="descrition"
                   label="Beskrivelse"
                   placeholder="Beskriv turarrangementet her"
                   rows={6}
-                  cols={72}
+                  multiline
+                  fullWidth
                   value={description}
                   margin="normal"
                   onChange={onChangeDescription}
