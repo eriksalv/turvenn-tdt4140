@@ -13,18 +13,20 @@ import {
 
 function CreateTrip() {
   const [formData, setFormData] = useState({
-    destination: '',
-    startpoint: '',
+    goal: '',
+    start: '',
     date: '',
     difficulty: '',
     duration: '',
     description: ''
   });
 
-  const { destination, startpoint, date, difficulty, duration, description } = formData;
+  const { goal, start, date, difficulty, duration, description } = formData;
   const paperStyle = { padding: 20, height: '90vh', width: 350, margin: '20px auto' };
 
   const onChange = (e) => {
+    console.log(e.target.value);
+    console.log(e.target.id);
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value
@@ -33,7 +35,11 @@ function CreateTrip() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(`Destination: ${destination}, Startpoint: ${startpoint}, Date: ${date}`);
+    console.log(`Goal: ${goal}, Start: ${start}, Date: ${date}`);
+  };
+
+  const onChangeDifficulty = (e) => {
+    setFormData((prevState) => ({ ...prevState, difficulty: e.target.value }));
   };
 
   return (
@@ -48,46 +54,51 @@ function CreateTrip() {
           <Grid>
             <form onSubmit={onSubmit}>
               <TextField
+                id="goal"
                 label="Turmål"
                 placeholder="Hvor går turen?"
                 required
                 fullWidth
-                value={destination}
+                value={goal}
                 margin="normal"
                 onChange={onChange}
               />
               <TextField
+                id="start"
                 label="Startpunkt"
                 placeholder="Hvor starter turen?"
                 required
                 fullWidth
-                value={startpoint}
+                value={start}
                 margin="normal"
                 onChange={onChange}
               />
               <TextField
-                id="datetime-local"
+                id="date"
                 label="Dato og tid"
                 type="datetime-local"
                 required
                 fullWidth
                 value={date}
                 margin="normal"
+                InputLabelProps={{
+                  shrink: true
+                }}
                 onChange={onChange}
               />
-              <FormControl fullWidth>
-                <InputLabel id="difficulty">Vanskelighetsgrad</InputLabel>
+              <FormControl id="difficulty" fullWidth>
+                <InputLabel>Vanskelighetsgrad</InputLabel>
                 <Select
                   labelId="difficulty"
                   id="difficulty"
                   value={difficulty}
                   label="Vanskelighetsgrad"
-                  onChange={onChange}
+                  onChange={onChangeDifficulty}
                 >
-                  <MenuItem>Enkel</MenuItem>
-                  <MenuItem>Middels</MenuItem>
-                  <MenuItem>Krevende</MenuItem>
-                  <MenuItem>Ekstra krevende</MenuItem>
+                  <MenuItem value="enkel">Enkel</MenuItem>
+                  <MenuItem value="middels">Middels</MenuItem>
+                  <MenuItem value="krevende">Krevende</MenuItem>
+                  <MenuItem value="ekstraKrevende">Ekstra krevende</MenuItem>
                 </Select>
               </FormControl>
               <TextField
