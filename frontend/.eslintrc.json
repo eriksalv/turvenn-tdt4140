@@ -9,6 +9,7 @@
   "plugins": ["jest", "prettier"],
   "rules": {
     "prettier/prettier": ["warn", { "endOfLine": "auto" }],
+    "react/prop-types": "warn",
     "no-unused-vars": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-console": "off",

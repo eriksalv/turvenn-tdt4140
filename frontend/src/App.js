@@ -6,8 +6,8 @@ import Register from './pages/Register';
 import CreateTrip from './pages/CreateTrip';
 import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
-import Profile from './pages/Profile';
 import Home from './pages/Home';
+import ProfilePage from './pages/ProfilePage';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/create-trip" element={<CreateTrip />} />
           <Route path="/profile" element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
           <Route path="/home" element={<Home />} />
         </Routes>

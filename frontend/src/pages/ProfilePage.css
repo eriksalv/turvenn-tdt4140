@@ -1,0 +1,35 @@
+#information {
+  margin-top: 30px;
+  display: flex;
+  width: 100%;
+}
+
+#about {
+  margin: auto;
+  width: 80%;
+  height: 300px;
+}
+
+.aboutText {
+  width: 80%;
+}
+
+#aboutSave {
+  margin-top: 5px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+#profilePic {
+  width: 25%;
+  height: 300px;
+  margin: auto;
+}
+.experienceBox {
+  margin-top: 70px;
+  width: 20%;
+}
+
+#tripHistoryContainer {
+  top: 200px;
+}

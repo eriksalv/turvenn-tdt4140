@@ -18,16 +18,10 @@ function Header() {
 
   const pathMatchRoute = (route) => route === location.pathname;
 
-  useEffect(() => {
-    // Redirect to login when user is null
-    if (!user) {
-      navigate('/');
-    }
-  }, [user]);
-
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
+    navigate('/');
   };
 
   const onLogin = () => {
