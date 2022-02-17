@@ -6,9 +6,7 @@ require('dotenv').config();
 
 const generateToken = (id) => {
   const jwtSecret = process.env.JWT_SECRET || 'abc123';
-  return jwt.sign({ id }, jwtSecret, {
-    expiresIn: '1h'
-  });
+  return jwt.sign({ id }, jwtSecret);
 };
 
 const getUsers = async (req, res, next) => {
