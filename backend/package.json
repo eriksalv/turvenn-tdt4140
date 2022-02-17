@@ -14,22 +14,25 @@
     "lint:fix": "eslint --fix --ext js,jsx",
     "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
     "format:write": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "dependencies": {
+    "@types/jest": "^27.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.1",
     "dotenv": "^16.0.0",
+    "eslint-plugin-jest": "^26.1.1",
     "express": "^4.17.2",
-    "express-async-handler": "^1.2.0",
     "express-validator": "^6.14.0",
     "global": "^4.4.0",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "babel-jest": "^27.5.1",
     "eslint": "8.2.0",

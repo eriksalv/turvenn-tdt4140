@@ -36,7 +36,7 @@ function Login() {
     // Redirect when logged in
     if (isSuccess || user) {
       // Bruker /register som placeholder foreløpig
-      navigate('/register');
+      navigate('/home');
     }
 
     dispatch(reset());
@@ -50,11 +50,9 @@ function Login() {
   };
 
   const onSubmit = (e) => {
-    console.log('clicked');
     e.preventDefault();
 
     const userData = { email, password };
-    console.log(userData);
 
     dispatch(login(userData));
   };

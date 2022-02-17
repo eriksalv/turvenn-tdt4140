@@ -8,7 +8,7 @@
   "extends": ["airbnb", "plugin:react/recommended", "prettier"],
   "plugins": ["jest", "prettier"],
   "rules": {
-    "prettier/prettier": "warn",
+    "prettier/prettier": ["warn", { "endOfLine": "auto" }],
     "no-unused-vars": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-console": "off",

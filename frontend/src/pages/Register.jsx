@@ -1,9 +1,9 @@
 import { TextField, Grid, Paper, Avatar, Button } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
-import { register } from '../features/auth/authSlice';
+import { register, reset } from '../features/auth/authSlice';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -17,8 +17,9 @@ function Register() {
   const { firstName, lastName, email, password, confirmedPassword } = formData;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { user, isLoading, isError, message } = useSelector((state) => state.auth);
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   const paperStyle = {
     padding: 20,
@@ -27,6 +28,19 @@ function Register() {
     margin: '20px auto'
   };
   const inputStyle = { margin: '0px 0px 20px' };
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    // Redirect when logged in
+    if (isSuccess || user) {
+      navigate('/home');
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -46,6 +60,8 @@ function Register() {
       dispatch(register(userData));
     }
   };
+
+  if (isLoading) return <h1>Loading...</h1>;
 
   return (
     <main>

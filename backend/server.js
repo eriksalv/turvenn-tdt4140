@@ -23,11 +23,7 @@ app.use((req, res, next) => {
 app.use('/api/users', require('./routes/user'));
 app.use('/api/trips', require('./routes/trip'));
 
-app.get('/', (req, res) => {
-  res.status(200).send({ status: 'ok' });
-});
-
-app.use(errorHandler);
+app.use((err, req, res, next) => errorHandler(err, req, res, next));
 
 sequelize
   .authenticate()
