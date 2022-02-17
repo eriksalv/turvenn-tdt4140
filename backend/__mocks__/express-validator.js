@@ -1,7 +1,7 @@
 const validationResult = (req) => {
   const res = {
     value: 'notempty',
-    isEmpty: () => false
+    isEmpty: () => true
   };
 
   return res;

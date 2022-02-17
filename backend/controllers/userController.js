@@ -38,7 +38,6 @@ const registerUser = async (req, res, next) => {
   const { email, firstName, lastName, password } = req.body;
 
   const errors = validationResult(req);
-  console.log(errors);
 
   // Validation
   if (!errors.isEmpty() || !firstName || !lastName || !email || !password) {
@@ -46,7 +45,6 @@ const registerUser = async (req, res, next) => {
     return next(new Error('Validation failed for submitted data'));
   }
 
-  // Check if user already exists
   if (await User.findOne({ where: { email } })) {
     res.status(400);
     return next(new Error('User already exists'));

@@ -85,9 +85,42 @@ describe('User Controller - Register', () => {
     expect(next).toHaveBeenCalledWith(new Error('Validation failed for submitted data'));
   });
 
-  it.todo('should set status to 400 if user already exists');
+  it('should set status to 400 if user already exists', async () => {
+    const user = {
+      email: 'test@test.com'
+    };
+    User.findOne = jest.fn().mockImplementation(({ attributes }) => user);
 
-  it.todo('should return user with status 201 if register is successful');
+    await registerUser(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(next).toHaveBeenCalledWith(new Error('User already exists'));
+  });
+
+  it('should return user with status 201 if register is successful', async () => {
+    const user = {
+      id: 1,
+      email: 'test@test.com',
+      firstName: 'Ola',
+      lastName: 'Normann'
+    };
+    User.findOne = jest.fn().mockImplementation(() => null);
+    User.create = jest.fn().mockImplementation(() => user);
+
+    await registerUser(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'User created successfully',
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        accessToken: 'supersecrettoken'
+      }
+    });
+  });
 });
 
 describe('User Controller - getUsers', () => {
