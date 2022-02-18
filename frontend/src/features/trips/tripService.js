@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = '/api/tickets';
+const baseUrl = '/api/trips';
 
 const getTrips = async () => {
   const res = await axios.get(baseUrl);

@@ -12,7 +12,7 @@ const initialState = {
   message: ''
 };
 
-const getTrips = createAsyncThunk('/trips/getAll', async (_, thunkAPI) => {
+export const getTrips = createAsyncThunk('/trips/getAll', async (_, thunkAPI) => {
   try {
     return await tripService.getTrips();
   } catch (error) {
