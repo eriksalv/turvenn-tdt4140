@@ -12,7 +12,7 @@ const generateToken = (id) => {
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.findAll({ attributes: ['email', 'firstName', 'lastName'] });
-    res.status(200).json(users);
+    return res.status(200).json(users);
   } catch (error) {
     res.status(500);
     return next(new Error('Something went wrong'));
@@ -45,7 +45,6 @@ const registerUser = async (req, res, next) => {
     return next(new Error('Validation failed for submitted data'));
   }
 
-  // Check if user already exists
   if (await User.findOne({ where: { email } })) {
     res.status(400);
     return next(new Error('User already exists'));
