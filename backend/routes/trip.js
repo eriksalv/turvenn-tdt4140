@@ -2,6 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 
 const { getTrips, createTrip } = require('../controllers/tripController');
+const { protect } = require('../middleware/authHandler');
 
 const router = express.Router();
 
@@ -9,6 +10,6 @@ const router = express.Router();
 router.get('/', getTrips);
 
 // POST /api/trips
-router.post('/', createTrip);
+router.post('/', protect, createTrip);
 
 module.exports = router;
