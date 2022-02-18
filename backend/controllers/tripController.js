@@ -14,8 +14,48 @@ const getTrips = async (req, res, next) => {
     });
     return res.status(200).json(trips);
   } catch (error) {
+    console.log(error);
     res.status(500);
     next(new Error('Something went wrong'));
+  }
+};
+
+const getUserTrips = async (req, res, next) => {
+  const { userId } = req.params;
+
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    res.status(404);
+    return next(new Error('User not found'));
+  }
+
+  try {
+    const trips = await user.getTrips({
+      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description']
+    });
+
+    return res.status(200).json(trips);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
+const getTrip = async (req, res, next) => {
+  const { tripId } = req.params;
+
+  try {
+    const trip = await Trip.findByPk(tripId, {
+      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description']
+    });
+    res.status(200);
+    return res.json(trip);
+  } catch (error) {
+    console.log(error);
+    res.status(404);
+    next(new Error('Trip not found'));
   }
 };
 
@@ -52,4 +92,4 @@ const createTrip = async (req, res, next) => {
   }
 };
 
-module.exports = { getTrips, createTrip };
+module.exports = { getTrips, createTrip, getUserTrips, getTrip };

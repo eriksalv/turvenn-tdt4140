@@ -6,6 +6,11 @@ const { protect } = require('../middleware/authHandler');
 
 const router = express.Router();
 
+const { getUserTrips } = require('../controllers/tripController');
+
+// Bruker funksjon fra tripController, kanskje det finnes en bedre måte å gjøre dette på?
+router.get('/:userId/trips', getUserTrips);
+
 // GET /api/users
 router.get('/', getUsers);
 
