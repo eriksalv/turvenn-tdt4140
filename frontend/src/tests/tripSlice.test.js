@@ -4,8 +4,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import tripReducer, { getTrips } from '../features/trips/tripSlice';
 
-it('should return the initial state', () => {
-  expect(tripReducer(undefined, {})).toEqual({
+let initialState;
+let store;
+
+beforeEach(() => {
+  initialState = {
     trips: [],
     trip: {},
     userTrips: [],
@@ -13,7 +16,14 @@ it('should return the initial state', () => {
     isSuccess: false,
     isLoading: false,
     message: ''
-  });
+  };
+  store = configureStore({ reducer: { trip: tripReducer }, initialState });
+});
+
+it('should return the initial state', () => {
+  const { trip } = store.getState();
+
+  expect(trip).toEqual(initialState);
 });
 
 // Integration test: tripSlice + tripService + getError
@@ -29,16 +39,6 @@ describe('TripSlice - getTrips', () => {
   });
 
   it('should set error to true if rejected', async () => {
-    const previousState = {
-      trips: [],
-      trip: {},
-      userTrips: [],
-      isError: false,
-      isSuccess: false,
-      isLoading: false,
-      message: ''
-    };
-    const store = configureStore({ reducer: { trip: tripReducer }, previousState });
     mock.onGet('/api/trips').reply(500, { message: 'Rejected' });
 
     await store.dispatch(getTrips());
@@ -55,6 +55,20 @@ describe('TripSlice - getTrips', () => {
       isSuccess: false,
       isLoading: false,
       message: 'Rejected'
+    });
+  });
+
+  it('should be reset', () => {
+    const { trip } = store.getState();
+
+    expect(trip).toEqual({
+      trips: [],
+      trip: {},
+      userTrips: [],
+      isError: false,
+      isSuccess: false,
+      isLoading: false,
+      message: ''
     });
   });
 });
