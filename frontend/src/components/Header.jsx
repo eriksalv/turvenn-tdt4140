@@ -18,9 +18,8 @@ function Header() {
 
   const pathMatchRoute = (route) => route === location.pathname;
 
-  const onLogout = () => {
-    dispatch(logout());
-    dispatch(reset());
+  const onLogout = async () => {
+    await Promise.all([dispatch(logout()), dispatch(reset())]);
     navigate('/');
   };
 
