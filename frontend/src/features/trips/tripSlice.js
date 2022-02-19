@@ -20,7 +20,7 @@ export const getTrips = createAsyncThunk('/trips/getAll', async (_, thunkAPI) =>
   }
 });
 
-const createTrip = createAsyncThunk('/trips/create', async (tripData, thunkAPI) => {
+export const createTrip = createAsyncThunk('/trips/create', async (tripData, thunkAPI) => {
   try {
     const { token } = thunkAPI.getState().auth.user;
     return await tripService().createTrip(tripData, token);
@@ -29,7 +29,7 @@ const createTrip = createAsyncThunk('/trips/create', async (tripData, thunkAPI) 
   }
 });
 
-const getTrip = createAsyncThunk('trips/get', async (tripId, thunkAPI) => {
+export const getTrip = createAsyncThunk('trips/get', async (tripId, thunkAPI) => {
   try {
     return await tripService.getTrip(tripId);
   } catch (error) {
@@ -37,7 +37,7 @@ const getTrip = createAsyncThunk('trips/get', async (tripId, thunkAPI) => {
   }
 });
 
-const getUserTrips = createAsyncThunk('trips/user/get', async (userId, thunkAPI) => {
+export const getUserTrips = createAsyncThunk('trips/user/get', async (userId, thunkAPI) => {
   try {
     return await tripService.getUserTrips(userId);
   } catch (error) {

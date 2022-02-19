@@ -20,6 +20,16 @@ beforeEach(() => {
   store = configureStore({ reducer: { trip: tripReducer }, initialState });
 });
 
+let mock;
+
+beforeAll(() => {
+  mock = new AxiosMockAdapter(axios);
+});
+
+afterEach(() => {
+  mock.reset();
+});
+
 it('should return the initial state', () => {
   const { trip } = store.getState();
 
@@ -28,16 +38,6 @@ it('should return the initial state', () => {
 
 // Integration test: tripSlice + tripService + getError
 describe('TripSlice - getTrips', () => {
-  let mock;
-
-  beforeAll(() => {
-    mock = new AxiosMockAdapter(axios);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-
   it('should set error to true if rejected', async () => {
     mock.onGet('/api/trips').reply(500, { message: 'Rejected' });
 
