@@ -10,7 +10,6 @@ import { login, reset } from '../features/auth/authSlice';
 
 const paperStyle = {
   padding: 20,
-  height: 330,
   width: 350,
   margin: '20px auto'
 };
@@ -65,53 +64,47 @@ function Login() {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <Paper elevation={10} style={paperStyle}>
-          <Grid
-            container
-            spacing={5}
-            columnSpacing={{ xs: 0, sm: 0, md: 0 }}
-            direction="column"
-            alignItems="center"
+        <Paper
+          elevation={10}
+          style={paperStyle}
+          sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+        >
+          <h1>Logg inn</h1>
+
+          <TextField
+            required
+            id="email"
+            fullWidth
+            label="Email"
+            placeholder="Skriv inn Email"
+            variant="outlined"
+            onChange={onChange}
+            style={inputStyle}
+          />
+
+          <TextField
+            fullWidth
+            required
+            placeholder="Skriv inn passord"
+            id="password"
+            label="Passord"
+            type="password"
+            style={inputStyle}
+            onChange={onChange}
+          />
+
+          <Button
+            style={inputStyle}
+            fullWidth
+            variant="contained"
+            id="onSubmit"
+            color="success"
+            onClick={onSubmit}
           >
-            <Grid item xs={12}>
-              <h1 className="">Logg inn</h1>
-            </Grid>
+            Logg inn
+          </Button>
 
-            <TextField
-              required
-              id="email"
-              fullWidth
-              label="Email"
-              placeholder="Skriv inn Email"
-              variant="outlined"
-              onChange={onChange}
-              style={inputStyle}
-            />
-
-            <TextField
-              fullWidth
-              required
-              placeholder="Skriv inn passord"
-              id="password"
-              label="Passord"
-              type="password"
-              style={inputStyle}
-              onChange={onChange}
-            />
-
-            <Button
-              style={inputStyle}
-              fullWidth
-              variant="contained"
-              id="onSubmit"
-              color="success"
-              onClick={onSubmit}
-            >
-              Logg inn
-            </Button>
-
-            <Link to="/register">Ingen bruker? Registrer deg</Link>
-          </Grid>
+          <Link to="/register">Ingen bruker? Registrer deg</Link>
         </Paper>
       </form>
     </div>

@@ -23,7 +23,6 @@ function Register() {
 
   const paperStyle = {
     padding: 20,
-    height: 500,
     width: 350,
     margin: '20px auto'
   };
@@ -65,77 +64,76 @@ function Register() {
 
   return (
     <main>
-      <Grid>
-        <Paper elevation={10} style={paperStyle}>
-          <Grid align="center">
-            <h2>Bli en Turvenn</h2>
-          </Grid>
-          <Grid className="flex-container">
-            <form onSubmit={onSubmit}>
-              <TextField
-                label="Fornavn"
-                placeholder="Skriv inn fornavn"
-                required
-                onChange={onChange}
-                fullWidth
-                id="firstName"
-                style={inputStyle}
-              />
-              <TextField
-                required
-                id="lastName"
-                fullWidth
-                label="Etternavn"
-                placeholder="Skriv inn etternavn"
-                variant="outlined"
-                onChange={onChange}
-                style={inputStyle}
-              />
-              <TextField
-                label="Email"
-                type="email"
-                placeholder="Skriv inn email"
-                required
-                onChange={onChange}
-                fullWidth
-                id="email"
-                style={inputStyle}
-              />
-              <TextField
-                label="Passord"
-                type="password"
-                placeholder="Velg passord"
-                required
-                onChange={onChange}
-                fullWidth
-                id="password"
-                style={inputStyle}
-              />
-              <TextField
-                label="Bekreft passord"
-                type="password"
-                placeholder="Bekreft valgt passord"
-                required
-                onChange={onChange}
-                fullWidth
-                id="confirmedPassword"
-                style={inputStyle}
-              />
+      <Paper
+        elevation={10}
+        style={paperStyle}
+        sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+      >
+        <h2 style={{ width: '100%', textAlign: 'center' }}>Bli en Turvenn</h2>
+        <form onSubmit={onSubmit}>
+          <TextField
+            label="Fornavn"
+            placeholder="Skriv inn fornavn"
+            required
+            onChange={onChange}
+            fullWidth
+            id="firstName"
+            style={inputStyle}
+          />
+          <TextField
+            required
+            id="lastName"
+            fullWidth
+            label="Etternavn"
+            placeholder="Skriv inn etternavn"
+            variant="outlined"
+            onChange={onChange}
+            style={inputStyle}
+          />
+          <TextField
+            label="Email"
+            type="email"
+            placeholder="Skriv inn email"
+            required
+            onChange={onChange}
+            fullWidth
+            id="email"
+            style={inputStyle}
+          />
+          <TextField
+            label="Passord"
+            type="password"
+            placeholder="Velg passord"
+            required
+            onChange={onChange}
+            fullWidth
+            id="password"
+            style={inputStyle}
+          />
+          <TextField
+            label="Bekreft passord"
+            type="password"
+            placeholder="Bekreft valgt passord"
+            required
+            onChange={onChange}
+            fullWidth
+            id="confirmedPassword"
+            style={inputStyle}
+          />
 
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                color="success"
-                onClick={onSubmit}
-              >
-                Registrer deg
-              </Button>
-              <Link to="/">Allerede bruker? Logg inn</Link>
-            </form>
-          </Grid>
-        </Paper>
-      </Grid>
+          <Button
+            style={{ marginBottom: '10px' }}
+            type="submit"
+            variant="contained"
+            fullWidth
+            color="success"
+            onClick={onSubmit}
+          >
+            Registrer deg
+          </Button>
+          <Link to="/">Allerede bruker? Logg inn</Link>
+        </form>
+      </Paper>
     </main>
   );
 }
