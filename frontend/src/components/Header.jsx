@@ -94,7 +94,7 @@ function Header() {
                 <MenuIcon />
               </IconButton>
             )}
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} role="heading">
               {user ? `Hei ${user.firstName}!` : 'Turvenn'}
             </Typography>
             {user ? (
