@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -76,37 +77,37 @@ function Header() {
   };
 
   return (
-    <>
-      <CssBaseline />
-      <AppBar position="static" open={open}>
-        <Toolbar>
-          {user && (
-            <IconButton
-              size="large"
-              aria-label="menu"
-              edge="start"
-              color="inherit"
-              onClick={handleDrawerOpen}
-              sx={{ mr: 2, ...(open && { display: 'none' }) }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {user ? `Hei ${user.firstName}!` : 'Turvenn'}
-          </Typography>
-          {user ? (
-            <Button color="inherit" onClick={onLogout}>
-              Logg Ut
-            </Button>
-          ) : (
-            <Button color="inherit" onClick={onLogin}>
-              Logg Inn
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
-      <ClickAwayListener onClickAway={() => console.log('clicked away?')}>
+    <ClickAwayListener onClickAway={handleDrawerClose}>
+      <Box>
+        <CssBaseline />
+        <AppBar position="static" open={open}>
+          <Toolbar>
+            {user && (
+              <IconButton
+                size="large"
+                aria-label="menu"
+                edge="start"
+                color="inherit"
+                onClick={handleDrawerOpen}
+                sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {user ? `Hei ${user.firstName}!` : 'Turvenn'}
+            </Typography>
+            {user ? (
+              <Button color="inherit" onClick={onLogout}>
+                Logg Ut
+              </Button>
+            ) : (
+              <Button color="inherit" onClick={onLogin}>
+                Logg Inn
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
         <Drawer
           sx={{
             width: drawerWidth,
@@ -119,7 +120,6 @@ function Header() {
           variant="persistent"
           anchor="left"
           open={open}
-          onClose={() => console.log('close')}
         >
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
@@ -155,8 +155,8 @@ function Header() {
             </Link>
           </List>
         </Drawer>
-      </ClickAwayListener>
-    </>
+      </Box>
+    </ClickAwayListener>
   );
 }
 

@@ -69,7 +69,7 @@ function Login() {
           style={paperStyle}
           sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
         >
-          <h1>Logg inn</h1>
+          <h1 style={{ textAlign: 'center', width: '100%' }}>Logg inn</h1>
 
           <TextField
             required
