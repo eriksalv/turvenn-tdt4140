@@ -1,22 +1,26 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-import moment from 'moment';
 import { useEffect } from 'react';
 import TripCard from '../components/TripCard';
-import { getTrips } from '../features/trips/tripSlice';
+import { getTrips, reset } from '../features/trips/tripSlice';
 
 function Home() {
-  const { trips, isError } = useSelector((state) => state.trips);
+  const { trips, isSuccess, isLoading } = useSelector((state) => state.trips);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTrips());
-
-    if (isError) {
-      toast.error('Something went wrong');
+    if (isSuccess) {
+      dispatch(reset());
     }
-  }, [dispatch, isError]);
+  }, [dispatch, isSuccess]);
+
+  useEffect(() => {
+    dispatch(getTrips());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <Box
@@ -28,6 +32,9 @@ function Home() {
         alignItems: 'center'
       }}
     >
+      <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
+        Turer
+      </Typography>
       {trips.map((item) => (
         <TripCard
           title={item.name}

@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import LoadingButton from '@mui/material/Button';
-import SaveIcon from '@mui/icons-material/Save';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { Divider, Chip, Typography, Grid } from '@mui/material';
+import { toast } from 'react-toastify';
+import { Divider, Chip, Typography, Grid, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TripCard from '../components/TripCard';
-import { getUser } from '../features/users/userSlice';
+import { getUser, reset as userReset } from '../features/users/userSlice';
+import { getUserTrips, reset as tripReset } from '../features/trips/tripSlice';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -22,41 +17,28 @@ const Img = styled('img')({
 });
 
 function User() {
-  const mockData = [
-    {
-      difficulty: 1,
-      duration: '2 days',
-      date: '25.02.2022',
-      id: 'dkawdopwa'
-    },
-    {
-      difficulty: 3,
-      duration: '4 days',
-      date: '15.03.2022',
-      id: 'jdpowadjwpa'
-    },
-    {
-      difficulty: 5,
-      duration: '3 days',
-      date: '01.04.2022',
-      id: 'jdiwajdipaw'
-    }
-  ];
-
-  const { user, isError, isLoading, isSuccess } = useSelector((state) => state.users);
+  const { user: loggedInUser } = useSelector((state) => state.auth);
+  const { user, isError, isLoading, message, isSuccess } = useSelector((state) => state.users);
+  const { userTrips, isLoading: tripsIsLoading } = useSelector((state) => state.trips);
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getUser(id));
-
     if (isError) {
+      toast.error(message);
       navigate('/notfound');
+      dispatch(userReset());
+      return;
     }
-  }, [dispatch, getUser, isError]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+    dispatch(getUser(id));
+    dispatch(getUserTrips(id));
+  }, [isError, message, id]);
+
+  if (isLoading || tripsIsLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <Box
@@ -79,9 +61,14 @@ function User() {
         }}
       >
         <h1 style={{ width: '100%', textAlign: 'center', marginBottom: '3px' }}>
-          {user.firstName} {user.lastName} {id}
+          {user.firstName} {user.lastName}
         </h1>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
+        {loggedInUser && loggedInUser.id === user.id && (
+          <Button variant="outlined" onClick={() => navigate('/profile')}>
+            Rediger Profil
+          </Button>
+        )}
       </Box>
       <Grid
         width="80%"
@@ -114,8 +101,9 @@ function User() {
           alignItems: 'center'
         }}
       >
-        {mockData.map((item) => (
+        {userTrips.map((item) => (
           <TripCard
+            title={item.name}
             difficulty={item.difficulty}
             duration={item.duration}
             date={item.date}

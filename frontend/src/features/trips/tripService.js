@@ -15,7 +15,7 @@ const getTrip = async (tripId) => {
 };
 
 const getUserTrips = async (userId) => {
-  const res = await axios.get(`/api/users/${userId}`);
+  const res = await axios.get(`/api/users/${userId}/trips`);
 
   return res.data;
 };
