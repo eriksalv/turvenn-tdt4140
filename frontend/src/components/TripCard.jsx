@@ -14,6 +14,7 @@ const Img = styled('img')({
 });
 
 export default function TripCard({
+  title,
   difficulty,
   duration,
   date,

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Button,
@@ -10,9 +12,12 @@ import {
   MenuItem,
   styled
 } from '@mui/material';
+import { toast } from 'react-toastify';
+import { createTrip, reset } from '../features/trips/tripSlice';
 
 function CreateTrip() {
   const [formData, setFormData] = useState({
+    name: '',
     goal: '',
     start: '',
     date: '',
@@ -20,9 +25,12 @@ function CreateTrip() {
     duration: '',
     description: ''
   });
+  const dispatch = useDispatch();
+  const { isLoading, isError, isSuccess, message } = useSelector((state) => state.trips);
+  const navigate = useNavigate();
 
-  const { goal, start, date, difficulty, duration, description } = formData;
-  const paperStyle = { padding: 20, width: 900, margin: '20px auto' };
+  const { name, goal, start, date, difficulty, duration, description } = formData;
+  const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
 
   const Img = styled('img')({
     margin: 'auto',
@@ -31,18 +39,32 @@ function CreateTrip() {
     maxHeight: '100%'
   });
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess) {
+      dispatch(reset());
+      navigate('/home');
+      toast.success('Turen ble opprettet');
+    }
+
+    dispatch(reset());
+  }, [dispatch, isError, isSuccess, navigate, message]);
+
   const onChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.id);
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value
     }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(`Goal: ${goal}, Start: ${start}, Date: ${date}`);
+    const tripData = { name, goal, start, date, difficulty, duration, description };
+
+    dispatch(createTrip(tripData));
   };
 
   const onChangeDifficulty = (e) => {
@@ -66,6 +88,16 @@ function CreateTrip() {
             </Grid>
             <Grid item xs={8}>
               <form onSubmit={onSubmit}>
+                <TextField
+                  id="name"
+                  label="Tittel"
+                  placeholder="Navn på turen"
+                  required
+                  fullWidth
+                  value={name}
+                  margin="normal"
+                  onChange={onChange}
+                />
                 <TextField
                   id="goal"
                   label="Turmål"
@@ -143,7 +175,12 @@ function CreateTrip() {
             justifyContent="flex-end"
             sx={{ mt: '4rem', mb: '0.5rem' }}
           >
-            <Button className="btn btn-success" type="submit" variant="contained">
+            <Button
+              onClick={onSubmit}
+              className="btn btn-success"
+              type="submit"
+              variant="contained"
+            >
               Opprett turarrangement
             </Button>
           </Grid>
