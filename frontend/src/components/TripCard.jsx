@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
-import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 
@@ -63,7 +62,7 @@ export default function TripCard({
                 {difficulty}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <Moment format="MMMM Do YYYY, h:mm">{date}</Moment>
+                <Moment format="Do MMMM YYYY, h:mm">{date}</Moment>
               </Typography>
             </Grid>
           </Grid>
