@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import LoadingButton from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
@@ -12,7 +12,7 @@ import Select from '@mui/material/Select';
 import { Divider, Chip, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TripCard from '../components/TripCard';
-import { register } from '../features/auth/authSlice';
+import { getUser } from '../features/users/userSlice';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -43,11 +43,20 @@ function User() {
     }
   ];
 
-  // Burde hente fra en userSlice i redux med alle brukere, men dette fungerer foreløpig
-  const { user } = useSelector((state) => state.auth);
+  const { user, isError, isLoading, isSuccess } = useSelector((state) => state.users);
+  const dispatch = useDispatch();
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  if (!user) return <h1>Loading...</h1>;
+  useEffect(() => {
+    dispatch(getUser(id));
+
+    if (isError) {
+      navigate('/notfound');
+    }
+  }, [dispatch, getUser, isError]);
+
+  if (isLoading) return <h1>Loading...</h1>;
 
   return (
     <Box
@@ -79,10 +88,10 @@ function User() {
         container
         sx={{ gap: '10px', marginTop: '10px', marginRight: '0px', flexDirection: 'row' }}
       >
-        <Grid xs={4} flex={1}>
+        <Grid xs={4} flex={1} item>
           <Img alt="En kul tur med gode venner" src="../assets/Turvenn-2.png" />
         </Grid>
-        <Grid width="50%" flex={3}>
+        <Grid width="50%" flex={3} item>
           <Typography className="aboutText" id="outlined-multiline-static">
             Biografi: her står det noe veldig kult om personene.
           </Typography>

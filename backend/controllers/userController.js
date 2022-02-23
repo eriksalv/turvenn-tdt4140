@@ -11,12 +11,25 @@ const generateToken = (id) => {
 
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll({ attributes: ['email', 'firstName', 'lastName'] });
+    const users = await User.findAll({ attributes: ['id', 'email', 'firstName', 'lastName'] });
     return res.status(200).json(users);
   } catch (error) {
     res.status(500);
     return next(new Error('Something went wrong'));
   }
+};
+
+const getUser = async (req, res) => {
+  const { userId } = req.params;
+  const user = await User.findByPk(userId, {
+    attributes: ['id', 'email', 'firstName', 'lastName']
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  return res.status(200).json(user);
 };
 
 /**
@@ -97,5 +110,6 @@ module.exports = {
   getUsers,
   registerUser,
   loginUser,
-  getLogin
+  getLogin,
+  getUser
 };
