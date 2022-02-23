@@ -24,7 +24,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
           <Route path="/home" element={<Home />} />
-          <Route path="/trip" element={<ViewTrip />} />
+          <Route path="/trip/:id" element={<ViewTrip />} />
         </Routes>
       </Router>
       <ToastContainer />

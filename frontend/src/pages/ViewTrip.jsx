@@ -1,5 +1,6 @@
-import { useSelector } from 'react-redux';
-import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Grid,
   Paper,
@@ -14,6 +15,9 @@ import {
   Box,
   Typography
 } from '@mui/material';
+
+import { getTrip } from '../features/trips/tripSlice';
+
 import ProfileCard from '../components/ProfileCard';
 
 function ViewTrip() {
@@ -28,76 +32,74 @@ function ViewTrip() {
     {
       name: 'Sondre',
       experienceLevel: 'ekspert',
-      id: 'dkawdopwa'
+      id: 'a'
     },
     {
       name: 'Erik',
       experienceLevel: 'ekspert',
-      id: 'jdpowadjwpa'
+      id: 'b'
     },
     {
       name: 'Ola',
       experienceLevel: 'ekspert',
-      id: 'jdiwajdipaw'
+      id: 'c'
     },
     {
       name: 'Andrea',
       experienceLevel: 'ekspert',
-      id: 'jdiwajdipaw'
+      id: 'd'
     },
     {
       name: 'Trygve',
       experienceLevel: 'ekspert',
-      id: 'jdiwajdipaw'
+      id: 'e'
     },
     {
       name: 'Andreas',
       experienceLevel: 'ekspert',
-      id: 'jdiwajdipaw'
+      id: 'f'
     },
     {
       name: 'Alva',
       experienceLevel: 'ekspert',
-      id: 'jdiwajdipaw'
+      id: 'g'
     }
   ];
+
+  const { trip } = useSelector((state) => state.trips);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getTrip(1));
+  }, [dispatch]);
+
   return (
     <main>
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="left">
-            <h2>Tittel</h2>
+            <h2>{trip.name}</h2>
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={4}>
               <Img alt="logo" src="../Turvenn-logo.png" />
             </Grid>
             <Grid item xs={8}>
-              {/* <TextField
-                id="start"
-                label="Startpunkt"
-                placeholder="Hvor starter turen?"
-                required
-                fullWidth
-                // value={start}
-                margin="normal"
-              /> */}
-              <Typography variant="h5" component="h2" margin="20px auto">
-                Turmål:
+              <Typography variant="h5" component="h4" margin="20px auto">
+                Mål
+              </Typography>
+              <Typography variant="body1" component="body2" margin="20px auto">
+                {trip.goal}
               </Typography>
               <Typography variant="h5" component="h2" margin="20px auto">
-                Startpunkt:
+                Startpunkt
               </Typography>
-              {/* <TextField
-                id="date"
-                label="Dato og tid"
-                type="datetime-local"
-                fullWidth
-                // value={date}
-                margin="normal"
-              /> */}
+              <Typography variant="body1" component="body2" margin="20px auto">
+                {trip.start}
+              </Typography>
               <Typography variant="h5" component="h2" margin="20px auto">
-                Dato:
+                Dato
               </Typography>
               {/* <FormControl id="difficulty" fullWidth>
                 <InputLabel>Vanskelighetsgrad</InputLabel>
@@ -137,11 +139,11 @@ function ViewTrip() {
                 // value={description}
                 margin="normal"
               /> */}
-              <Typography variant="body1" component="h2" margin="20px auto">
-                Beskrivelse:
-              </Typography>
             </Grid>
           </Grid>
+          <Typography variant="body1" component="h2" margin="20px auto">
+            Beskrivelse:
+          </Typography>
           <Grid
             container
             alignItems="flex-end"
