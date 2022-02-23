@@ -89,13 +89,13 @@ function ViewTrip() {
               <Typography variant="h5" component="h4" margin="20px auto">
                 Mål
               </Typography>
-              <Typography variant="body1" component="body2" margin="20px auto">
+              <Typography variant="body1" component="h2" margin="20px auto">
                 {trip.goal}
               </Typography>
               <Typography variant="h5" component="h2" margin="20px auto">
                 Startpunkt
               </Typography>
-              <Typography variant="body1" component="body2" margin="20px auto">
+              <Typography variant="body1" component="h2" margin="20px auto">
                 {trip.start}
               </Typography>
               <Typography variant="h5" component="h2" margin="20px auto">
