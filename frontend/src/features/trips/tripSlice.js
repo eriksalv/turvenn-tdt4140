@@ -59,7 +59,7 @@ export const tripSlice = createSlice({
       .addCase(getTrips.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.trip = action.payload;
+        state.trips = action.payload;
       })
       .addCase(getTrips.rejected, (state, action) => {
         state.isLoading = false;

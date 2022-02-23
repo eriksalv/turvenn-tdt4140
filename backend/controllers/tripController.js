@@ -3,7 +3,7 @@ const { Trip, User } = require('../models');
 const getTrips = async (req, res, next) => {
   try {
     const trips = await Trip.findAll({
-      attributes: ['name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description'],
+      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description'],
       include: [
         {
           model: User,

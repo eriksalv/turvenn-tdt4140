@@ -46,7 +46,7 @@ export default function TripCard({
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div">
-                Kolsåstoppen
+                {title}
               </Typography>
               <Typography variant="body2" gutterBottom>
                 Vanskelighetsgrad: {difficulty}
