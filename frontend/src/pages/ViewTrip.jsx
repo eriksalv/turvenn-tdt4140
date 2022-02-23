@@ -89,36 +89,36 @@ function ViewTrip() {
               <Typography variant="h6" component="h6">
                 Mål
               </Typography>
-              <Typography variant="body1" component="body1">
+              <Typography variant="body1" component="h2">
                 {trip.goal}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
                 Startpunkt
               </Typography>
-              <Typography variant="body1" component="body1">
+              <Typography variant="body1" component="h2">
                 {trip.start}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
                 Dato
               </Typography>
-              <Typography variant="body1" component="body1">
+              <Typography variant="body1" component="h2">
                 {trip.date}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
                 Vanskelighetsgrad
               </Typography>
-              <Typography variant="body1" component="body1">
+              <Typography variant="body1" component="h2">
                 {trip.difficulty}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
                 Varighet
               </Typography>
-              <Typography variant="body1" component="body1">
+              <Typography variant="body1" component="h2">
                 {trip.duration}
               </Typography>
             </Grid>
           </Grid>
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h6">
             Om turen
           </Typography>
           <Typography variant="body1" component="h2">
