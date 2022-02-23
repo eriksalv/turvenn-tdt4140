@@ -86,63 +86,43 @@ function ViewTrip() {
               <Img alt="logo" src="../Turvenn-logo.png" />
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="h5" component="h4" margin="20px auto">
+              <Typography variant="h6" component="h6">
                 Mål
               </Typography>
-              <Typography variant="body1" component="body2" margin="20px auto">
+              <Typography variant="body1" component="body1">
                 {trip.goal}
               </Typography>
-              <Typography variant="h5" component="h2" margin="20px auto">
+              <Typography variant="h6" component="h6" marginTop="20px">
                 Startpunkt
               </Typography>
-              <Typography variant="body1" component="body2" margin="20px auto">
+              <Typography variant="body1" component="body1">
                 {trip.start}
               </Typography>
-              <Typography variant="h5" component="h2" margin="20px auto">
+              <Typography variant="h6" component="h6" marginTop="20px">
                 Dato
               </Typography>
-              {/* <FormControl id="difficulty" fullWidth>
-                <InputLabel>Vanskelighetsgrad</InputLabel>
-                <Select
-                  labelId="difficulty"
-                  id="difficulty"
-                  //   value={difficulty}
-                  label="Vanskelighetsgrad"
-                >
-                  <MenuItem value="enkel">Enkel</MenuItem>
-                  <MenuItem value="middels">Middels</MenuItem>
-                  <MenuItem value="krevende">Krevende</MenuItem>
-                  <MenuItem value="ekstraKrevende">Ekstra krevende</MenuItem>
-                </Select>
-              </FormControl> */}
-              <Typography variant="h5" component="h2" margin="20px auto">
-                Vanskelighetsgrad:
+              <Typography variant="body1" component="body1">
+                {trip.date}
               </Typography>
-              {/* <TextField
-                id="duration"
-                label="Varighet"
-                placeholder="Hvor lenge varer turen?"
-                fullWidth
-                // value={duration}
-                margin="normal"
-              /> */}
-              <Typography variant="h5" component="h2" margin="20px auto">
-                Varighet:
+              <Typography variant="h6" component="h6" marginTop="20px">
+                Vanskelighetsgrad
               </Typography>
-              {/* <TextField
-                id="descrition"
-                label="Beskrivelse"
-                placeholder="Beskriv turarrangementet her"
-                rows={6}
-                multiline
-                fullWidth
-                // value={description}
-                margin="normal"
-              /> */}
+              <Typography variant="body1" component="body1">
+                {trip.difficulty}
+              </Typography>
+              <Typography variant="h6" component="h6" marginTop="20px">
+                Varighet
+              </Typography>
+              <Typography variant="body1" component="body1">
+                {trip.duration}
+              </Typography>
             </Grid>
           </Grid>
-          <Typography variant="body1" component="h2" margin="20px auto">
-            Beskrivelse:
+          <Typography variant="h6" component="h2">
+            Om turen
+          </Typography>
+          <Typography variant="body1" component="h2">
+            {trip.description}
           </Typography>
           <Grid
             container
