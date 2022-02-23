@@ -49,7 +49,12 @@ export const tripSlice = createSlice({
   name: 'trip',
   initialState,
   reducers: {
-    reset: () => initialState
+    reset: (state) => {
+      state.isError = false;
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.message = '';
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -59,7 +64,7 @@ export const tripSlice = createSlice({
       .addCase(getTrips.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.trip = action.payload;
+        state.trips = action.payload;
       })
       .addCase(getTrips.rejected, (state, action) => {
         state.isLoading = false;

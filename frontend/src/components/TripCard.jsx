@@ -4,6 +4,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
+import { useNavigate } from 'react-router-dom';
+import Moment from 'react-moment';
+
 // import { mdiClock } from '@mdi/js';
 
 const Img = styled('img')({
@@ -21,8 +24,15 @@ export default function TripCard({
   imagePath = '/assets/defaultHike.jpeg',
   iconPath = '/assets/clock.png'
 }) {
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    navigate('/users/1');
+  };
+
   return (
     <Paper
+      onClick={onClick}
       sx={{
         width: '400px',
         maxWidth: '400px',
@@ -46,13 +56,13 @@ export default function TripCard({
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div">
-                Kolsåstoppen
+                {title}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                Vanskelighetsgrad: {difficulty}
+                {difficulty}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Dato: {date}
+                <Moment format="Do MMMM YYYY, h:mm">{date}</Moment>
               </Typography>
             </Grid>
           </Grid>

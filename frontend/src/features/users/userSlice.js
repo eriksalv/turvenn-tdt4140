@@ -32,7 +32,12 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    reset: () => initialState
+    reset: (state) => {
+      state.isError = false;
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.message = '';
+    }
   },
   extraReducers: (builder) => {
     builder
