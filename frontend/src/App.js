@@ -24,7 +24,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/create-trip" element={<CreateTrip />} />
+          <Route path="/create-trip" element={<PrivateRoute />}>
+            <Route path="/create-trip" element={<CreateTrip />} />
+          </Route>
           <Route path="/profile" element={<PrivateRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
           </Route>

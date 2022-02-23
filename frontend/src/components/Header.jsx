@@ -145,7 +145,7 @@ function Header() {
                 <ListItemText primary="Opprett Tur" />
               </ListItem>
             </Link>
-            <Link to={user ? `/users/${user.id}` : '/login'} style={{ textDecoration: 'none' }}>
+            <Link to={user ? `/users/${user.id}` : '/'} style={{ textDecoration: 'none' }}>
               <ListItem button key="Profil">
                 <ListItemIcon>
                   <AccountCircleIcon />

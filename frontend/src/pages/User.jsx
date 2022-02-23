@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { toast } from 'react-toastify';
 import { Divider, Chip, Typography, Grid, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import EditIcon from '@mui/icons-material/Edit';
 import TripCard from '../components/TripCard';
 import { getUser, reset as userReset } from '../features/users/userSlice';
 import { getUserTrips, reset as tripReset } from '../features/trips/tripSlice';
@@ -29,6 +30,7 @@ function User() {
       toast.error(message);
       navigate('/notfound');
       dispatch(userReset());
+      dispatch(tripReset());
       return;
     }
 
@@ -65,7 +67,7 @@ function User() {
         </h1>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
         {loggedInUser && loggedInUser.id === user.id && (
-          <Button variant="outlined" onClick={() => navigate('/profile')}>
+          <Button variant="outlined" onClick={() => navigate('/profile')} endIcon={<EditIcon />}>
             Rediger Profil
           </Button>
         )}
