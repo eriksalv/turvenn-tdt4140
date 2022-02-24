@@ -95,9 +95,6 @@ const signUp = async (req, res, next) => {
   const { tripId } = req.params;
   const userId = req.user.id;
 
-  console.log(userId);
-  console.log(tripId);
-
   const user = await User.findByPk(userId);
   const trip = await Trip.findByPk(tripId);
 
@@ -107,8 +104,8 @@ const signUp = async (req, res, next) => {
   }
 
   try {
-    const participant = await user.addParticipatedTrip(trip);
-    return res.status(201).json(participant);
+    await user.addParticipatedTrip(trip);
+    return res.status(201).json({ message: 'Successfully signed up' });
   } catch (error) {
     console.log(error);
     res.status(500);
