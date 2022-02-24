@@ -20,6 +20,11 @@ const protect = async (req, res, next) => {
       // Get user from token and put in request
       req.user = await User.findByPk(decoded.id);
 
+      if (!req.user) {
+        res.status(401);
+        return next(new Error('Not authorized'));
+      }
+
       return next();
     } catch (error) {
       res.status(401);
