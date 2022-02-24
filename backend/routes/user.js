@@ -1,7 +1,13 @@
 const express = require('express');
 const { body } = require('express-validator');
 
-const { registerUser, getUsers, loginUser, getLogin } = require('../controllers/userController');
+const {
+  registerUser,
+  getUsers,
+  loginUser,
+  getLogin,
+  getUser
+} = require('../controllers/userController');
 const { protect } = require('../middleware/authHandler');
 
 const router = express.Router();
@@ -13,6 +19,9 @@ router.get('/:userId/trips', getUserTrips);
 
 // GET /api/users
 router.get('/', getUsers);
+
+// GET /api/users/:userId
+router.get('/:userId', getUser);
 
 // GET /api/users/login
 router.get('/login', protect, getLogin);
