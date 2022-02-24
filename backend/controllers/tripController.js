@@ -47,7 +47,22 @@ const getTrip = async (req, res, next) => {
   const { tripId } = req.params;
 
   const trip = await Trip.findByPk(tripId, {
-    attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description']
+    attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description'],
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['id', 'firstName', 'lastName', 'email']
+      },
+      {
+        model: User,
+        as: 'participators',
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+        through: {
+          attributes: []
+        }
+      }
+    ]
   });
 
   if (!trip) {
@@ -135,33 +150,4 @@ const signOff = async (req, res, next) => {
   }
 };
 
-const getParticipators = async (req, res, next) => {
-  const { tripId } = req.params;
-  const trip = await Trip.findByPk(tripId, {
-    attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description'],
-    include: [
-      {
-        model: User,
-        as: 'user',
-        attributes: ['id', 'firstName', 'lastName', 'email']
-      },
-      {
-        model: User,
-        as: 'participators',
-        attributes: ['id', 'firstName', 'lastName', 'email'],
-        through: {
-          attributes: []
-        }
-      }
-    ]
-  });
-
-  if (!trip) {
-    res.status(404);
-    return next(new Error('Trip not found'));
-  }
-
-  return res.status(200).json(trip);
-};
-
-module.exports = { getTrips, createTrip, getUserTrips, getTrip, signUp, signOff, getParticipators };
+module.exports = { getTrips, createTrip, getUserTrips, getTrip, signUp, signOff };

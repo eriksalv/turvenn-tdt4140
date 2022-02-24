@@ -179,7 +179,7 @@ describe('Trip Controller - signup/signoff', () => {
   });
 });
 
-describe('Trip Controller - getTrip, getTrips, getParticipators', () => {
+describe('Trip Controller - getTrip, getTrips', () => {
   let req;
   let res;
   let next;
@@ -196,19 +196,10 @@ describe('Trip Controller - getTrip, getTrips, getParticipators', () => {
     next = jest.fn();
   });
 
-  it('should return status 404 if trip was not found (getParticipators)', async () => {
-    Trip.findByPk = jest.fn().mockImplementation(() => null);
-
-    await getParticipators(req, res, next);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(next).toHaveBeenCalledWith(new Error('Trip not found'));
-  });
-
   it('should return status 404 if trip was not found (getTrip)', async () => {
     Trip.findByPk = jest.fn().mockImplementation(() => null);
 
-    await getParticipators(req, res, next);
+    await getTrip(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(next).toHaveBeenCalledWith(new Error('Trip not found'));
@@ -221,18 +212,6 @@ describe('Trip Controller - getTrip, getTrips, getParticipators', () => {
     Trip.findByPk = jest.fn().mockImplementation(() => trip);
 
     await getTrip(req, res, next);
-
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(trip);
-  });
-
-  it('should return trip with status 200 if found (getParticipators)', async () => {
-    const trip = {
-      id: 1
-    };
-    Trip.findByPk = jest.fn().mockImplementation(() => trip);
-
-    await getParticipators(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(trip);
