@@ -3,3 +3,4 @@ node_modules
 coverage
 .env
 npmlist.json
+.DS_Store
