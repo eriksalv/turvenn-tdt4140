@@ -11,8 +11,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
 import ProfilePage from './pages/ProfilePage';
 import NotFound from './pages/NotFound';
-import User from './pages/User';
 import ViewTrip from './pages/ViewTrip';
+import User from './pages/User';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
