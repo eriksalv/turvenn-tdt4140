@@ -110,7 +110,7 @@ function ProfilePage() {
       </div>
 
       <Divider sx={{ width: '100%' }}>
-        <Chip label="Turhistorikk" />
+        <Chip label="Kommende turer" />
       </Divider>
       <Box
         id="tripHistoryContainer"
@@ -132,7 +132,28 @@ function ProfilePage() {
         ))}
       </Box>
 
-      <div id="history" />
+      <Divider sx={{ width: '100%' }}>
+        <Chip label="Turhistorikk" />
+      </Divider>
+      <Box
+        id="tripHistoryContainer"
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        {mockData.map((item) => (
+          <TripCard
+            difficulty={item.difficulty}
+            duration={item.duration}
+            date={item.date}
+            key={item.id}
+          />
+        ))}
+      </Box>
     </Box>
   );
 }

@@ -12,6 +12,7 @@ import Home from './pages/Home';
 import ProfilePage from './pages/ProfilePage';
 import NotFound from './pages/NotFound';
 import User from './pages/User';
+import ViewTrip from './pages/ViewTrip';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           </Route>
           <Route path="/home" element={<Home />} />
           <Route path="/users/:id" element={<User />} />
+          <Route path="/trips/:id" element={<ViewTrip />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

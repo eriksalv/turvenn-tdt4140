@@ -46,17 +46,16 @@ const getUserTrips = async (req, res, next) => {
 const getTrip = async (req, res, next) => {
   const { tripId } = req.params;
 
-  try {
-    const trip = await Trip.findByPk(tripId, {
-      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description']
-    });
-    res.status(200);
-    return res.json(trip);
-  } catch (error) {
-    console.log(error);
+  const trip = await Trip.findByPk(tripId, {
+    attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description']
+  });
+
+  if (!trip) {
     res.status(404);
-    next(new Error('Trip not found'));
+    return next(new Error('Trip not found'));
   }
+
+  return res.status(200).json(trip);
 };
 
 const createTrip = async (req, res, next) => {
