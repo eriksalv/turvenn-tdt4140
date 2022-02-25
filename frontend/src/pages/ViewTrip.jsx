@@ -5,6 +5,9 @@ import { Grid, Paper, styled, Divider, Chip, Box, Typography, Button } from '@mu
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { toast } from 'react-toastify';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { getTrip, reset } from '../features/trips/tripSlice';
 
@@ -82,9 +85,18 @@ function ViewTrip() {
     <main>
       <Grid>
         <Paper elevation={10} style={paperStyle}>
-          <Grid align="left">
+          <Grid container alignItems="flex-start" justifyContent="space-between">
             <h2>{trip.name}</h2>
+            <Grid>
+              <Fab sx={{ mr: 1 }} size="small" color="secondary" aria-label="delete">
+                <EditIcon />
+              </Fab>
+              <Fab size="small" color="primary" aria-label="edit">
+                <DeleteIcon />
+              </Fab>
+            </Grid>
           </Grid>
+
           <Grid align="left" sx={{ marginBottom: '10px' }}>
             <Button
               onClick={() => setIsSignedUp((prevState) => !prevState)}
