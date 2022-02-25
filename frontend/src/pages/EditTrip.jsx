@@ -29,18 +29,6 @@ function EditTrip() {
     description: trip.description
   });
 
-  const mockData = [
-    {
-      name: 'Kul tur',
-      goal: 'Der',
-      start: 'her',
-      date: '25.02.2022',
-      difficulty: 'enkel',
-      duration: 10,
-      description: 'superkul tur'
-    }
-  ];
-
   const dispatch = useDispatch();
   const { isLoading, isError, isSuccess, message } = useSelector((state) => state.trips);
   const navigate = useNavigate();
