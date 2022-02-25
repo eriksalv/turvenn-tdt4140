@@ -4,7 +4,7 @@ import getError from '../../util/getError';
 
 const initialState = {
   trips: [],
-  trip: {},
+  trip: null,
   userTrips: [],
   isError: false,
   isSuccess: false,
@@ -48,7 +48,7 @@ export const getUserTrips = createAsyncThunk('trips/user/get', async (userId, th
 export const signUp = createAsyncThunk('trips/signup', async (tripId, thunkAPI) => {
   try {
     const { accessToken } = thunkAPI.getState().auth.user;
-    return await tripService.signup(tripId, accessToken);
+    return await tripService.signUp(tripId, accessToken);
   } catch (error) {
     return thunkAPI.rejectWithValue(getError(error));
   }
@@ -57,7 +57,7 @@ export const signUp = createAsyncThunk('trips/signup', async (tripId, thunkAPI) 
 export const signOff = createAsyncThunk('trips/signoff', async (tripId, thunkAPI) => {
   try {
     const { accessToken } = thunkAPI.getState().auth.user;
-    return await tripService.signoff(tripId, accessToken);
+    return await tripService.signOff(tripId, accessToken);
   } catch (error) {
     return thunkAPI.rejectWithValue(getError(error));
   }

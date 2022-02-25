@@ -51,7 +51,7 @@ const signOff = async (tripId, token) => {
     }
   };
 
-  const res = await axios.delete(`${baseUrl}/${tripId}/signup`, {}, config);
+  const res = await axios.delete(`${baseUrl}/${tripId}/signup`, config);
 
   return res.data;
 };

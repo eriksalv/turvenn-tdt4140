@@ -5,14 +5,13 @@ import { Grid, Paper, styled, Divider, Chip, Box, Typography, Button } from '@mu
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { toast } from 'react-toastify';
+import useSignedUpStatus from '../hooks/useSignedUpStatus';
 
-import { getTrip, reset } from '../features/trips/tripSlice';
+import { getTrip, reset, signUp, signOff } from '../features/trips/tripSlice';
 
 import ProfileCard from '../components/ProfileCard';
 
 function ViewTrip() {
-  // TODO: erstatt med redux state
-  const [isSignedUp, setIsSignedUp] = useState(false);
   const Img = styled('img')({
     margin: 'auto',
     display: 'block',
@@ -20,6 +19,9 @@ function ViewTrip() {
     maxHeight: '100%'
   });
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
+
+  const [signedUp, setSignedUp] = useSignedUpStatus()[0];
+  const [checkingStatus] = useSignedUpStatus()[1];
 
   const { trip, isError, message, isLoading, isSuccess } = useSelector((state) => state.trips);
   const navigate = useNavigate();
@@ -41,9 +43,19 @@ function ViewTrip() {
     }
 
     dispatch(getTrip(id));
-  }, [isError, message, id]);
+  }, [isError, message, id, signedUp]);
 
-  if (isLoading) {
+  const onSignUp = async () => {
+    await Promise.resolve(dispatch(signUp(trip.id)));
+    setSignedUp(true);
+  };
+
+  const onSignOff = async () => {
+    await Promise.resolve(dispatch(signOff(trip.id)));
+    setSignedUp(false);
+  };
+
+  if (isLoading || checkingStatus || !trip) {
     return <h1>Loading...</h1>;
   }
 
@@ -55,13 +67,15 @@ function ViewTrip() {
             <h2>{trip.name}</h2>
           </Grid>
           <Grid align="left" sx={{ marginBottom: '10px' }}>
-            <Button
-              onClick={() => setIsSignedUp((prevState) => !prevState)}
-              variant={!isSignedUp ? 'outlined' : 'contained'}
-              startIcon={!isSignedUp ? <GroupAddOutlinedIcon /> : <GroupAddIcon />}
-            >
-              {!isSignedUp ? 'Meld deg på' : 'Meld deg av'}
-            </Button>
+            {!signedUp ? (
+              <Button onClick={onSignUp} variant="outlined" startIcon={<GroupAddOutlinedIcon />}>
+                Meld deg på
+              </Button>
+            ) : (
+              <Button onClick={onSignOff} variant="contained" startIcon={<GroupAddIcon />}>
+                Meld deg av
+              </Button>
+            )}
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={4}>
