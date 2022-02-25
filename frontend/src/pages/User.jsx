@@ -20,10 +20,21 @@ const Img = styled('img')({
 function User() {
   const { user: loggedInUser } = useSelector((state) => state.auth);
   const { user, isError, isLoading, message, isSuccess } = useSelector((state) => state.users);
-  const { userTrips, isLoading: tripsIsLoading } = useSelector((state) => state.trips);
+  const {
+    userTrips,
+    isLoading: tripsIsLoading,
+    isSuccess: tripsIsSuccess
+  } = useSelector((state) => state.trips);
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess && tripsIsSuccess) {
+      dispatch(userReset());
+      dispatch(tripReset());
+    }
+  }, [dispatch, isSuccess, tripsIsSuccess]);
 
   useEffect(() => {
     if (isError) {

@@ -23,6 +23,7 @@ export default function ProfileCard({
 
   return (
     <Paper
+      onClick={() => navigate(`/users/${id}`)}
       sx={{
         width: '200px',
         maxWidth: '200px',
@@ -48,9 +49,9 @@ export default function ProfileCard({
               <Typography gutterBottom variant="subtitle1" component="div">
                 {name}
               </Typography>
-              <Typography variant="body2" gutterBottom>
+              {/* <Typography variant="body2" gutterBottom> // Har ikke erfaringsnivå enda
                 Erfaringsnivå: {experienceLevel}
-              </Typography>
+              </Typography> */}
             </Grid>
           </Grid>
         </Grid>

@@ -20,48 +20,17 @@ function ViewTrip() {
     maxHeight: '100%'
   });
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
-  const mockData = [
-    {
-      name: 'Sondre',
-      experienceLevel: 'ekspert',
-      id: 'a'
-    },
-    {
-      name: 'Erik',
-      experienceLevel: 'ekspert',
-      id: 'b'
-    },
-    {
-      name: 'Ola',
-      experienceLevel: 'ekspert',
-      id: 'c'
-    },
-    {
-      name: 'Andrea',
-      experienceLevel: 'ekspert',
-      id: 'd'
-    },
-    {
-      name: 'Trygve',
-      experienceLevel: 'ekspert',
-      id: 'e'
-    },
-    {
-      name: 'Andreas',
-      experienceLevel: 'ekspert',
-      id: 'f'
-    },
-    {
-      name: 'Alva',
-      experienceLevel: 'ekspert',
-      id: 'g'
-    }
-  ];
 
-  const { trip, isError, message, isLoading } = useSelector((state) => state.trips);
+  const { trip, isError, message, isLoading, isSuccess } = useSelector((state) => state.trips);
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(reset());
+    }
+  }, [dispatch, isSuccess]);
 
   useEffect(() => {
     if (isError) {
@@ -139,8 +108,8 @@ function ViewTrip() {
           </Typography>
           <Grid
             container
-            alignItems="flex-end"
-            justifyContent="flex-end"
+            alignItems="flex-start"
+            justifyContent="flex-start"
             sx={{ mt: '4rem', mb: '0.5rem' }}
           >
             <Divider sx={{ width: '100%' }}>
@@ -156,13 +125,17 @@ function ViewTrip() {
                 alignItems: 'center'
               }}
             >
-              {mockData.map((item) => (
-                <ProfileCard
-                  name={item.name}
-                  experienceLevel={item.experienceLevel}
-                  key={item.id}
-                />
-              ))}
+              {trip.participators && trip.participators.length > 0 ? (
+                trip.participators.map((item) => (
+                  <ProfileCard
+                    id={item.id}
+                    name={`${item.firstName} ${item.lastName}`}
+                    key={item.id}
+                  />
+                ))
+              ) : (
+                <p>Ingen deltakere enda</p>
+              )}
             </Box>
           </Grid>
         </Paper>
