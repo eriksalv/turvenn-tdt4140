@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import Moment from 'react-moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import TripCard from '../components/TripCard';
@@ -32,18 +33,40 @@ function Home() {
         alignItems: 'center'
       }}
     >
-      <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
-        Turer
-      </Typography>
-      {trips.map((item) => (
-        <TripCard
-          title={item.name}
-          difficulty={item.difficulty}
-          duration={item.duration}
-          date={item.date}
-          key={item.id}
-        />
-      ))}
+      <Box
+        sx={{
+          width: '500px',
+          display: 'flex',
+          flexDirection: 'column',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
+          Hjem
+        </Typography>
+        {[...trips]
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+          .reverse()
+          .map((item) => (
+            <div key={item.createdAt}>
+              <Typography sx={{ display: 'inline' }} variant="p">
+                <b>{item.user.firstName}</b> publiserte en ny tur
+              </Typography>
+              <Typography sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }} variant="p">
+                <Moment format="Do MMMM YYYY, hh:mm">{item.createdAt}</Moment>
+              </Typography>
+              <TripCard
+                title={item.name}
+                difficulty={item.difficulty}
+                duration={item.duration}
+                date={item.date}
+                key={item.id}
+              />
+            </div>
+          ))}
+      </Box>
     </Box>
   );
 }
