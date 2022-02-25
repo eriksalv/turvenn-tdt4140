@@ -44,7 +44,7 @@ function Home() {
         }}
       >
         <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
-          Turer
+          Hjem
         </Typography>
         {[...trips]
           .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
