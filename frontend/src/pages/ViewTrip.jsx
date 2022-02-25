@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Grid, Paper, styled, Divider, Chip, Box, Typography } from '@mui/material';
+import { Grid, Paper, styled, Divider, Chip, Box, Typography, Button } from '@mui/material';
+import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { toast } from 'react-toastify';
 
 import { getTrip, reset } from '../features/trips/tripSlice';
@@ -9,13 +11,15 @@ import { getTrip, reset } from '../features/trips/tripSlice';
 import ProfileCard from '../components/ProfileCard';
 
 function ViewTrip() {
+  // TODO: erstatt med redux state
+  const [isSignedUp, setIsSignedUp] = useState(false);
   const Img = styled('img')({
     margin: 'auto',
     display: 'block',
     maxWidth: '100%',
     maxHeight: '100%'
   });
-  const paperStyle = { padding: 20, width: 900, margin: '20px auto' };
+  const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
   const mockData = [
     {
       name: 'Sondre',
@@ -80,6 +84,15 @@ function ViewTrip() {
         <Paper elevation={10} style={paperStyle}>
           <Grid align="left">
             <h2>{trip.name}</h2>
+          </Grid>
+          <Grid align="left" sx={{ marginBottom: '10px' }}>
+            <Button
+              onClick={() => setIsSignedUp((prevState) => !prevState)}
+              variant={!isSignedUp ? 'outlined' : 'contained'}
+              startIcon={!isSignedUp ? <GroupAddOutlinedIcon /> : <GroupAddIcon />}
+            >
+              {!isSignedUp ? 'Meld deg på' : 'Meld deg av'}
+            </Button>
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={4}>
