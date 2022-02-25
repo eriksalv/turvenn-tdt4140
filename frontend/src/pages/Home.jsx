@@ -37,6 +37,7 @@ function Home() {
       </Typography>
       {trips.map((item) => (
         <TripCard
+          id={item.id}
           title={item.name}
           difficulty={item.difficulty}
           duration={item.duration}

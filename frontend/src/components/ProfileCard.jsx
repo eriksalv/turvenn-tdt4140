@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -13,10 +14,13 @@ const Img = styled('img')({
 });
 
 export default function ProfileCard({
+  id,
   name,
   experienceLevel,
   profilepicPath = '/assets/defaultProfilepic.jpeg'
 }) {
+  const navigate = useNavigate();
+
   return (
     <Paper
       sx={{

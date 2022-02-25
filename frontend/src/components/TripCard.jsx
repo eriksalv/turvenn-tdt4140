@@ -17,6 +17,7 @@ const Img = styled('img')({
 });
 
 export default function TripCard({
+  id,
   title,
   difficulty,
   duration,
@@ -27,7 +28,7 @@ export default function TripCard({
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate('/users/1');
+    navigate(`/trips/${id}`);
   };
 
   return (

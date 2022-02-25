@@ -124,6 +124,7 @@ function ProfilePage() {
       >
         {mockData.map((item) => (
           <TripCard
+            id={item.id}
             difficulty={item.difficulty}
             duration={item.duration}
             date={item.date}
