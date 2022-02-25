@@ -20,6 +20,7 @@ const Img = styled('img')({
 });
 
 export default function TripCard({
+  id,
   title,
   difficulty,
   duration,
@@ -30,7 +31,7 @@ export default function TripCard({
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate('/users/1');
+    navigate(`/trips/${id}`);
   };
 
   return (
@@ -65,7 +66,7 @@ export default function TripCard({
                 {difficulty}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <Moment format="Do MMMM YYYY, h:mm">{date}</Moment>
+                <Moment format="Do MMMM YYYY, HH:mm">{date}</Moment>
               </Typography>
             </Grid>
           </Grid>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -13,12 +14,16 @@ const Img = styled('img')({
 });
 
 export default function ProfileCard({
+  id,
   name,
   experienceLevel,
   profilepicPath = '/assets/defaultProfilepic.jpeg'
 }) {
+  const navigate = useNavigate();
+
   return (
     <Paper
+      onClick={() => navigate(`/users/${id}`)}
       sx={{
         width: '200px',
         maxWidth: '200px',
@@ -44,9 +49,9 @@ export default function ProfileCard({
               <Typography gutterBottom variant="subtitle1" component="div">
                 {name}
               </Typography>
-              <Typography variant="body2" gutterBottom>
+              {/* <Typography variant="body2" gutterBottom> // Har ikke erfaringsnivå enda
                 Erfaringsnivå: {experienceLevel}
-              </Typography>
+              </Typography> */}
             </Grid>
           </Grid>
         </Grid>

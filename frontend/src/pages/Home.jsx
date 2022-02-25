@@ -54,10 +54,14 @@ function Home() {
               <Typography sx={{ display: 'inline' }} variant="p">
                 <b>{item.user.firstName}</b> publiserte en ny tur
               </Typography>
-              <Typography sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }} variant="p">
-                <Moment format="Do MMMM YYYY, hh:mm">{item.createdAt}</Moment>
+              <Typography
+                sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }}
+                variant="p"
+              >
+                <Moment format="Do MMMM YYYY, HH:mm">{item.createdAt}</Moment>
               </Typography>
               <TripCard
+                id={item.id}
                 title={item.name}
                 difficulty={item.difficulty}
                 duration={item.duration}
