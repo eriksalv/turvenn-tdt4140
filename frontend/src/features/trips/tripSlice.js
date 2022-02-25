@@ -45,6 +45,24 @@ export const getUserTrips = createAsyncThunk('trips/user/get', async (userId, th
   }
 });
 
+export const signUp = createAsyncThunk('trips/signup', async (tripId, thunkAPI) => {
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await tripService.signup(tripId, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
+export const signOff = createAsyncThunk('trips/signoff', async (tripId, thunkAPI) => {
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await tripService.signoff(tripId, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
 export const tripSlice = createSlice({
   name: 'trip',
   initialState,
@@ -105,6 +123,30 @@ export const tripSlice = createSlice({
         state.userTrips = action.payload;
       })
       .addCase(getUserTrips.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(signUp.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(signUp.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(signUp.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(signOff.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(signOff.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(signOff.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
