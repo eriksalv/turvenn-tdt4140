@@ -35,15 +35,26 @@ function Home() {
       <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
         Turer
       </Typography>
-      {trips.map((item) => (
-        <TripCard
-          title={item.name}
-          difficulty={item.difficulty}
-          duration={item.duration}
-          date={item.date}
-          key={item.id}
-        />
-      ))}
+      {[...trips]
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+        .reverse()
+        .map((item) => (
+          <div key={item.createdAt}>
+            <Typography sx={{ display: 'inline' }} variant="p">
+              <b>{item.user.firstName}</b> publiserte en ny tur
+            </Typography>
+            <Typography sx={{ display: 'inline', fontSize: 13, color: '#b5b5b5' }} variant="p">
+              <i>I dag kl 23:03</i>
+            </Typography>
+            <TripCard
+              title={item.name}
+              difficulty={item.difficulty}
+              duration={item.duration}
+              date={item.date}
+              key={item.id}
+            />
+          </div>
+        ))}
     </Box>
   );
 }

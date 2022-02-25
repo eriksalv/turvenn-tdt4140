@@ -3,7 +3,7 @@ const { Trip, User } = require('../models');
 const getTrips = async (req, res, next) => {
   try {
     const trips = await Trip.findAll({
-      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description'],
+      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description', 'createdAt'],
       include: [
         {
           model: User,
@@ -47,7 +47,7 @@ const getTrip = async (req, res, next) => {
   const { tripId } = req.params;
 
   const trip = await Trip.findByPk(tripId, {
-    attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description'],
+    attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description', 'createdAt'],
     include: [
       {
         model: User,
