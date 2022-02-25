@@ -16,21 +16,19 @@ import SaveIcon from '@mui/icons-material/Save';
 import { toast } from 'react-toastify';
 import { editTrip, reset } from '../features/trips/tripSlice';
 
-const { trip } = useSelector((state) => state.auth);
-
 function EditTrip() {
   const [formData, setFormData] = useState({
-    name: trip.name,
-    goal: trip.goal,
-    start: trip.start,
-    date: trip.date,
-    difficulty: trip.difficulty,
-    duration: trip.duration,
-    description: trip.description
+    name: '',
+    goal: '',
+    start: '',
+    date: '',
+    difficulty: '',
+    duration: '',
+    description: ''
   });
 
   const dispatch = useDispatch();
-  const { isLoading, isError, isSuccess, message } = useSelector((state) => state.trips);
+  const { isError, isSuccess, message } = useSelector((state) => state.trips);
   const navigate = useNavigate();
 
   const { name, goal, start, date, difficulty, duration, description } = formData;
