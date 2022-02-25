@@ -150,4 +150,22 @@ const signOff = async (req, res, next) => {
   }
 };
 
-module.exports = { getTrips, createTrip, getUserTrips, getTrip, signUp, signOff };
+const deleteTrip = async (req, res, next) => {
+  // const { name, start, goal, date, difficulty, duration, description } = req.body;
+  // const userId = req.user.id;
+  const { tripId } = req.params;
+
+  try {
+    const trip = await Trip.findByPk(tripId);
+
+    await trip.destroy();
+
+    return res.status(200).json({ message: 'Trip deleted successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
+module.exports = { getTrips, createTrip, getUserTrips, getTrip, signUp, signOff, deleteTrip };
