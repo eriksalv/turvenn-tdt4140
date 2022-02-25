@@ -29,6 +29,10 @@ export const createTrip = createAsyncThunk('/trips/create', async (tripData, thu
   }
 });
 
+export const editTrip = createAsyncThunk('/trips/edit', async (tripData, thunkAPI) => {
+  // TO DO: noe må skje her
+});
+
 export const getTrip = createAsyncThunk('trips/get', async (tripId, thunkAPI) => {
   try {
     return await tripService.getTrip(tripId);
