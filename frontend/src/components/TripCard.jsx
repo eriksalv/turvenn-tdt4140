@@ -6,6 +6,9 @@ import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
 
 // import { mdiClock } from '@mdi/js';
 
@@ -71,6 +74,12 @@ export default function TripCard({
               <Img alt="Klokke" src={iconPath} />
               {duration}
             </Typography>
+            <Fab sx={{ mr: 1, mt: '2rem' }} size="small" color="secondary" aria-label="delete">
+              <EditIcon />
+            </Fab>
+            <Fab sx={{ mt: '2rem' }} size="small" color="primary" aria-label="edit">
+              <DeleteIcon />
+            </Fab>
           </Grid>
         </Grid>
       </Grid>
