@@ -2,7 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const { protect } = require('../middleware/authHandler');
 
-const { getTrips, createTrip, getTrip, signUp, signOff, editTrip, deleteTrip } = require('../controllers/tripController');
+const { getTrips, createTrip, getTrip, signUp, signOff, updateTrip, deleteTrip } = require('../controllers/tripController');
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.post('/', protect, createTrip);
 router.post('/:tripId/signup', protect, signUp);
 
 // POST /api/trips/:tripId/edit
-// router.post('/:tripId/edit', protect, editTrip);
+router.post('/:tripId/update', protect, updateTrip);
 
 // DELETE /api/trips/:tripId
 router.delete('/:tripId', protect, deleteTrip);

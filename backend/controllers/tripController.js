@@ -177,6 +177,7 @@ const deleteTrip = async (req, res, next) => {
   try {
     const trip = await Trip.findByPk(tripId);
 
+    // TODO(Ola): gjøre så "groups" kan slette, ikke basert på brukerid for at admin kan også slette
     if (trip.userId !== userId) return res.status(403).json({ message: 'Unauthorized' });
 
     await trip.destroy();
@@ -190,17 +191,29 @@ const deleteTrip = async (req, res, next) => {
 };
 
 const updateTrip = async (req, res, next) => {
-  // const { name, start, goal, date, difficulty, duration, description } = req.body;
+  const { name, start, goal, date, difficulty, duration, description } = req.body;
   const userId = req.user.id;
   const { tripId } = req.params;
 
   try {
     const trip = await Trip.findByPk(tripId);
 
-    console.log(userId);
-    await trip.destroy();
+    // TODO(Ola): gjøre så "groups" kan slette, ikke basert på brukerid for at admin kan også slette
+    if (trip.userId !== userId) return res.status(403).json({ message: 'Unauthorized' });
 
-    return res.status(200).json({ message: 'Trip deleted successfully' });
+    trip.set({
+      name: name,
+      start: start,
+      goal: goal,
+      date: date,
+      difficulty: difficulty,
+      duration: duration,
+      description: description
+    });
+
+    await trip.save();
+
+    return res.status(200).json({ message: 'Trip updated successfully' });
   } catch (error) {
     console.log(error);
     res.status(500);
