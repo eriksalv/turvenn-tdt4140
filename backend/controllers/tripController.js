@@ -3,7 +3,17 @@ const { Trip, User } = require('../models');
 const getTrips = async (req, res, next) => {
   try {
     const trips = await Trip.findAll({
-      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description', 'createdAt'],
+      attributes: [
+        'id',
+        'name',
+        'start',
+        'goal',
+        'date',
+        'difficulty',
+        'duration',
+        'description',
+        'createdAt'
+      ],
       include: [
         {
           model: User,
@@ -47,7 +57,17 @@ const getTrip = async (req, res, next) => {
   const { tripId } = req.params;
 
   const trip = await Trip.findByPk(tripId, {
-    attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description', 'createdAt'],
+    attributes: [
+      'id',
+      'name',
+      'start',
+      'goal',
+      'date',
+      'difficulty',
+      'duration',
+      'description',
+      'createdAt'
+    ],
     include: [
       {
         model: User,
@@ -151,12 +171,13 @@ const signOff = async (req, res, next) => {
 };
 
 const deleteTrip = async (req, res, next) => {
-  // const { name, start, goal, date, difficulty, duration, description } = req.body;
-  // const userId = req.user.id;
+  const userId = req.user.id;
   const { tripId } = req.params;
 
   try {
     const trip = await Trip.findByPk(tripId);
+
+    if (trip.userId !== userId) return res.status(403).json({ message: 'Unauthorized' });
 
     await trip.destroy();
 
@@ -168,4 +189,32 @@ const deleteTrip = async (req, res, next) => {
   }
 };
 
-module.exports = { getTrips, createTrip, getUserTrips, getTrip, signUp, signOff, deleteTrip };
+const updateTrip = async (req, res, next) => {
+  // const { name, start, goal, date, difficulty, duration, description } = req.body;
+  const userId = req.user.id;
+  const { tripId } = req.params;
+
+  try {
+    const trip = await Trip.findByPk(tripId);
+
+    console.log(userId);
+    await trip.destroy();
+
+    return res.status(200).json({ message: 'Trip deleted successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
+module.exports = {
+  getTrips,
+  createTrip,
+  getUserTrips,
+  getTrip,
+  signUp,
+  signOff,
+  deleteTrip,
+  updateTrip
+};
