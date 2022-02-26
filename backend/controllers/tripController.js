@@ -174,9 +174,14 @@ const deleteTrip = async (req, res, next) => {
   const userId = req.user.id;
   const { tripId } = req.params;
 
-  try {
-    const trip = await Trip.findByPk(tripId);
+  const trip = await Trip.findByPk(tripId);
 
+  if (!trip) {
+    res.status(404);
+    return next(new Error('Trip not found'));
+  }
+
+  try {
     // TODO(Ola): gjøre så "groups" kan slette, ikke basert på brukerid for at admin kan også slette
     if (trip.userId !== userId) return res.status(403).json({ message: 'Unauthorized' });
 
@@ -195,9 +200,14 @@ const updateTrip = async (req, res, next) => {
   const userId = req.user.id;
   const { tripId } = req.params;
 
-  try {
-    const trip = await Trip.findByPk(tripId);
+  const trip = await Trip.findByPk(tripId);
 
+  if (!trip) {
+    res.status(404);
+    return next(new Error('Trip not found'));
+  }
+
+  try {
     // TODO(Ola): gjøre så "groups" kan slette, ikke basert på brukerid for at admin kan også slette
     if (trip.userId !== userId) return res.status(403).json({ message: 'Unauthorized' });
 
