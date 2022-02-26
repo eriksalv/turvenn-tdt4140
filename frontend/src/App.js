@@ -35,8 +35,10 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/users/:id" element={<User />} />
           <Route path="/trips/:id" element={<ViewTrip />} />
+          <Route path="/trips/:id/edit" element={<PrivateRoute />}>
+            <Route path="/trips/:id/edit" element={<EditTrip />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
-          <Route path="/edit-trip" element={<EditTrip />} />
         </Routes>
       </Router>
       <ToastContainer />

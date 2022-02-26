@@ -9,7 +9,8 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: ''
+  message: '',
+  status: ''
 };
 
 export const getTrips = createAsyncThunk('/trips/getAll', async (_, thunkAPI) => {
@@ -38,7 +39,7 @@ export const editTrip = createAsyncThunk('/trips/edit', async (tripData, thunkAP
   }
 });
 
-export const deleteTrip = createAsyncThunk('/trips/edit', async (tripId, thunkAPI) => {
+export const deleteTrip = createAsyncThunk('/trips/delete', async (tripId, thunkAPI) => {
   try {
     const { accessToken } = thunkAPI.getState().auth.user;
     return await tripService.deleteTrip(tripId, accessToken);
@@ -90,6 +91,7 @@ export const tripSlice = createSlice({
       state.isSuccess = false;
       state.isLoading = false;
       state.message = '';
+      state.status = '';
     }
   },
   extraReducers: (builder) => {
@@ -175,11 +177,13 @@ export const tripSlice = createSlice({
       .addCase(editTrip.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.status = 'updated';
       })
       .addCase(editTrip.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.status = 'update failed';
       })
       .addCase(deleteTrip.pending, (state) => {
         state.isLoading = true;
@@ -187,11 +191,13 @@ export const tripSlice = createSlice({
       .addCase(deleteTrip.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.status = 'deleted';
       })
       .addCase(deleteTrip.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.status = 'delete failed';
       });
   }
 });

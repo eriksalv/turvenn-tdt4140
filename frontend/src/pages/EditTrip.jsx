@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Grid,
   Button,
@@ -14,7 +14,8 @@ import {
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { toast } from 'react-toastify';
-import { editTrip, reset } from '../features/trips/tripSlice';
+import moment from 'moment';
+import { getTrip, editTrip, reset } from '../features/trips/tripSlice';
 
 function EditTrip() {
   const [formData, setFormData] = useState({
@@ -28,8 +29,10 @@ function EditTrip() {
   });
 
   const dispatch = useDispatch();
-  const { isError, isSuccess, message } = useSelector((state) => state.trips);
+  const { user } = useSelector((state) => state.auth);
+  const { trip, isError, isSuccess, message, status } = useSelector((state) => state.trips);
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const { name, goal, start, date, difficulty, duration, description } = formData;
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
@@ -42,18 +45,49 @@ function EditTrip() {
   });
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
+    if (trip && trip.user.id !== user.id) {
+      toast.error('Du kan bare redigere dine egne turer');
+      navigate('/home');
+      dispatch(reset());
     }
+  }, [user, trip]);
 
+  useEffect(() => {
     if (isSuccess) {
       dispatch(reset());
-      navigate('/trips/:id');
-      toast.success('Turen ble oppdatert');
+      if (status === 'updated') {
+        toast.success('Turen ble oppdatert');
+        navigate(`/trips/${id}`);
+      }
+    }
+  }, [dispatch, isSuccess, status]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+      if (status === '') {
+        navigate('/notfound');
+      }
+      dispatch(reset());
+      return;
     }
 
-    dispatch(reset());
-  }, [dispatch, isError, isSuccess, navigate, message]);
+    dispatch(getTrip(id));
+  }, [dispatch, isError, navigate, message, id, status]);
+
+  useEffect(() => {
+    if (trip) {
+      setFormData(() => ({
+        name: trip.name || '',
+        goal: trip.goal || '',
+        start: trip.start || '',
+        date: moment(trip.date).format('yyyy-MM-DDTHH:mm') || '',
+        difficulty: trip.difficulty || '',
+        duration: trip.duration || '',
+        description: trip.description || ''
+      }));
+    }
+  }, [trip]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -64,7 +98,7 @@ function EditTrip() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const tripData = { name, goal, start, date, difficulty, duration, description };
+    const tripData = { id, name, goal, start, date, difficulty, duration, description };
 
     dispatch(editTrip(tripData));
   };
@@ -86,7 +120,7 @@ function EditTrip() {
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={4}>
-              <Img alt="logo" src="../Turvenn-logo.png" />
+              <Img alt="logo" src="../../Turvenn-logo.png" />
             </Grid>
             <Grid item xs={8}>
               <form onSubmit={onSubmit}>

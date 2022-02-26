@@ -6,6 +6,7 @@ import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { toast } from 'react-toastify';
 import DeleteIcon from '@mui/icons-material/Delete';
+import moment from 'moment';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import useSignedUpStatus from '../hooks/useSignedUpStatus';
@@ -110,7 +111,7 @@ function ViewTrip() {
                 Dato
               </Typography>
               <Typography variant="body1" component="h2">
-                {trip.date}
+                {moment(trip.date).format('yyyy-MM-DD HH:mm')}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
                 Vanskelighetsgrad
@@ -123,6 +124,12 @@ function ViewTrip() {
               </Typography>
               <Typography variant="body1" component="h2">
                 {trip.duration}
+              </Typography>
+              <Typography variant="h6" component="h6" marginTop="20px">
+                Opprettet av
+              </Typography>
+              <Typography variant="body1" component="h2">
+                {trip.user.firstName} {trip.user.lastName} <br /> {trip.user.email}
               </Typography>
             </Grid>
           </Grid>
