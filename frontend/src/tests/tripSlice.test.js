@@ -15,7 +15,8 @@ beforeEach(() => {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
+    status: ''
   };
   store = configureStore({ reducer: { trip: tripReducer }, initialState });
 });
@@ -54,7 +55,8 @@ describe('TripSlice - getTrips', () => {
       isError: true,
       isSuccess: false,
       isLoading: false,
-      message: 'Rejected'
+      message: 'Rejected',
+      status: ''
     });
   });
 
@@ -68,7 +70,8 @@ describe('TripSlice - getTrips', () => {
       isError: false,
       isSuccess: false,
       isLoading: false,
-      message: ''
+      message: '',
+      status: ''
     });
   });
 });
