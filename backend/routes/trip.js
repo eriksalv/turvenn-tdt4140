@@ -2,7 +2,15 @@ const express = require('express');
 const { body } = require('express-validator');
 const { protect } = require('../middleware/authHandler');
 
-const { getTrips, createTrip, getTrip, signUp, signOff, updateTrip, deleteTrip } = require('../controllers/tripController');
+const {
+  getTrips,
+  createTrip,
+  getTrip,
+  signUp,
+  signOff,
+  updateTrip,
+  deleteTrip
+} = require('../controllers/tripController');
 
 const router = express.Router();
 
@@ -18,7 +26,7 @@ router.post('/', protect, createTrip);
 // POST /api/trips/:tripId/signup
 router.post('/:tripId/signup', protect, signUp);
 
-// POST /api/trips/:tripId/edit
+// POST /api/trips/:tripId/update
 router.post('/:tripId/update', protect, updateTrip);
 
 // DELETE /api/trips/:tripId

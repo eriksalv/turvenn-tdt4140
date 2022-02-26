@@ -30,7 +30,21 @@ export const createTrip = createAsyncThunk('/trips/create', async (tripData, thu
 });
 
 export const editTrip = createAsyncThunk('/trips/edit', async (tripData, thunkAPI) => {
-  // TO DO: noe må skje her
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await tripService.editTrip(tripData, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
+export const deleteTrip = createAsyncThunk('/trips/edit', async (tripId, thunkAPI) => {
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await tripService.deleteTrip(tripId, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
 });
 
 export const getTrip = createAsyncThunk('trips/get', async (tripId, thunkAPI) => {
@@ -151,6 +165,30 @@ export const tripSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(signOff.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(editTrip.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editTrip.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(editTrip.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteTrip.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteTrip.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(deleteTrip.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

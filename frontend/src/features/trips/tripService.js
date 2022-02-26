@@ -56,6 +56,39 @@ const signOff = async (tripId, token) => {
   return res.data;
 };
 
-const tripService = { getTrips, getTrip, getUserTrips, createTrip, signUp, signOff };
+const editTrip = async (tripData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+
+  const res = await axios.post(`${baseUrl}/${tripData.id}/update`, tripData, config);
+
+  return res.data;
+};
+
+const deleteTrip = async (tripId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+
+  const res = await axios.delete(`${baseUrl}/${tripId}/update`, config);
+
+  return res.data;
+};
+
+const tripService = {
+  getTrips,
+  getTrip,
+  getUserTrips,
+  createTrip,
+  signUp,
+  signOff,
+  editTrip,
+  deleteTrip
+};
 
 export default tripService;
