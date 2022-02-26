@@ -26,7 +26,7 @@ function CreateTrip() {
     description: ''
   });
   const dispatch = useDispatch();
-  const { isLoading, isError, isSuccess, message } = useSelector((state) => state.trips);
+  const { isError, isSuccess, message } = useSelector((state) => state.trips);
   const navigate = useNavigate();
 
   const { name, goal, start, date, difficulty, duration, description } = formData;

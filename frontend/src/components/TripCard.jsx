@@ -6,6 +6,9 @@ import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
 
 // import { mdiClock } from '@mdi/js';
 
@@ -17,6 +20,7 @@ const Img = styled('img')({
 });
 
 export default function TripCard({
+  id,
   title,
   difficulty,
   duration,
@@ -27,7 +31,7 @@ export default function TripCard({
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate('/users/1');
+    navigate(`/trips/${id}`);
   };
 
   return (
@@ -62,7 +66,7 @@ export default function TripCard({
                 {difficulty}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <Moment format="Do MMMM YYYY, h:mm">{date}</Moment>
+                <Moment format="Do MMMM YYYY, HH:mm">{date}</Moment>
               </Typography>
             </Grid>
           </Grid>
@@ -71,6 +75,12 @@ export default function TripCard({
               <Img alt="Klokke" src={iconPath} />
               {duration}
             </Typography>
+            <Fab sx={{ mr: 1, mt: '2rem' }} size="small" color="secondary" aria-label="delete">
+              <EditIcon />
+            </Fab>
+            <Fab sx={{ mt: '2rem' }} size="small" color="primary" aria-label="edit">
+              <DeleteIcon />
+            </Fab>
           </Grid>
         </Grid>
       </Grid>

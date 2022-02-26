@@ -5,14 +5,16 @@ import { Grid, Paper, styled, Divider, Chip, Box, Typography, Button } from '@mu
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { toast } from 'react-toastify';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import useSignedUpStatus from '../hooks/useSignedUpStatus';
 
-import { getTrip, reset } from '../features/trips/tripSlice';
+import { getTrip, reset, signUp, signOff } from '../features/trips/tripSlice';
 
 import ProfileCard from '../components/ProfileCard';
 
 function ViewTrip() {
-  // TODO: erstatt med redux state
-  const [isSignedUp, setIsSignedUp] = useState(false);
   const Img = styled('img')({
     margin: 'auto',
     display: 'block',
@@ -20,48 +22,20 @@ function ViewTrip() {
     maxHeight: '100%'
   });
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
-  const mockData = [
-    {
-      name: 'Sondre',
-      experienceLevel: 'ekspert',
-      id: 'a'
-    },
-    {
-      name: 'Erik',
-      experienceLevel: 'ekspert',
-      id: 'b'
-    },
-    {
-      name: 'Ola',
-      experienceLevel: 'ekspert',
-      id: 'c'
-    },
-    {
-      name: 'Andrea',
-      experienceLevel: 'ekspert',
-      id: 'd'
-    },
-    {
-      name: 'Trygve',
-      experienceLevel: 'ekspert',
-      id: 'e'
-    },
-    {
-      name: 'Andreas',
-      experienceLevel: 'ekspert',
-      id: 'f'
-    },
-    {
-      name: 'Alva',
-      experienceLevel: 'ekspert',
-      id: 'g'
-    }
-  ];
 
-  const { trip, isError, message, isLoading } = useSelector((state) => state.trips);
+  const [signedUp, setSignedUp] = useSignedUpStatus()[0];
+  const [checkingStatus] = useSignedUpStatus()[1];
+
+  const { trip, isError, message, isLoading, isSuccess } = useSelector((state) => state.trips);
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(reset());
+    }
+  }, [dispatch, isSuccess]);
 
   useEffect(() => {
     if (isError) {
@@ -72,9 +46,19 @@ function ViewTrip() {
     }
 
     dispatch(getTrip(id));
-  }, [isError, message, id]);
+  }, [isError, message, id, signedUp]);
 
-  if (isLoading) {
+  const onSignUp = async () => {
+    await Promise.resolve(dispatch(signUp(trip.id)));
+    setSignedUp(true);
+  };
+
+  const onSignOff = async () => {
+    await Promise.resolve(dispatch(signOff(trip.id)));
+    setSignedUp(false);
+  };
+
+  if (isLoading || checkingStatus || !trip) {
     return <h1>Loading...</h1>;
   }
 
@@ -82,17 +66,28 @@ function ViewTrip() {
     <main>
       <Grid>
         <Paper elevation={10} style={paperStyle}>
-          <Grid align="left">
+          <Grid container alignItems="flex-start" justifyContent="space-between">
             <h2>{trip.name}</h2>
+            <Grid>
+              <Fab sx={{ mr: 1 }} size="small" color="secondary" aria-label="delete">
+                <EditIcon />
+              </Fab>
+              <Fab size="small" color="primary" aria-label="edit">
+                <DeleteIcon />
+              </Fab>
+            </Grid>
           </Grid>
+
           <Grid align="left" sx={{ marginBottom: '10px' }}>
-            <Button
-              onClick={() => setIsSignedUp((prevState) => !prevState)}
-              variant={!isSignedUp ? 'outlined' : 'contained'}
-              startIcon={!isSignedUp ? <GroupAddOutlinedIcon /> : <GroupAddIcon />}
-            >
-              {!isSignedUp ? 'Meld deg på' : 'Meld deg av'}
-            </Button>
+            {!signedUp ? (
+              <Button onClick={onSignUp} variant="outlined" startIcon={<GroupAddOutlinedIcon />}>
+                Meld deg på
+              </Button>
+            ) : (
+              <Button onClick={onSignOff} variant="contained" startIcon={<GroupAddIcon />}>
+                Meld deg av
+              </Button>
+            )}
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={4}>
@@ -139,8 +134,8 @@ function ViewTrip() {
           </Typography>
           <Grid
             container
-            alignItems="flex-end"
-            justifyContent="flex-end"
+            alignItems="flex-start"
+            justifyContent="flex-start"
             sx={{ mt: '4rem', mb: '0.5rem' }}
           >
             <Divider sx={{ width: '100%' }}>
@@ -156,13 +151,17 @@ function ViewTrip() {
                 alignItems: 'center'
               }}
             >
-              {mockData.map((item) => (
-                <ProfileCard
-                  name={item.name}
-                  experienceLevel={item.experienceLevel}
-                  key={item.id}
-                />
-              ))}
+              {trip.participators && trip.participators.length > 0 ? (
+                trip.participators.map((item) => (
+                  <ProfileCard
+                    id={item.id}
+                    name={`${item.firstName} ${item.lastName}`}
+                    key={item.id}
+                  />
+                ))
+              ) : (
+                <p>Ingen deltakere enda</p>
+              )}
             </Box>
           </Grid>
         </Paper>

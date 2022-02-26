@@ -10,7 +10,7 @@ let store;
 beforeEach(() => {
   initialState = {
     trips: [],
-    trip: {},
+    trip: null,
     userTrips: [],
     isError: false,
     isSuccess: false,
@@ -49,7 +49,7 @@ describe('TripSlice - getTrips', () => {
     expect(mock.history.get[0].url).toEqual(`/api/trips`);
     expect(trip).toEqual({
       trips: [],
-      trip: {},
+      trip: null,
       userTrips: [],
       isError: true,
       isSuccess: false,
@@ -63,7 +63,7 @@ describe('TripSlice - getTrips', () => {
 
     expect(trip).toEqual({
       trips: [],
-      trip: {},
+      trip: null,
       userTrips: [],
       isError: false,
       isSuccess: false,
