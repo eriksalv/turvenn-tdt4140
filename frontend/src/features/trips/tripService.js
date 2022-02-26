@@ -75,7 +75,7 @@ const deleteTrip = async (tripId, token) => {
     }
   };
 
-  const res = await axios.delete(`${baseUrl}/${tripId}/update`, config);
+  const res = await axios.delete(`${baseUrl}/${tripId}`, config);
 
   return res.data;
 };

@@ -13,6 +13,7 @@ import {
   styled
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { getTrip, editTrip, reset } from '../features/trips/tripSlice';
@@ -206,6 +207,16 @@ function EditTrip() {
             justifyContent="flex-end"
             sx={{ mt: '4rem', mb: '0.5rem' }}
           >
+            <Button
+              onClick={() => navigate(`/trips/${id}`)}
+              className="btn"
+              variant="contained"
+              color="warning"
+              endIcon={<CancelIcon />}
+              sx={{ marginRight: '10px' }}
+            >
+              Avbryt
+            </Button>
             <Button
               onClick={onSubmit}
               className="btn btn-success"
