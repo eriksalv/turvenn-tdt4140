@@ -14,6 +14,7 @@ import NotFound from './pages/NotFound';
 import ViewTrip from './pages/ViewTrip';
 import User from './pages/User';
 import 'react-toastify/dist/ReactToastify.css';
+import EditTrip from './pages/EditTrip';
 
 function App() {
   moment.locale('nb');
@@ -34,6 +35,9 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/users/:id" element={<User />} />
           <Route path="/trips/:id" element={<ViewTrip />} />
+          <Route path="/trips/:id/edit" element={<PrivateRoute />}>
+            <Route path="/trips/:id/edit" element={<EditTrip />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

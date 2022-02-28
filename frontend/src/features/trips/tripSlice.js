@@ -9,7 +9,8 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: ''
+  message: '',
+  status: ''
 };
 
 export const getTrips = createAsyncThunk('/trips/getAll', async (_, thunkAPI) => {
@@ -24,6 +25,24 @@ export const createTrip = createAsyncThunk('/trips/create', async (tripData, thu
   try {
     const { accessToken } = thunkAPI.getState().auth.user;
     return await tripService.createTrip(tripData, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
+export const editTrip = createAsyncThunk('/trips/edit', async (tripData, thunkAPI) => {
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await tripService.editTrip(tripData, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
+export const deleteTrip = createAsyncThunk('/trips/delete', async (tripId, thunkAPI) => {
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await tripService.deleteTrip(tripId, accessToken);
   } catch (error) {
     return thunkAPI.rejectWithValue(getError(error));
   }
@@ -72,6 +91,7 @@ export const tripSlice = createSlice({
       state.isSuccess = false;
       state.isLoading = false;
       state.message = '';
+      state.status = '';
     }
   },
   extraReducers: (builder) => {
@@ -150,6 +170,34 @@ export const tripSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(editTrip.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editTrip.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.status = 'updated';
+      })
+      .addCase(editTrip.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.status = 'update failed';
+      })
+      .addCase(deleteTrip.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteTrip.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.status = 'deleted';
+      })
+      .addCase(deleteTrip.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.status = 'delete failed';
       });
   }
 });

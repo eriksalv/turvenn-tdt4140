@@ -34,7 +34,6 @@ function Login() {
 
     // Redirect when logged in
     if (isSuccess || user) {
-      // Bruker /register som placeholder foreløpig
       navigate('/home');
     }
 
