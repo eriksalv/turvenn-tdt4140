@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React from 'react';
 import { ToastContainer } from 'react-toastify';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Button } from '@mui/material';
+import { blue, purple } from '@mui/material/colors';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateTrip from './pages/CreateTrip';
@@ -10,9 +13,27 @@ import Home from './pages/Home';
 import ProfilePage from './pages/ProfilePage';
 import 'react-toastify/dist/ReactToastify.css';
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#85bb5c',
+      main: '#558b2f',
+      dark: '#00897b',
+      contrastText: '#000000'
+    },
+    secondary: {
+      light: '#4ebaaa',
+      main: '#00897b',
+      dark: '#005b4f',
+      contrastText: '#fff'
+    },
+    test: blue
+  }
+});
+
 function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Router>
         <Header />
         <Routes>
@@ -26,7 +47,7 @@ function App() {
         </Routes>
       </Router>
       <ToastContainer />
-    </>
+    </ThemeProvider>
   );
 }
 

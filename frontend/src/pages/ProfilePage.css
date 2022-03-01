@@ -21,12 +21,13 @@
 }
 
 #profilePic {
-  width: 25%;
-  height: 300px;
-  margin: auto;
+  width: 20%;
+  height: 250px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 .experienceBox {
-  margin-top: 70px;
+  margin-top: 50px;
   width: 20%;
 }
 

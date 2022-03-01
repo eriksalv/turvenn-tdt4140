@@ -36,7 +36,7 @@ function Header() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            Meny
           </Typography>
           {user ? (
             <Button color="inherit" onClick={onLogout}>

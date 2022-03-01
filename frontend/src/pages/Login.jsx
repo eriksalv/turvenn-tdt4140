@@ -104,7 +104,7 @@ function Login() {
               fullWidth
               variant="contained"
               id="onSubmit"
-              color="success"
+              color="secondary"
               onClick={onSubmit}
             >
               Logg inn
