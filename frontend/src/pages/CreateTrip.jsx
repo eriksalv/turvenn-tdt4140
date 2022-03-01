@@ -148,6 +148,7 @@ function CreateTrip() {
                 </FormControl>
                 <TextField
                   id="duration"
+                  type="number"
                   label="Varighet"
                   placeholder="Hvor lenge varer turen?"
                   fullWidth

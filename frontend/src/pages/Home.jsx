@@ -50,7 +50,7 @@ function Home() {
           .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
           .reverse()
           .map((item) => (
-            <div key={item.createdAt}>
+            <div key={item.id}>
               <Typography sx={{ display: 'inline' }} variant="p">
                 <b>{item.user.firstName}</b> publiserte en ny tur
               </Typography>
