@@ -3,6 +3,8 @@ import React from 'react';
 import moment from 'moment';
 import 'moment/locale/nb';
 import { ToastContainer } from 'react-toastify';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { blue } from '@mui/material/colors';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateTrip from './pages/CreateTrip';
@@ -16,11 +18,29 @@ import User from './pages/User';
 import 'react-toastify/dist/ReactToastify.css';
 import EditTrip from './pages/EditTrip';
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#85bb5c',
+      main: '#558b2f',
+      dark: '#00897b',
+      contrastText: '#000000'
+    },
+    secondary: {
+      light: '#4ebaaa',
+      main: '#00897b',
+      dark: '#005b4f',
+      contrastText: '#fff'
+    },
+    test: blue
+  }
+});
+
 function App() {
   moment.locale('nb');
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Router>
         <Header />
         <Routes>
@@ -42,7 +62,7 @@ function App() {
         </Routes>
       </Router>
       <ToastContainer />
-    </>
+    </ThemeProvider>
   );
 }
 
