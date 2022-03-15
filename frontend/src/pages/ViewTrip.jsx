@@ -154,6 +154,12 @@ function ViewTrip() {
                 {trip.difficulty}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
+                Type
+              </Typography>
+              <Typography variant="body1" component="h2">
+                {trip.type}
+              </Typography>
+              <Typography variant="h6" component="h6" marginTop="20px">
                 Varighet
               </Typography>
               <Typography variant="body1" component="h2">

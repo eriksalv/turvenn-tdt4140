@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       goal: DataTypes.STRING,
       date: DataTypes.DATE,
       difficulty: DataTypes.STRING,
+      type: DataTypes.STRING,
       duration: DataTypes.INTEGER,
       description: DataTypes.STRING,
       userId: DataTypes.INTEGER
