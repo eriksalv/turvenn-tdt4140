@@ -25,6 +25,7 @@ function EditTrip() {
     start: '',
     date: '',
     difficulty: '',
+    type: '',
     duration: '',
     description: ''
   });
@@ -35,7 +36,7 @@ function EditTrip() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { name, goal, start, date, difficulty, duration, description } = formData;
+  const { name, goal, start, date, difficulty, type, duration, description } = formData;
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
 
   const Img = styled('img')({
@@ -84,6 +85,7 @@ function EditTrip() {
         start: trip.start || '',
         date: moment(trip.date).format('yyyy-MM-DDTHH:mm') || '',
         difficulty: trip.difficulty || '',
+        type: trip.type || '',
         duration: trip.duration || '',
         description: trip.description || ''
       }));
@@ -99,7 +101,7 @@ function EditTrip() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const tripData = { id, name, goal, start, date, difficulty, duration, description };
+    const tripData = { id, name, goal, start, date, difficulty, type, duration, description };
 
     dispatch(editTrip(tripData));
   };
@@ -110,6 +112,10 @@ function EditTrip() {
 
   const onChangeDescription = (e) => {
     setFormData((prevState) => ({ ...prevState, description: e.target.value }));
+  };
+
+  const onChangeType = (e) => {
+    setFormData((prevState) => ({ ...prevState, type: e.target.value }));
   };
 
   return (
@@ -178,6 +184,22 @@ function EditTrip() {
                     <MenuItem value="middels">Middels</MenuItem>
                     <MenuItem value="krevende">Krevende</MenuItem>
                     <MenuItem value="ekstraKrevende">Ekstra krevende</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl id="type" fullWidth margin="normal">
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    labelId="type"
+                    id="type"
+                    value={type}
+                    label="Type"
+                    onChange={onChangeType}
+                  >
+                    <MenuItem value="skogtur">Skogtur</MenuItem>
+                    <MenuItem value="bytur">Bytur</MenuItem>
+                    <MenuItem value="klatretur">Klatretur</MenuItem>
+                    <MenuItem value="fjelltur">Fjelltur</MenuItem>
+                    <MenuItem value="bratt fjelltur">Bratt fjelltur</MenuItem>
                   </Select>
                 </FormControl>
                 <TextField

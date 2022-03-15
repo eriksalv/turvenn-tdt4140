@@ -10,6 +10,7 @@ const getTrips = async (req, res, next) => {
         'goal',
         'date',
         'difficulty',
+        'type',
         'duration',
         'description',
         'createdAt'
@@ -42,7 +43,17 @@ const getUserTrips = async (req, res, next) => {
 
   try {
     const trips = await user.getTrips({
-      attributes: ['id', 'name', 'start', 'goal', 'date', 'difficulty', 'duration', 'description']
+      attributes: [
+        'id',
+        'name',
+        'start',
+        'goal',
+        'date',
+        'difficulty',
+        'type',
+        'duration',
+        'description'
+      ]
     });
 
     return res.status(200).json(trips);
@@ -64,6 +75,7 @@ const getTrip = async (req, res, next) => {
       'goal',
       'date',
       'difficulty',
+      'type',
       'duration',
       'description',
       'createdAt'
@@ -94,7 +106,7 @@ const getTrip = async (req, res, next) => {
 };
 
 const createTrip = async (req, res, next) => {
-  const { name, start, goal, date, difficulty, duration, description } = req.body;
+  const { name, start, goal, date, difficulty, type, duration, description } = req.body;
   const userId = req.user.id;
 
   try {
@@ -104,6 +116,7 @@ const createTrip = async (req, res, next) => {
       goal,
       date,
       difficulty,
+      type,
       duration,
       description,
       userId
@@ -116,6 +129,7 @@ const createTrip = async (req, res, next) => {
         goal: newTrip.goal,
         date: newTrip.date,
         difficulty: newTrip.difficulty,
+        type: newTrip.type,
         duration: newTrip.duration,
         description: newTrip.description
       }
@@ -196,7 +210,7 @@ const deleteTrip = async (req, res, next) => {
 };
 
 const updateTrip = async (req, res, next) => {
-  const { name, start, goal, date, difficulty, duration, description } = req.body;
+  const { name, start, goal, date, difficulty, type, duration, description } = req.body;
   const userId = req.user.id;
   const { tripId } = req.params;
 
@@ -217,6 +231,7 @@ const updateTrip = async (req, res, next) => {
       goal: goal,
       date: date,
       difficulty: difficulty,
+      type: type,
       duration: duration,
       description: description
     });
