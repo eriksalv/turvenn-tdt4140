@@ -1,13 +1,20 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, TextField } from '@mui/material';
 import Moment from 'react-moment';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import TripCard from '../components/TripCard';
 import { getTrips, reset } from '../features/trips/tripSlice';
 
 function Home() {
   const { trips, isSuccess, isLoading } = useSelector((state) => state.trips);
   const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    dateStart: '',
+    dateEnd: ''
+  });
+
+  const { dateStart, dateEnd } = formData;
 
   useEffect(() => {
     if (isSuccess) {
@@ -46,6 +53,30 @@ function Home() {
         <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
           Hjem
         </Typography>
+        <TextField
+          id="dateStart"
+          label="Dato og tid fra"
+          type="datetime-local"
+          required
+          fullWidth
+          value={dateStart}
+          margin="normal"
+          InputLabelProps={{
+            shrink: true
+          }}
+        />
+        <TextField
+          id="dateEnd"
+          label="Dato og tid til"
+          type="datetime-local"
+          required
+          fullWidth
+          value={dateEnd}
+          margin="normal"
+          InputLabelProps={{
+            shrink: true
+          }}
+        />
         {[...trips]
           .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
           .reverse()
