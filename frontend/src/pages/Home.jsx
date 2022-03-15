@@ -2,7 +2,7 @@ import { Box, Typography, TextField } from '@mui/material';
 import Moment from 'react-moment';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import TripCard from '../components/TripCard';
 import { getTrips, reset } from '../features/trips/tripSlice';
@@ -46,21 +46,55 @@ function Home() {
       <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
         Hjem
       </Typography>
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-        <form style={{ width: '50%' }}>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+          <form style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+            <TextField
+              id="searchbar"
+              label="Søkefelt"
+              placeholder="Søk etter turer"
+              fullWidth
+              value={searchWord}
+              margin="normal"
+              sx={{ width: '90%', height: '60px', marginRight: '10px' }}
+            />
+            <Button
+              color="primary"
+              aria-label="search"
+              component="span"
+              variant="outlined"
+              sx={{ width: '10%', height: '60px' }}
+            >
+              <SearchIcon />
+            </Button>
+          </form>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
           <TextField
-            id="searchbar"
-            label="Søkefelt"
-            placeholder="Søk etter turer"
-            required
+            id="dateStart"
+            label="Dato og tid fra"
+            type="datetime-local"
             fullWidth
-            value={searchWord}
+            value={dateStart}
             margin="normal"
-          />{' '}
-        </form>
-        <IconButton color="primary" aria-label="search" component="span">
-          <SearchIcon />
-        </IconButton>
+            InputLabelProps={{
+              shrink: true
+            }}
+            sx={{ width: '50%', marginRight: '20px' }}
+          />
+          <TextField
+            id="dateEnd"
+            label="Dato og tid til"
+            type="datetime-local"
+            fullWidth
+            value={dateEnd}
+            margin="normal"
+            InputLabelProps={{
+              shrink: true
+            }}
+            sx={{ width: '50%' }}
+          />
+        </Box>
       </Box>
       <Box
         sx={{
@@ -69,36 +103,10 @@ function Home() {
           flexDirection: 'column',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginTop: '20px'
         }}
       >
-        <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
-          Hjem
-        </Typography>
-        <TextField
-          id="dateStart"
-          label="Dato og tid fra"
-          type="datetime-local"
-          required
-          fullWidth
-          value={dateStart}
-          margin="normal"
-          InputLabelProps={{
-            shrink: true
-          }}
-        />
-        <TextField
-          id="dateEnd"
-          label="Dato og tid til"
-          type="datetime-local"
-          required
-          fullWidth
-          value={dateEnd}
-          margin="normal"
-          InputLabelProps={{
-            shrink: true
-          }}
-        />
         {[...trips]
           .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
           .reverse()
