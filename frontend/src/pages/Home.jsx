@@ -2,6 +2,8 @@ import { Box, Typography, TextField } from '@mui/material';
 import Moment from 'react-moment';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 import TripCard from '../components/TripCard';
 import { getTrips, reset } from '../features/trips/tripSlice';
 
@@ -54,6 +56,9 @@ function Home() {
             margin="normal"
           />{' '}
         </form>
+        <IconButton color="primary" aria-label="search" component="span">
+          <SearchIcon />
+        </IconButton>
       </Box>
       <Box
         sx={{
