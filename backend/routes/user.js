@@ -6,7 +6,8 @@ const {
   getUsers,
   loginUser,
   getLogin,
-  getUser
+  getUser,
+  changeRoleAdmin
 } = require('../controllers/userController');
 const { protect } = require('../middleware/authHandler');
 
@@ -31,5 +32,8 @@ router.post('/', [body('email').isEmail(), body('password').isLength({ min: 4 })
 
 // POST /api/users/login
 router.post('/login', loginUser);
+
+// PUT /api/users/:userId/role
+router.put('/:userId/role', protect, changeRoleAdmin);
 
 module.exports = router;

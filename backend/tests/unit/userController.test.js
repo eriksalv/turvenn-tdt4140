@@ -1,5 +1,11 @@
 const { User } = require('../../models');
-const { loginUser, getLogin, getUsers, registerUser } = require('../../controllers/userController');
+const {
+  loginUser,
+  getLogin,
+  getUsers,
+  registerUser,
+  changeRoleAdmin
+} = require('../../controllers/userController');
 
 describe('User Controller - Login', () => {
   let req;
@@ -184,5 +190,72 @@ describe('User Controller - getLogin', () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(req.user);
+  });
+});
+
+describe('User Controller - changeRoleAdmin', () => {
+  let req;
+  let res;
+  let next;
+  beforeEach(() => {
+    req = {
+      user: {
+        id: 1,
+        email: 'turvenn.turvenn@gmail.com',
+        firstName: 'Turvenn',
+        lastName: 'Turvenn',
+        role: 'admin'
+      },
+      params: {
+        userId: 2
+      },
+      body: {
+        role: 'admin'
+      }
+    };
+    res = {
+      status: jest.fn().mockImplementation(() => res),
+      json: jest.fn()
+    };
+    next = jest.fn();
+  });
+
+  it('should be unauthorized if not super admin', async () => {
+    req.user.email = 'email@email.com';
+
+    await changeRoleAdmin(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(403);
+  });
+
+  it('should return 404 if user is not found', async () => {
+    User.findByPk = jest.fn().mockImplementation(() => null);
+
+    await changeRoleAdmin(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+  });
+
+  it('should not be able to change role of super admin', async () => {
+    User.findByPk = jest.fn().mockImplementation(() => ({
+      id: 2,
+      email: 'turvenn.turvenn@gmail.com'
+    }));
+
+    await changeRoleAdmin(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it('should return 200 if update succeeds', async () => {
+    User.findByPk = jest.fn().mockImplementation(() => ({
+      id: 2,
+      email: 'email@email.com',
+      update: () => {}
+    }));
+
+    await changeRoleAdmin(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });
