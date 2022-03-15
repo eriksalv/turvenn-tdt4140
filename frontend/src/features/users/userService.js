@@ -14,6 +14,18 @@ const getUser = async (userId) => {
   return res.data;
 };
 
-const authService = { getUsers, getUser };
+const changeRoleAdmin = async (userId, role, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+
+  const res = await axios.put(`${baseUrl}/${userId}/role`, { role }, config);
+
+  return res.data;
+};
+
+const authService = { getUsers, getUser, changeRoleAdmin };
 
 export default authService;
