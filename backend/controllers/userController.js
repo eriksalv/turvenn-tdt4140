@@ -111,10 +111,36 @@ const loginUser = async (req, res, next) => {
   next(new Error('Invalid credentials'));
 };
 
+const changeRoleAdmin = async (req, res, next) => {
+  if (req.user.email !== 'turvenn.turvenn@gmail.com') {
+    res.status(403);
+    return next(new Error('Not authorized to make admin'));
+  }
+
+  const { userId } = req.params;
+  const { role } = req.body;
+
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    res.status(404);
+    return next(new Error('User not found'));
+  }
+
+  try {
+    await user.update({ role });
+    return res.status(200).json(user);
+  } catch (error) {
+    res.status(400);
+    next(new Error('Invalid role'));
+  }
+};
+
 module.exports = {
   getUsers,
   registerUser,
   loginUser,
   getLogin,
-  getUser
+  getUser,
+  changeRoleAdmin
 };

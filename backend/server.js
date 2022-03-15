@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyparser = require('body-parser');
+const bcrypt = require('bcryptjs');
 const { sequelize } = require('./models');
+const { User } = require('./models');
+require('dotenv').config();
 
 const { errorHandler } = require('./middleware/errorHandler');
 
@@ -27,7 +30,21 @@ app.use((err, req, res, next) => errorHandler(err, req, res, next));
 
 sequelize
   .authenticate()
-  .then(() => {
+  .then(async () => {
+    // Create super admin if not exists
+    if (!(await User.findOne({ where: { email: 'turvenn.turvenn@gmail.com' } }))) {
+      const salt = await bcrypt.genSalt(10);
+      const password = process.env.TURVENN_PASSWORD || 'password';
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      await User.create({
+        email: 'turvenn.turvenn@gmail.com',
+        firstName: 'Turvenn',
+        lastName: 'Turvenn',
+        role: 'admin',
+        password: hashedPassword
+      });
+    }
     app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
     console.log('Connection has been established successfully.');
   })
