@@ -11,7 +11,9 @@ const generateToken = (id) => {
 
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll({ attributes: ['id', 'email', 'firstName', 'lastName'] });
+    const users = await User.findAll({
+      attributes: ['id', 'email', 'firstName', 'lastName', 'role']
+    });
     return res.status(200).json(users);
   } catch (error) {
     res.status(500);
@@ -22,7 +24,7 @@ const getUsers = async (req, res, next) => {
 const getUser = async (req, res) => {
   const { userId } = req.params;
   const user = await User.findByPk(userId, {
-    attributes: ['id', 'email', 'firstName', 'lastName']
+    attributes: ['id', 'email', 'firstName', 'lastName', 'role']
   });
 
   if (!user) {
@@ -42,7 +44,8 @@ const getLogin = async (req, res, next) => {
     id: req.user.id,
     email: req.user.email,
     firstName: req.user.firstName,
-    lastName: req.user.lastName
+    lastName: req.user.lastName,
+    role: req.user.role
   };
   res.status(200).json(user);
 };
@@ -75,6 +78,7 @@ const registerUser = async (req, res, next) => {
         email: newUser.email,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
+        role: newUser.role,
         accessToken: generateToken(newUser.id)
       }
     });
@@ -98,6 +102,7 @@ const loginUser = async (req, res, next) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        role: user.role,
         accessToken: generateToken(user.id)
       }
     });
