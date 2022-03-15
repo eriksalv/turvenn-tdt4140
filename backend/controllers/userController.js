@@ -127,6 +127,11 @@ const changeRoleAdmin = async (req, res, next) => {
     return next(new Error('User not found'));
   }
 
+  if (user.email === 'turvenn.turvenn@gmail.com') {
+    res.status(400);
+    return next(new Error('Cannot remove admin priviliges of super admin'));
+  }
+
   try {
     await user.update({ role });
     return res.status(200).json(user);
