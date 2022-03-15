@@ -1,20 +1,22 @@
 import { Box, Typography, TextField } from '@mui/material';
 import Moment from 'react-moment';
-import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect } from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 import TripCard from '../components/TripCard';
 import { getTrips, reset } from '../features/trips/tripSlice';
 
 function Home() {
   const { trips, isSuccess, isLoading } = useSelector((state) => state.trips);
-  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
+    searchWord: '',
     dateStart: '',
     dateEnd: ''
   });
+  const { searchWord, dateStart, dateEnd } = formData;
 
-  const { dateStart, dateEnd } = formData;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isSuccess) {
@@ -37,9 +39,29 @@ function Home() {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%'
       }}
     >
+      <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
+        Hjem
+      </Typography>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <form style={{ width: '50%' }}>
+          <TextField
+            id="searchbar"
+            label="Søkefelt"
+            placeholder="Søk etter turer"
+            required
+            fullWidth
+            value={searchWord}
+            margin="normal"
+          />{' '}
+        </form>
+        <IconButton color="primary" aria-label="search" component="span">
+          <SearchIcon />
+        </IconButton>
+      </Box>
       <Box
         sx={{
           width: '500px',
