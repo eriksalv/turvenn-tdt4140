@@ -185,7 +185,7 @@ const signOff = async (req, res, next) => {
 };
 
 const deleteTrip = async (req, res, next) => {
-  const userId = req.user.id;
+  const { id, role } = req.user;
   const { tripId } = req.params;
 
   const trip = await Trip.findByPk(tripId);
@@ -197,7 +197,8 @@ const deleteTrip = async (req, res, next) => {
 
   try {
     // TODO(Ola): gjøre så "groups" kan slette, ikke basert på brukerid for at admin kan også slette
-    if (trip.userId !== userId) return res.status(403).json({ message: 'Unauthorized' });
+    if (role !== 'admin' && trip.userId !== id)
+      return res.status(403).json({ message: 'Unauthorized' });
 
     await trip.destroy();
 
