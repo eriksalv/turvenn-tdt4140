@@ -1,12 +1,17 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, TextField } from '@mui/material';
 import Moment from 'react-moment';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import TripCard from '../components/TripCard';
 import { getTrips, reset } from '../features/trips/tripSlice';
 
 function Home() {
   const { trips, isSuccess, isLoading } = useSelector((state) => state.trips);
+  const [formData, setFormData] = useState({
+    searchword: ''
+  });
+  const { searchword } = formData;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,9 +35,26 @@ function Home() {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%'
       }}
     >
+      <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
+        Hjem
+      </Typography>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <form style={{ width: '50%' }}>
+          <TextField
+            id="searchbar"
+            label="Søkefelt"
+            placeholder="Søk etter turer"
+            required
+            fullWidth
+            value={searchword}
+            margin="normal"
+          />{' '}
+        </form>
+      </Box>
       <Box
         sx={{
           width: '500px',
@@ -43,9 +65,6 @@ function Home() {
           alignItems: 'center'
         }}
       >
-        <Typography sx={{ width: '100%', margin: '20px' }} align="center" variant="h2">
-          Hjem
-        </Typography>
         {[...trips]
           .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
           .reverse()
