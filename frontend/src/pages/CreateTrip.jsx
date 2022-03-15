@@ -22,6 +22,7 @@ function CreateTrip() {
     start: '',
     date: '',
     difficulty: '',
+    type: '',
     duration: '',
     description: ''
   });
@@ -29,7 +30,7 @@ function CreateTrip() {
   const { isError, isSuccess, message } = useSelector((state) => state.trips);
   const navigate = useNavigate();
 
-  const { name, goal, start, date, difficulty, duration, description } = formData;
+  const { name, goal, start, date, difficulty, type, duration, description } = formData;
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
 
   const Img = styled('img')({
@@ -62,7 +63,7 @@ function CreateTrip() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const tripData = { name, goal, start, date, difficulty, duration, description };
+    const tripData = { name, goal, start, date, difficulty, type, duration, description };
 
     dispatch(createTrip(tripData));
   };
@@ -73,6 +74,10 @@ function CreateTrip() {
 
   const onChangeDescription = (e) => {
     setFormData((prevState) => ({ ...prevState, description: e.target.value }));
+  };
+
+  const onChangeType = (e) => {
+    setFormData((prevState) => ({ ...prevState, type: e.target.value }));
   };
 
   return (
@@ -131,7 +136,7 @@ function CreateTrip() {
                   }}
                   onChange={onChange}
                 />
-                <FormControl id="difficulty" fullWidth>
+                <FormControl id="difficulty" fullWidth margin="normal">
                   <InputLabel>Vanskelighetsgrad</InputLabel>
                   <Select
                     labelId="difficulty"
@@ -144,6 +149,22 @@ function CreateTrip() {
                     <MenuItem value="middels">Middels</MenuItem>
                     <MenuItem value="krevende">Krevende</MenuItem>
                     <MenuItem value="ekstraKrevende">Ekstra krevende</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl id="type" fullWidth>
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    labelId="type"
+                    id="type"
+                    value={type}
+                    label="Type"
+                    onChange={onChangeType}
+                  >
+                    <MenuItem value="skogtur">Skogtur</MenuItem>
+                    <MenuItem value="bytur">Bytur</MenuItem>
+                    <MenuItem value="klatretur">Klatretur</MenuItem>
+                    <MenuItem value="fjelltur">Fjelltur</MenuItem>
+                    <MenuItem value="bratt fjelltur">Bratt fjelltur</MenuItem>
                   </Select>
                 </FormControl>
                 <TextField
