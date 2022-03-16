@@ -203,6 +203,7 @@ function ViewTrip() {
                   <ProfileCard
                     id={item.id}
                     name={`${item.firstName} ${item.lastName}`}
+                    role={item.role}
                     key={item.id}
                   />
                 ))

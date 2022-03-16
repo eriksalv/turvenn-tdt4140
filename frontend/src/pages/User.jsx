@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { toast } from 'react-toastify';
-import { Divider, Chip, Typography, Grid, Button } from '@mui/material';
+import { Divider, Chip, Typography, Grid, Button, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
@@ -86,7 +86,12 @@ function User() {
         }}
       >
         <h1 style={{ width: '100%', textAlign: 'center', marginBottom: '3px' }}>
-          {user.firstName} {user.lastName}
+          {user.firstName} {user.lastName}&nbsp;
+          {user.role === 'admin' && (
+            <Tooltip title="admin" arrow>
+              <AdminPanelSettingsOutlinedIcon />
+            </Tooltip>
+          )}
         </h1>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
         {loggedInUser && loggedInUser.id === user.id && (
