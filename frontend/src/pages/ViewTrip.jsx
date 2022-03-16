@@ -95,7 +95,7 @@ function ViewTrip() {
         <Paper elevation={10} style={paperStyle}>
           <Grid container alignItems="flex-start" justifyContent="space-between">
             <h2>{trip.name}</h2>
-            {user && trip.user.id === user.id && (
+            {user && (trip.user.id === user.id || user.role === 'admin') && (
               <Grid>
                 <Fab
                   sx={{ mr: 1 }}

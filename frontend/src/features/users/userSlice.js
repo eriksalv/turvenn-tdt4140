@@ -28,6 +28,15 @@ export const getUser = createAsyncThunk('/users/get', async (userId, thunkAPI) =
   }
 });
 
+export const changeRoleAdmin = createAsyncThunk('/users/role', async (userData, thunkAPI) => {
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await userService.changeRoleAdmin(userData.userId, userData.role, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -63,6 +72,19 @@ export const userSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(getUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(changeRoleAdmin.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changeRoleAdmin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(changeRoleAdmin.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

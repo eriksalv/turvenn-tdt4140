@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -6,8 +6,10 @@ import { toast } from 'react-toastify';
 import { Divider, Chip, Typography, Grid, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import TripCard from '../components/TripCard';
-import { getUser, reset as userReset } from '../features/users/userSlice';
+import { getUser, changeRoleAdmin, reset as userReset } from '../features/users/userSlice';
 import { getUserTrips, reset as tripReset } from '../features/trips/tripSlice';
 
 const Img = styled('img')({
@@ -30,8 +32,10 @@ function User() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isSuccess && tripsIsSuccess) {
+    if (isSuccess) {
       dispatch(userReset());
+    }
+    if (tripsIsSuccess) {
       dispatch(tripReset());
     }
   }, [dispatch, isSuccess, tripsIsSuccess]);
@@ -48,6 +52,14 @@ function User() {
     dispatch(getUser(id));
     dispatch(getUserTrips(id));
   }, [isError, message, id]);
+
+  const onAdmin = (role) => {
+    const userData = {
+      userId: id,
+      role
+    };
+    dispatch(changeRoleAdmin(userData));
+  };
 
   if (isLoading || tripsIsLoading) {
     return <h1>Loading...</h1>;
@@ -82,6 +94,30 @@ function User() {
             Rediger Profil
           </Button>
         )}
+        {loggedInUser &&
+          user.email !== 'turvenn.turvenn@gmail.com' &&
+          loggedInUser.email === 'turvenn.turvenn@gmail.com' && (
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <>
+              {user.role !== 'admin' ? (
+                <Button
+                  onClick={() => onAdmin('admin')}
+                  variant="outlined"
+                  startIcon={<AdminPanelSettingsOutlinedIcon />}
+                >
+                  Gi adminrettigheter
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => onAdmin('user')}
+                  variant="contained"
+                  startIcon={<AdminPanelSettingsIcon />}
+                >
+                  Fjern adminrettigheter
+                </Button>
+              )}
+            </>
+          )}
       </Box>
       <Grid
         width="80%"
