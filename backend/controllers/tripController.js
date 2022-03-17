@@ -256,37 +256,31 @@ const searchTripByName = async (req, res, next) => {
     return next(new Error('No search parameter'));
   }
 
-  try {
-    const trips = await Trip.findAll({
-      where: {
-        name: { [Op.iLike]: `%${searchWord}%` }
-      },
-      attributes: [
-        'id',
-        'name',
-        'start',
-        'goal',
-        'date',
-        'difficulty',
-        'type',
-        'duration',
-        'description',
-        'createdAt'
-      ],
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['firstName', 'lastName', 'email']
-        }
-      ]
-    });
-    return res.status(200).json(trips);
-  } catch (error) {
-    console.log(error);
-    res.status(500);
-    next(new Error('Something went wrong'));
-  }
+  const trips = await Trip.findAll({
+    where: {
+      name: { [Op.iLike]: `%${searchWord}%` }
+    },
+    attributes: [
+      'id',
+      'name',
+      'start',
+      'goal',
+      'date',
+      'difficulty',
+      'type',
+      'duration',
+      'description',
+      'createdAt'
+    ],
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['firstName', 'lastName', 'email']
+      }
+    ]
+  });
+  return res.status(200).json(trips);
 };
 
 module.exports = {
