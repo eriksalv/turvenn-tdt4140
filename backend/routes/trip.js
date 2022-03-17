@@ -14,6 +14,11 @@ const {
 
 const router = express.Router();
 
+// Re-route into note router
+const logRouter = require('./log');
+
+router.use('/:tripId/logs', logRouter);
+
 // GET /api/trips
 router.get('/', getTrips);
 
