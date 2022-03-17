@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import TripCard from '../components/TripCard';
-import { getTrips, reset } from '../features/trips/tripSlice';
+import { getTrips, reset, searchTripByName } from '../features/trips/tripSlice';
 
 function Home() {
   const { trips, isSuccess, isLoading } = useSelector((state) => state.trips);
@@ -31,6 +31,17 @@ function Home() {
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value
+    }));
+  };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    dispatch(searchTripByName(searchWord));
+  };
 
   return (
     <Box
@@ -48,14 +59,15 @@ function Home() {
       </Typography>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-          <form style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+          <form style={{ display: 'flex', alignItems: 'center', width: '50%' }} onSubmit={onSubmit}>
             <TextField
-              id="searchbar"
+              id="searchWord"
               label="Søkefelt"
               placeholder="Søk etter turer"
               fullWidth
               value={searchWord}
               margin="normal"
+              onChange={onChange}
               sx={{ width: '90%', height: '60px', marginRight: '10px' }}
             />
             <Button
@@ -63,6 +75,7 @@ function Home() {
               aria-label="search"
               component="span"
               variant="outlined"
+              onClick={onSubmit}
               sx={{ width: '10%', height: '60px' }}
             >
               <SearchIcon />

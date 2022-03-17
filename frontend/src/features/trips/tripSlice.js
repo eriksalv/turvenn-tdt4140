@@ -82,6 +82,14 @@ export const signOff = createAsyncThunk('trips/signoff', async (tripId, thunkAPI
   }
 });
 
+export const searchTripByName = createAsyncThunk('trips/search', async (searchWord, thunkAPI) => {
+  try {
+    return await tripService.searchTripByName(searchWord);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
 export const tripSlice = createSlice({
   name: 'trip',
   initialState,
@@ -198,6 +206,21 @@ export const tripSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.status = 'delete failed';
+      })
+      .addCase(searchTripByName.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchTripByName.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.trips = action.payload;
+        state.status = 'search success';
+      })
+      .addCase(searchTripByName.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.status = 'search failed';
       });
   }
 });

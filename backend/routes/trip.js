@@ -9,10 +9,13 @@ const {
   signUp,
   signOff,
   updateTrip,
-  deleteTrip
+  deleteTrip,
+  searchTripByName
 } = require('../controllers/tripController');
 
 const router = express.Router();
+
+router.get('/search', searchTripByName);
 
 // GET /api/trips
 router.get('/', getTrips);
