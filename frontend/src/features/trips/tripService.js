@@ -80,6 +80,14 @@ const deleteTrip = async (tripId, token) => {
   return res.data;
 };
 
+const searchTrip = async (searchData) => {
+  const res = await axios.get(
+    `${baseUrl}/search?searchWord=${searchData.searchWord}&dateStart=${searchData.dateStart}&dateEnd=${searchData.dateEnd}`
+  );
+
+  return res.data;
+};
+
 const tripService = {
   getTrips,
   getTrip,
@@ -88,7 +96,8 @@ const tripService = {
   signUp,
   signOff,
   editTrip,
-  deleteTrip
+  deleteTrip,
+  searchTrip
 };
 
 export default tripService;
