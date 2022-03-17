@@ -25,7 +25,7 @@ const createLog = async (req, res, next) => {
       userId: id,
       tripId
     });
-    return res.status(200).json(log);
+    return res.status(201).json(log);
   } catch (error) {
     res.status(500);
     next(new Error('Something went wrong'));
