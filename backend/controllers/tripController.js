@@ -1,5 +1,5 @@
 const { Op } = require('@sequelize/core');
-const { Trip, User } = require('../models');
+const { Trip, User, sequelize } = require('../models');
 
 const getTrips = async (req, res, next) => {
   try {
@@ -247,18 +247,25 @@ const updateTrip = async (req, res, next) => {
   }
 };
 
-const searchTripByName = async (req, res, next) => {
-  const { searchWord } = req.query;
-  console.log(searchWord);
+const searchTrip = async (req, res, next) => {
+  let { searchWord, dateStart, dateEnd } = req.query;
+
+  if (!dateStart) {
+    dateStart = new Date(1, 1, 1);
+  }
+
+  if (!dateEnd) {
+    dateEnd = new Date(3000, 1, 1);
+  }
 
   if (!searchWord) {
-    res.status(400);
-    return next(new Error('No search parameter'));
+    searchWord = '';
   }
 
   const trips = await Trip.findAll({
     where: {
-      name: { [Op.iLike]: `%${searchWord}%` }
+      name: { [Op.iLike]: `%${searchWord}%` },
+      date: { [Op.lte]: dateEnd, [Op.gte]: dateStart }
     },
     attributes: [
       'id',
@@ -292,5 +299,5 @@ module.exports = {
   signOff,
   deleteTrip,
   updateTrip,
-  searchTripByName
+  searchTrip
 };

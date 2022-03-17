@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import TripCard from '../components/TripCard';
-import { getTrips, reset, searchTripByName } from '../features/trips/tripSlice';
+import { getTrips, reset, searchTrip } from '../features/trips/tripSlice';
 
 function Home() {
   const { trips, isSuccess, isLoading, isError, message } = useSelector((state) => state.trips);
@@ -44,8 +44,8 @@ function Home() {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    dispatch(searchTripByName(searchWord));
+    const searchData = { searchWord, dateStart, dateEnd };
+    dispatch(searchTrip(searchData));
   };
 
   return (
@@ -99,6 +99,7 @@ function Home() {
               shrink: true
             }}
             sx={{ width: '50%', marginRight: '20px' }}
+            onChange={onChange}
           />
           <TextField
             id="dateEnd"
@@ -111,6 +112,7 @@ function Home() {
               shrink: true
             }}
             sx={{ width: '50%' }}
+            onChange={onChange}
           />
         </Box>
       </Box>
