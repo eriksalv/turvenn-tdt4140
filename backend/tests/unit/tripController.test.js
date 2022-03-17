@@ -7,7 +7,7 @@ const {
   getParticipators,
   getTrip,
   getTrips,
-  searchTripByName
+  searchTrip
 } = require('../../controllers/tripController');
 
 describe('Trip Controller - Create Trip', () => {
@@ -256,20 +256,20 @@ describe('Trip Controller - searchTripByName, searchTripByName', () => {
   it('should return trip with status 200 if found searchWord', async () => {
     Trip.findAll = jest.fn().mockImplementation(() => [{ id: 1 }]);
 
-    await searchTripByName(req, res, next);
+    await searchTrip(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith([{ id: 1 }]);
   });
 
-  it('should return error with status 400 if empty searchWord', async () => {
+  it('should return error with status 200 if empty searchWord', async () => {
     req = {
       query: {
         searchWord: ''
       }
     };
-    await searchTripByName(req, res, next);
+    await searchTrip(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });
