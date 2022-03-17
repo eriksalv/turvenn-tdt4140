@@ -4,7 +4,9 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import ButtonBase from '@mui/material/ButtonBase';
+import { Tooltip } from '@mui/material';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -17,6 +19,7 @@ export default function ProfileCard({
   id,
   name,
   experienceLevel,
+  role,
   profilepicPath = '/assets/defaultProfilepic.jpeg'
 }) {
   const navigate = useNavigate();
@@ -46,8 +49,18 @@ export default function ProfileCard({
         <Grid item xs={12} sm container>
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
-              <Typography gutterBottom variant="subtitle1" component="div">
-                {name}
+              <Typography
+                gutterBottom
+                variant="subtitle1"
+                component="div"
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                {name}&nbsp;
+                {role === 'admin' && (
+                  <Tooltip title="admin" arrow>
+                    <AdminPanelSettingsOutlinedIcon />
+                  </Tooltip>
+                )}
               </Typography>
               {/* <Typography variant="body2" gutterBottom> // Har ikke erfaringsnivå enda
                 Erfaringsnivå: {experienceLevel}

@@ -84,12 +84,12 @@ const getTrip = async (req, res, next) => {
       {
         model: User,
         as: 'user',
-        attributes: ['id', 'firstName', 'lastName', 'email']
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role']
       },
       {
         model: User,
         as: 'participators',
-        attributes: ['id', 'firstName', 'lastName', 'email'],
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
         through: {
           attributes: []
         }
