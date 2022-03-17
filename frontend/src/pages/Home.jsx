@@ -1,5 +1,6 @@
 import { Box, Typography, TextField } from '@mui/material';
 import Moment from 'react-moment';
+import { toast } from 'react-toastify';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
@@ -8,7 +9,7 @@ import TripCard from '../components/TripCard';
 import { getTrips, reset, searchTripByName } from '../features/trips/tripSlice';
 
 function Home() {
-  const { trips, isSuccess, isLoading } = useSelector((state) => state.trips);
+  const { trips, isSuccess, isLoading, isError, message } = useSelector((state) => state.trips);
   const [formData, setFormData] = useState({
     searchWord: '',
     dateStart: '',
@@ -25,8 +26,12 @@ function Home() {
   }, [dispatch, isSuccess]);
 
   useEffect(() => {
+    if (isError) {
+      toast.error(message);
+      dispatch(reset());
+    }
     dispatch(getTrips());
-  }, [dispatch]);
+  }, [dispatch, isError]);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
