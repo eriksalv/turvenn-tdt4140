@@ -9,27 +9,20 @@ const getLogs = async (tripId) => {
 };
 
 const createLog = async (logData, token) => {
+  const formData = new FormData();
+  const { tripId, image, text } = logData;
+  formData.append('image', image);
+  formData.append('tripId', tripId);
+  formData.append('text', text);
+
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data; charset=utf8'
     }
   };
 
-  const { tripId, image, text } = logData;
-
-  const res = await axios.post(
-    `${baseUrl}/${logData.tripId}/logs`,
-    { tripId, image: image.name, text },
-    config
-  );
-  config.headers = {
-    'Content-Type': 'multipart/form-data',
-    Authorization: `Bearer ${token}`
-  };
-
-  const formData = new FormData(image);
-
-  await axios.post(`${baseUrl}/${logData.tripId}/logs`, formData, config);
+  const res = await axios.post(`${baseUrl}/${logData.tripId}/logs`, formData, config);
 
   return res.data;
 };

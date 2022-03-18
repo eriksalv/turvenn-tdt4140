@@ -62,10 +62,7 @@ function ViewTrip() {
   ];
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
   const [image, setImage] = useState({});
-  const [formData, setFormData] = useState({
-    text: ''
-  });
-  const { text, imgurl } = formData;
+  const [text, setText] = useState('');
 
   const [signedUp, setSignedUp] = useSignedUpStatus()[0];
   const [checkingStatus] = useSignedUpStatus()[1];
@@ -124,7 +121,7 @@ function ViewTrip() {
   };
 
   const onChangeLog = (e) => {
-    setFormData((prevState) => ({ ...prevState, text: e.target.value }));
+    setText(e.target.value);
   };
 
   const onChangePic = (e) => {
@@ -133,9 +130,7 @@ function ViewTrip() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const logData = { text, image: image, tripId: id };
-    console.log(text);
-    console.log(logData);
+    const logData = { text, image, tripId: id };
 
     dispatch(createLog(logData));
   };
