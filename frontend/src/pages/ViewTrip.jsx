@@ -30,6 +30,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PublishIcon from '@mui/icons-material/Publish';
 import useSignedUpStatus from '../hooks/useSignedUpStatus';
 import { getTrip, reset, signUp, signOff, deleteTrip } from '../features/trips/tripSlice';
+import { getLogs, createLog } from '../features/logs/logSlice';
 
 import ProfileCard from '../components/ProfileCard';
 import LogCard from '../components/LogCard';
@@ -45,17 +46,17 @@ function ViewTrip() {
   const mockData = [
     {
       text: 'Nydelig tur!',
-      imgurl: '../assets/defaultHike.jpeg',
+      imgurl: '/assets/defaultHike.jpeg',
       id: 'dkawdopwa'
     },
     {
       text: 'Ut på tur aldri sur!',
-      imgurl: '../assets/defaultHike.jpeg',
+      imgurl: '/assets/defaultHike.jpeg',
       id: 'bcjhscfre'
     },
     {
       text: 'Utrolig vær og utrolige turkammerater!',
-      imgurl: '../assets/defaultHike.jpeg',
+      imgurl: '/assets/defaultHike.jpeg',
       id: 'fewjbhjrwfr'
     }
   ];
@@ -123,14 +124,15 @@ function ViewTrip() {
   };
 
   const onChangeLog = (e) => {
-    setFormData((prevState) => ({ ...prevState, description: e.target.value }));
+    setFormData((prevState) => ({ ...prevState, text: e.target.value }));
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     const logData = { text, imgurl };
+    console.log(text);
 
-    // dispatch(createLog(logData));
+    dispatch(createLog(logData));
   };
 
   if (isLoading || checkingStatus || !trip) {
@@ -273,7 +275,6 @@ function ViewTrip() {
                     fullWidth
                     margin="normal"
                     size="small"
-                    value={text}
                     onChange={onChangeLog}
                   />
                 </Grid>
@@ -286,7 +287,7 @@ function ViewTrip() {
                     margin="normal"
                   >
                     <AddPhotoAlternateIcon />
-                    <input type="file" hidden value={imgurl} />
+                    <input type="file" hidden />
                   </Button>
                 </Grid>
               </Grid>
@@ -308,7 +309,7 @@ function ViewTrip() {
               </Grid>
             </Paper>
             <Box
-              id="postCardContainer"
+              id="logCardContainer"
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -318,7 +319,7 @@ function ViewTrip() {
               }}
             >
               {mockData.map((item) => (
-                <LogCard key={item.id} id={item.id} text={item.text} imgurl={item.imgurl} />
+                <LogCard key={item.id} id={item.id} text={item.text} imgpath={item.imgurl} />
               ))}
             </Box>
 

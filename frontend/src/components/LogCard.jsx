@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import { useNavigate } from 'react-router-dom';
 
-const Img = styled('imgurl')({
+const Img = styled('img')({
   margin: 'auto',
   display: 'block',
   maxWidth: '100%',
   maxHeight: '100%'
 });
 
-export default function LogCard({ id, text, imgurl = '../assets/defaultHike.jpeg' }) {
+export default function LogCard({ id, text, imgpath = '/assets/defaultHike.jpeg' }) {
   const navigate = useNavigate();
 
   const onClick = () => {};
@@ -37,7 +37,7 @@ export default function LogCard({ id, text, imgurl = '../assets/defaultHike.jpeg
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <ButtonBase sx={{ width: 160, height: 120 }}>
-            <Img alt="Nice bilde fra turen" src={imgurl} />
+            <Img alt="Nice bilde fra turen" src={imgpath} />
           </ButtonBase>
         </Grid>
         <Grid item xs={6} sm container>
