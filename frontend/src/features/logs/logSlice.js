@@ -7,14 +7,12 @@ const initialState = {
   log: null,
   isError: false,
   isSuccess: false,
-  isLoading: false,
-  message: '',
-  status: ''
+  isLoading: false
 };
 
-export const getLogs = createAsyncThunk('/log/getAll', async (_, thunkAPI) => {
+export const getLogs = createAsyncThunk('/log/getAll', async (tripId, thunkAPI) => {
   try {
-    return await logService.getLogs();
+    return await logService.getLogs(tripId);
   } catch (error) {
     return thunkAPI.rejectWithValue(getError(error));
   }
@@ -37,8 +35,6 @@ export const logSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
-      state.message = '';
-      state.status = '';
     }
   },
   extraReducers: (builder) => {
@@ -49,7 +45,7 @@ export const logSlice = createSlice({
       .addCase(getLogs.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.trips = action.payload;
+        state.logs = action.payload;
       })
       .addCase(getLogs.rejected, (state, action) => {
         state.isLoading = false;

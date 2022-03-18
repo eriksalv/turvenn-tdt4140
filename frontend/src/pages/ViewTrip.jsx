@@ -247,8 +247,7 @@ function ViewTrip() {
                 justifyContent: 'center',
                 width: '100%',
                 flexDirection: 'row',
-                flexWrap: 'wrap',
-                padding: '10px'
+                flexWrap: 'wrap'
               }}
             >
               <Grid
@@ -258,27 +257,54 @@ function ViewTrip() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '100%'
+                  width: '100%',
+                  padding: '20px',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap'
                 }}
               >
-                <Grid item xs={1}>
-                  <Avatar size="large">
+                <Grid
+                  item
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '10%'
+                  }}
+                >
+                  <Avatar size="medium">
                     <AccountCircleIcon />
                   </Avatar>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid
+                  item
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '80%'
+                  }}
+                >
                   <TextField
                     id="text"
                     label="Innlegg"
                     placeholder="Hvordan gikk turen?"
                     multiline
                     fullWidth
-                    margin="normal"
                     size="small"
                     onChange={onChangeLog}
+                    sx={{ marginRight: '10px' }}
                   />
                 </Grid>
-                <Grid item xs={1}>
+                <Grid
+                  item
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '10%'
+                  }}
+                >
                   <Button
                     id="imgurl"
                     variant="contained"
@@ -290,22 +316,27 @@ function ViewTrip() {
                     <input type="file" hidden />
                   </Button>
                 </Grid>
-              </Grid>
-              <Grid
-                container
-                alignItems="flex-end"
-                justifyContent="flex-end"
-                sx={{ mt: '0.5rem', mb: '0.2rem' }}
-              >
-                <Button
-                  onClick={onSubmit}
-                  className="btn btn-success"
-                  type="submit"
-                  variant="contained"
-                  endIcon={<PublishIcon />}
+                <Grid
+                  item
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end'
+                  }}
                 >
-                  Publiser innlegg
-                </Button>
+                  <Button
+                    onClick={onSubmit}
+                    className="btn btn-success"
+                    type="submit"
+                    variant="contained"
+                    endIcon={<PublishIcon />}
+                  >
+                    Publiser innlegg
+                  </Button>
+                </Grid>
               </Grid>
             </Paper>
             <Box
