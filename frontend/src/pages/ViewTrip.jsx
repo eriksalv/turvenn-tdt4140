@@ -128,10 +128,10 @@ function ViewTrip() {
   };
 
   const onChangePic = (e) => {
-    console.log('hello');
-    console.log(e.target.files[0]);
-    setImage(e.target.files[0]);
-    setSelectedImage(URL.createObjectURL(e.target.files[0]));
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      setSelectedImage(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   const onSubmit = async (e) => {
