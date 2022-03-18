@@ -292,6 +292,41 @@ const searchTrip = async (req, res, next) => {
   return res.status(200).json(trips);
 };
 
+const getPreviousUserTrips = async (req, res, next) => {
+  const { userId } = req.params;
+
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    res.status(404);
+    return next(new Error('User not found'));
+  }
+
+  try {
+    const trips = await user.getTrips({
+      where: {
+        date: { [Op.lte]: new Date() }
+      },
+      attributes: [
+        'id',
+        'name',
+        'start',
+        'goal',
+        'date',
+        'difficulty',
+        'type',
+        'duration',
+        'description'
+      ]
+    });
+
+    return res.status(200).json(trips);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
 module.exports = {
   getTrips,
   createTrip,
@@ -301,5 +336,6 @@ module.exports = {
   signOff,
   deleteTrip,
   updateTrip,
-  searchTrip
+  searchTrip,
+  getPreviousUserTrips
 };
