@@ -15,7 +15,21 @@ const createLog = async (logData, token) => {
     }
   };
 
-  const res = await axios.post(`${baseUrl}/${logData.tripId}/logs`, logData, config);
+  const { tripId, image, text } = logData;
+
+  const res = await axios.post(
+    `${baseUrl}/${logData.tripId}/logs`,
+    { tripId, image: image.name, text },
+    config
+  );
+  config.headers = {
+    'Content-Type': 'multipart/form-data',
+    Authorization: `Bearer ${token}`
+  };
+
+  const formData = new FormData(image);
+
+  await axios.post(`${baseUrl}/${logData.tripId}/logs`, formData, config);
 
   return res.data;
 };

@@ -61,9 +61,9 @@ function ViewTrip() {
     }
   ];
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
+  const [image, setImage] = useState({});
   const [formData, setFormData] = useState({
-    text: '',
-    imgurl: ''
+    text: ''
   });
   const { text, imgurl } = formData;
 
@@ -127,10 +127,15 @@ function ViewTrip() {
     setFormData((prevState) => ({ ...prevState, text: e.target.value }));
   };
 
+  const onChangePic = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    const logData = { text, imgurl };
+    const logData = { text, image: image, tripId: id };
     console.log(text);
+    console.log(logData);
 
     dispatch(createLog(logData));
   };
@@ -313,7 +318,13 @@ function ViewTrip() {
                     margin="normal"
                   >
                     <AddPhotoAlternateIcon />
-                    <input type="file" hidden />
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={onChangePic}
+                      name="uploaded_file"
+                    />
                   </Button>
                 </Grid>
                 <Grid
@@ -339,6 +350,7 @@ function ViewTrip() {
                 </Grid>
               </Grid>
             </Paper>
+
             <Box
               id="logCardContainer"
               sx={{

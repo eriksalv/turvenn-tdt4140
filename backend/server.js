@@ -1,8 +1,11 @@
 const express = require('express');
 const bodyparser = require('body-parser');
+const multer = require('multer');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 const { sequelize } = require('./models');
 const { User } = require('./models');
+
 require('dotenv').config();
 
 const { errorHandler } = require('./middleware/errorHandler');
@@ -11,6 +14,17 @@ const app = express();
 const PORT = 4000;
 
 app.disable('etag');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+    console.log(file);
+
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
 
 app.use(bodyparser.json({ limit: '50mb' }));
 app.use(bodyparser.urlencoded({ extended: false }));
@@ -51,3 +65,5 @@ sequelize
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
   });
+
+module.exports = { storage };

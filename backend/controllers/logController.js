@@ -1,7 +1,7 @@
 const { Trip, User, Log } = require('../models');
 
 const createLog = async (req, res, next) => {
-  const { text, imageUrl } = req.body;
+  const { text, image } = req.body;
 
   if (!text) {
     res.status(400);
@@ -18,14 +18,26 @@ const createLog = async (req, res, next) => {
 
   const { id } = req.user;
 
+  console.log(text);
+  console.log(image);
+  console.log(id);
+  console.log(tripId);
   try {
-    const log = await Log.create({
+    const newLog = await Log.create({
       text,
-      imageUrl,
+      imageUrl: image,
       userId: id,
       tripId
     });
-    return res.status(201).json(log);
+    return res.status(201).json({
+      message: 'Log created successfully',
+      trip: {
+        text: newLog.name,
+        imageUrl: newLog.imageUrl,
+        userId: newLog.userId,
+        tripId: newLog.id
+      }
+    });
   } catch (error) {
     res.status(500);
     next(new Error('Something went wrong'));
@@ -43,6 +55,7 @@ const getLogs = async (req, res, next) => {
   }
 
   const logs = await trip.getLogs({
+    attributes: ['id', 'text', 'imgUrl', 'UserID', 'TripID'],
     include: [
       {
         model: User,
