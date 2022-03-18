@@ -1,52 +1,44 @@
 const { Trip, User, Log } = require('../models');
-const { uploadSingle } = require('../middleware/uploadHandler');
 
 const createLog = async (req, res, next) => {
-  uploadSingle(req, res, async (err) => {
-    if (err) {
-      res.status(422);
-      return next(new Error(err));
-    }
+  const { text } = req.body;
 
-    const { text } = req.body;
+  if (!text) {
+    res.status(400);
+    return next(new Error('text cannot be empty'));
+  }
 
-    if (!text) {
-      res.status(400);
-      return next(new Error('text cannot be empty'));
-    }
+  const { tripId } = req.params;
+  const trip = await Trip.findByPk(tripId);
 
-    const { tripId } = req.params;
-    const trip = await Trip.findByPk(tripId);
+  if (!trip) {
+    res.status(404);
+    return next(new Error('Trip not found'));
+  }
 
-    if (!trip) {
-      res.status(404);
-      return next(new Error('Trip not found'));
-    }
+  const { id } = req.user;
+  const image = (req.file && req.file.filename) || null;
 
-    const { id } = req.user;
-    const image = (req.file && req.file.filename) || null;
-
-    try {
-      const newLog = await Log.create({
-        text,
-        imageUrl: image,
-        userId: id,
-        tripId
-      });
-      return res.status(201).json({
-        message: 'Log created successfully',
-        trip: {
-          text: newLog.name,
-          imageUrl: newLog.imageUrl,
-          userId: newLog.userId,
-          tripId: newLog.id
-        }
-      });
-    } catch (error) {
-      res.status(500);
-      next(new Error('Something went wrong'));
-    }
-  });
+  try {
+    const newLog = await Log.create({
+      text,
+      imageUrl: image,
+      userId: id,
+      tripId
+    });
+    return res.status(201).json({
+      message: 'Log created successfully',
+      trip: {
+        text: newLog.name,
+        imageUrl: newLog.imageUrl,
+        userId: newLog.userId,
+        tripId: newLog.id
+      }
+    });
+  } catch (error) {
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
 };
 
 const getLogs = async (req, res, next) => {

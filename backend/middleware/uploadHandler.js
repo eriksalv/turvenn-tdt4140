@@ -22,7 +22,19 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// limit filesize to 4MB
-const uploadSingle = multer({ storage, fileFilter, limits: { fileSize: 4000000 } }).single('image');
+function uploadFile(req, res, next) {
+  // limit filesize to 4MB
+  const uploadSingle = multer({ storage, fileFilter, limits: { fileSize: 4000000 } }).single(
+    'image'
+  );
 
-module.exports = { uploadSingle };
+  uploadSingle(req, res, (err) => {
+    if (err) {
+      res.status(422);
+      return next(new Error(err));
+    }
+    next();
+  });
+}
+
+module.exports = { uploadFile };
