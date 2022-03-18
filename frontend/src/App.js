@@ -17,6 +17,7 @@ import ViewTrip from './pages/ViewTrip';
 import User from './pages/User';
 import 'react-toastify/dist/ReactToastify.css';
 import EditTrip from './pages/EditTrip';
+import Calendar from './pages/Calendar';
 
 const theme = createTheme({
   palette: {
@@ -57,6 +58,9 @@ function App() {
           <Route path="/trips/:id" element={<ViewTrip />} />
           <Route path="/trips/:id/edit" element={<PrivateRoute />}>
             <Route path="/trips/:id/edit" element={<EditTrip />} />
+          </Route>
+          <Route path="/calendar" element={<PrivateRoute />}>
+            <Route path="/calendar" element={<Calendar />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
