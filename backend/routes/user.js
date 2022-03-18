@@ -13,10 +13,12 @@ const { protect } = require('../middleware/authHandler');
 
 const router = express.Router();
 
-const { getUserTrips } = require('../controllers/tripController');
+const { getUserTrips, getPreviousUserTrips } = require('../controllers/tripController');
 
 // Bruker funksjon fra tripController, kanskje det finnes en bedre måte å gjøre dette på?
 router.get('/:userId/trips', getUserTrips);
+
+router.get('/:userId/trips/previous', getPreviousUserTrips);
 
 // GET /api/users
 router.get('/', getUsers);

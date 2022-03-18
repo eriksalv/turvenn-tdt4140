@@ -1,7 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Grid, Paper, styled, Divider, Chip, Box, Typography, Button } from '@mui/material';
+import {
+  Grid,
+  Paper,
+  styled,
+  Divider,
+  Chip,
+  Box,
+  Typography,
+  Button,
+  Avatar,
+  TextField
+} from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,20 +25,47 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import PublishIcon from '@mui/icons-material/Publish';
 import useSignedUpStatus from '../hooks/useSignedUpStatus';
-
 import { getTrip, reset, signUp, signOff, deleteTrip } from '../features/trips/tripSlice';
+import { getLogs, createLog } from '../features/logs/logSlice';
 
 import ProfileCard from '../components/ProfileCard';
+import LogCard from '../components/LogCard';
+
+const Img = styled('img')({
+  margin: 'auto',
+  display: 'block',
+  maxWidth: '100%',
+  maxHeight: '100%'
+});
 
 function ViewTrip() {
-  const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%'
-  });
+  const mockData = [
+    {
+      text: 'Nydelig tur!',
+      imgurl: '/assets/defaultHike.jpeg',
+      id: 'dkawdopwa'
+    },
+    {
+      text: 'Ut på tur aldri sur!',
+      imgurl: '/assets/defaultHike.jpeg',
+      id: 'bcjhscfre'
+    },
+    {
+      text: 'Utrolig vær og utrolige turkammerater!',
+      imgurl: '/assets/defaultHike.jpeg',
+      id: 'fewjbhjrwfr'
+    }
+  ];
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
+  const [formData, setFormData] = useState({
+    text: '',
+    imgurl: ''
+  });
+  const { text, imgurl } = formData;
 
   const [signedUp, setSignedUp] = useSignedUpStatus()[0];
   const [checkingStatus] = useSignedUpStatus()[1];
@@ -83,6 +121,18 @@ function ViewTrip() {
 
   const onDelete = () => {
     dispatch(deleteTrip(trip.id));
+  };
+
+  const onChangeLog = (e) => {
+    setFormData((prevState) => ({ ...prevState, text: e.target.value }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const logData = { text, imgurl };
+    console.log(text);
+
+    dispatch(createLog(logData));
   };
 
   if (isLoading || checkingStatus || !trip) {
@@ -185,6 +235,125 @@ function ViewTrip() {
             justifyContent="flex-start"
             sx={{ mt: '4rem', mb: '0.5rem' }}
           >
+            <Divider sx={{ width: '100%' }}>
+              <Chip label="Innlegg" />
+            </Divider>
+
+            <Paper
+              sx={{ mt: '1rem', mb: '1rem' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                flexDirection: 'row',
+                flexWrap: 'wrap'
+              }}
+            >
+              <Grid
+                container
+                spacing={2}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                  padding: '20px',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap'
+                }}
+              >
+                <Grid
+                  item
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '10%'
+                  }}
+                >
+                  <Avatar size="medium">
+                    <AccountCircleIcon />
+                  </Avatar>
+                </Grid>
+                <Grid
+                  item
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '80%'
+                  }}
+                >
+                  <TextField
+                    id="text"
+                    label="Innlegg"
+                    placeholder="Hvordan gikk turen?"
+                    multiline
+                    fullWidth
+                    size="small"
+                    onChange={onChangeLog}
+                    sx={{ marginRight: '10px' }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '10%'
+                  }}
+                >
+                  <Button
+                    id="imgurl"
+                    variant="contained"
+                    component="label"
+                    size="large"
+                    margin="normal"
+                  >
+                    <AddPhotoAlternateIcon />
+                    <input type="file" hidden />
+                  </Button>
+                </Grid>
+                <Grid
+                  item
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end'
+                  }}
+                >
+                  <Button
+                    onClick={onSubmit}
+                    className="btn btn-success"
+                    type="submit"
+                    variant="contained"
+                    endIcon={<PublishIcon />}
+                  >
+                    Publiser innlegg
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Box
+              id="logCardContainer"
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContant: 'center',
+                alignItems: 'center'
+              }}
+            >
+              {mockData.map((item) => (
+                <LogCard key={item.id} id={item.id} text={item.text} imgpath={item.imgurl} />
+              ))}
+            </Box>
+
             <Divider sx={{ width: '100%' }}>
               <Chip label="Turgåere" />
             </Divider>
