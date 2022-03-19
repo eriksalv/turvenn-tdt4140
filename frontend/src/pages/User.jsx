@@ -160,8 +160,7 @@ function User() {
             id={item.id}
             title={item.name}
             difficulty={item.difficulty}
-            duration={item.duration}
-            date={item.date}
+            date={item.startDate}
             key={item.id}
           />
         ))}

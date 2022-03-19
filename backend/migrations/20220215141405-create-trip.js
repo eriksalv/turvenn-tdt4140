@@ -18,14 +18,16 @@ module.exports = {
       goal: {
         type: Sequelize.STRING
       },
-      date: {
-        type: Sequelize.DATE
+      startDate: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      endDate: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
       difficulty: {
         type: Sequelize.STRING
-      },
-      duration: {
-        type: Sequelize.INTEGER
       },
       description: {
         type: Sequelize.STRING

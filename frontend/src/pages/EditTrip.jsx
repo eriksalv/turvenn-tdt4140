@@ -23,10 +23,10 @@ function EditTrip() {
     name: '',
     goal: '',
     start: '',
-    date: '',
+    startDate: '',
+    endDate: '',
     difficulty: '',
     type: '',
-    duration: '',
     description: ''
   });
 
@@ -36,7 +36,7 @@ function EditTrip() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { name, goal, start, date, difficulty, type, duration, description } = formData;
+  const { name, goal, start, startDate, endDate, difficulty, type, description } = formData;
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
 
   const Img = styled('img')({
@@ -83,10 +83,10 @@ function EditTrip() {
         name: trip.name || '',
         goal: trip.goal || '',
         start: trip.start || '',
-        date: moment(trip.date).format('yyyy-MM-DDTHH:mm') || '',
+        startDate: moment(trip.startDate).format('yyyy-MM-DDTHH:mm') || '',
+        endDate: moment(trip.endDate).format('yyyy-MM-DDTHH:mm') || '',
         difficulty: trip.difficulty || '',
         type: trip.type || '',
-        duration: trip.duration || '',
         description: trip.description || ''
       }));
     }
@@ -101,7 +101,7 @@ function EditTrip() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const tripData = { id, name, goal, start, date, difficulty, type, duration, description };
+    const tripData = { id, name, goal, start, startDate, endDate, difficulty, type, description };
 
     dispatch(editTrip(tripData));
   };
@@ -159,12 +159,25 @@ function EditTrip() {
                   onChange={onChange}
                 />
                 <TextField
-                  id="date"
-                  label="Dato og tid"
+                  id="startDate"
+                  label="Startdato"
                   type="datetime-local"
                   required
                   fullWidth
-                  value={date}
+                  value={startDate}
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  onChange={onChange}
+                />
+                <TextField
+                  id="endDate"
+                  label="Sluttdato"
+                  type="datetime-local"
+                  required
+                  fullWidth
+                  value={endDate}
                   margin="normal"
                   InputLabelProps={{
                     shrink: true
@@ -202,14 +215,6 @@ function EditTrip() {
                     <MenuItem value="bratt fjelltur">Bratt fjelltur</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField
-                  id="duration"
-                  label="Varighet"
-                  fullWidth
-                  value={duration}
-                  margin="normal"
-                  onChange={onChange}
-                />
                 <TextField
                   id="descrition"
                   label="Beskrivelse"

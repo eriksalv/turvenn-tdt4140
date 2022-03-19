@@ -142,10 +142,16 @@ function ViewTrip() {
                 {trip.start}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
-                Dato
+                Startdato
               </Typography>
               <Typography variant="body1" component="h2">
-                {moment(trip.date).format('yyyy-MM-DD HH:mm')}
+                {moment(trip.startDate).format('yyyy-MM-DD HH:mm')}
+              </Typography>
+              <Typography variant="h6" component="h6" marginTop="20px">
+                Sluttdato
+              </Typography>
+              <Typography variant="body1" component="h2">
+                {moment(trip.endDate).format('yyyy-MM-DD HH:mm')}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
                 Vanskelighetsgrad
@@ -158,12 +164,6 @@ function ViewTrip() {
               </Typography>
               <Typography variant="body1" component="h2">
                 {trip.type}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Varighet
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.duration}
               </Typography>
               <Typography variant="h6" component="h6" marginTop="20px">
                 Opprettet av

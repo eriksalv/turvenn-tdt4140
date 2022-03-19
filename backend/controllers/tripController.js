@@ -9,10 +9,10 @@ const getTrips = async (req, res, next) => {
         'name',
         'start',
         'goal',
-        'date',
+        'startDate',
+        'endDate',
         'difficulty',
         'type',
-        'duration',
         'description',
         'createdAt'
       ],
@@ -49,10 +49,10 @@ const getUserTrips = async (req, res, next) => {
         'name',
         'start',
         'goal',
-        'date',
+        'startDate',
+        'endDate',
         'difficulty',
         'type',
-        'duration',
         'description'
       ]
     });
@@ -74,10 +74,10 @@ const getTrip = async (req, res, next) => {
       'name',
       'start',
       'goal',
-      'date',
+      'startDate',
+      'endDate',
       'difficulty',
       'type',
-      'duration',
       'description',
       'createdAt'
     ],
@@ -107,7 +107,7 @@ const getTrip = async (req, res, next) => {
 };
 
 const createTrip = async (req, res, next) => {
-  const { name, start, goal, date, difficulty, type, duration, description } = req.body;
+  const { name, start, goal, startDate, endDate, difficulty, type, description } = req.body;
   const userId = req.user.id;
 
   try {
@@ -115,10 +115,10 @@ const createTrip = async (req, res, next) => {
       name,
       start,
       goal,
-      date,
+      startDate,
+      endDate,
       difficulty,
       type,
-      duration,
       description,
       userId
     });
@@ -128,10 +128,10 @@ const createTrip = async (req, res, next) => {
         name: newTrip.name,
         start: newTrip.start,
         goal: newTrip.goal,
-        date: newTrip.date,
+        startDate: newTrip.endDate,
+        endDate: newTrip.endDate,
         difficulty: newTrip.difficulty,
         type: newTrip.type,
-        duration: newTrip.duration,
         description: newTrip.description
       }
     });
@@ -212,7 +212,7 @@ const deleteTrip = async (req, res, next) => {
 };
 
 const updateTrip = async (req, res, next) => {
-  const { name, start, goal, date, difficulty, type, duration, description } = req.body;
+  const { name, start, goal, startDate, endDate, difficulty, type, description } = req.body;
   const { id, role } = req.user;
   const { tripId } = req.params;
 
@@ -232,10 +232,10 @@ const updateTrip = async (req, res, next) => {
       name: name,
       start: start,
       goal: goal,
-      date: date,
+      startDate: startDate,
+      endDate: endDate,
       difficulty: difficulty,
       type: type,
-      duration: duration,
       description: description
     });
 
@@ -267,17 +267,17 @@ const searchTrip = async (req, res, next) => {
   const trips = await Trip.findAll({
     where: {
       name: { [Op.iLike]: `%${searchWord}%` },
-      date: { [Op.lte]: dateEnd, [Op.gte]: dateStart }
+      startDate: { [Op.lte]: dateEnd, [Op.gte]: dateStart }
     },
     attributes: [
       'id',
       'name',
       'start',
       'goal',
-      'date',
+      'startDate',
+      'endDate',
       'difficulty',
       'type',
-      'duration',
       'description',
       'createdAt'
     ],

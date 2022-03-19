@@ -23,7 +23,6 @@ export default function TripCard({
   id,
   title,
   difficulty,
-  duration,
   date,
   imagePath = '/assets/defaultHike.jpeg',
   iconPath = '/assets/clock.png'
@@ -70,12 +69,8 @@ export default function TripCard({
               </Typography>
             </Grid>
           </Grid>
-          <Grid item>
-            <Typography variant="subtitle1" component="div">
-              <Img alt="Klokke" src={iconPath} />
-              {duration}
-            </Typography>
-            {/* <Fab // Navigerer til både /trips/id/edit og /trips/id, siden hele komponenten også har en onclick, så fjerner dette foreløpig
+          {/* <Grid item>
+            <Fab // Navigerer til både /trips/id/edit og /trips/id, siden hele komponenten også har en onclick, så fjerner dette foreløpig
               sx={{ mr: 1, mt: '2rem' }}
               size="small"
               color="secondary"
@@ -86,8 +81,8 @@ export default function TripCard({
             </Fab>
             <Fab sx={{ mt: '2rem' }} size="small" color="primary" aria-label="edit">
               <DeleteIcon />
-            </Fab> */}
-          </Grid>
+            </Fab> 
+          </Grid> */}
         </Grid>
       </Grid>
     </Paper>

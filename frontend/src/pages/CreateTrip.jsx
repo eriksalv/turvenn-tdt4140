@@ -20,17 +20,17 @@ function CreateTrip() {
     name: '',
     goal: '',
     start: '',
-    date: '',
+    startDate: '',
+    endDate: '',
     difficulty: '',
     type: '',
-    duration: '',
     description: ''
   });
   const dispatch = useDispatch();
   const { isError, isSuccess, message } = useSelector((state) => state.trips);
   const navigate = useNavigate();
 
-  const { name, goal, start, date, difficulty, type, duration, description } = formData;
+  const { name, goal, start, startDate, endDate, difficulty, type, description } = formData;
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
 
   const Img = styled('img')({
@@ -63,7 +63,7 @@ function CreateTrip() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const tripData = { name, goal, start, date, difficulty, type, duration, description };
+    const tripData = { name, goal, start, startDate, endDate, difficulty, type, description };
 
     dispatch(createTrip(tripData));
   };
@@ -124,12 +124,25 @@ function CreateTrip() {
                   onChange={onChange}
                 />
                 <TextField
-                  id="date"
-                  label="Dato og tid"
+                  id="startDate"
+                  label="Startdato"
                   type="datetime-local"
                   required
                   fullWidth
-                  value={date}
+                  value={startDate}
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  onChange={onChange}
+                />
+                <TextField
+                  id="endDate"
+                  label="Sluttdato"
+                  type="datetime-local"
+                  required
+                  fullWidth
+                  value={endDate}
                   margin="normal"
                   InputLabelProps={{
                     shrink: true
@@ -167,16 +180,6 @@ function CreateTrip() {
                     <MenuItem value="bratt fjelltur">Bratt fjelltur</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField
-                  id="duration"
-                  type="number"
-                  label="Varighet"
-                  placeholder="Hvor lenge varer turen?"
-                  fullWidth
-                  value={duration}
-                  margin="normal"
-                  onChange={onChange}
-                />
                 <TextField
                   id="descrition"
                   label="Beskrivelse"
