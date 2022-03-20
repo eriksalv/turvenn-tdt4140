@@ -20,6 +20,12 @@ const getUserTrips = async (userId) => {
   return res.data;
 };
 
+const getTripsParticipatedIn = async (userId) => {
+  const res = await axios.get(`/api/users/${userId}/participations`);
+
+  return res.data;
+};
+
 const createTrip = async (tripData, token) => {
   const config = {
     headers: {
@@ -97,7 +103,8 @@ const tripService = {
   signOff,
   editTrip,
   deleteTrip,
-  searchTrip
+  searchTrip,
+  getTripsParticipatedIn
 };
 
 export default tripService;

@@ -1,5 +1,5 @@
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { styled, useTheme } from '@mui/material/styles';
@@ -149,7 +149,7 @@ function Header() {
             <Link to="/calendar" style={{ textDecoration: 'none' }}>
               <ListItem button key="Turkalender">
                 <ListItemIcon>
-                  <AddCircleIcon />
+                  <EventIcon />
                 </ListItemIcon>
                 <ListItemText primary="Turkalender" />
               </ListItem>

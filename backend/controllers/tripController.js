@@ -65,6 +65,53 @@ const getUserTrips = async (req, res, next) => {
   }
 };
 
+/**
+ * Gets all trips that a user has partcipated in
+ */
+const getTripsByParticipator = async (req, res, next) => {
+  const { userId } = req.params;
+
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    res.status(404);
+    return next(new Error('User not found'));
+  }
+
+  try {
+    const trips = await Trip.findAll({
+      include: {
+        model: User,
+        as: 'participators',
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+        through: {
+          attributes: []
+        },
+        where: {
+          id: userId
+        }
+      },
+      attributes: [
+        'id',
+        'name',
+        'start',
+        'goal',
+        'startDate',
+        'endDate',
+        'difficulty',
+        'type',
+        'description'
+      ]
+    });
+
+    return res.status(200).json(trips);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
 const getTrip = async (req, res, next) => {
   const { tripId } = req.params;
 
@@ -301,5 +348,6 @@ module.exports = {
   signOff,
   deleteTrip,
   updateTrip,
-  searchTrip
+  searchTrip,
+  getTripsByParticipator
 };

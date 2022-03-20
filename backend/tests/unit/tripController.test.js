@@ -4,7 +4,7 @@ const {
   getUserTrips,
   signUp,
   signOff,
-  getParticipators,
+  getTripsByParticipator,
   getTrip,
   getTrips,
   searchTrip
@@ -20,9 +20,9 @@ describe('Trip Controller - Create Trip', () => {
         name: 'En testtur',
         start: 'her',
         goal: 'der',
-        date: 'dato',
+        startDate: 'dato',
+        endDate: 'dato',
         difficulty: 'vasnkelig',
-        duration: '2 dager',
         description: 'vasnkelig tur'
       },
       user: {

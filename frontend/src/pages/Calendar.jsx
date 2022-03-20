@@ -18,7 +18,7 @@ import Grid from '@mui/material/Grid';
 import Room from '@mui/icons-material/Room';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
-import { getUserTrips, reset } from '../features/trips/tripSlice';
+import { getTripsParticipatedIn, reset } from '../features/trips/tripSlice';
 
 const PREFIX = 'Demo';
 
@@ -160,7 +160,9 @@ function Header({ children, appointmentData, ...restProps }) {
 
 function Calendar() {
   const { user } = useSelector((state) => state.auth);
-  const { userTrips, isLoading, isSuccess, isError, message } = useSelector((state) => state.trips);
+  const { userParticipatedIn, isLoading, isSuccess, isError, message } = useSelector(
+    (state) => state.trips
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -178,10 +180,12 @@ function Calendar() {
       return;
     }
 
-    dispatch(getUserTrips(user.id));
+    if (user) {
+      dispatch(getTripsParticipatedIn(user.id));
+    }
   }, [isError, message, user]);
 
-  const data = userTrips.map((item) => ({
+  const data = userParticipatedIn.map((item) => ({
     id: item.id,
     title: item.name,
     startDate: item.startDate,

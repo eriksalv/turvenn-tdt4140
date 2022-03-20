@@ -6,6 +6,7 @@ const initialState = {
   trips: [],
   trip: null,
   userTrips: [],
+  userParticipatedIn: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -89,6 +90,17 @@ export const searchTrip = createAsyncThunk('trips/search', async (searchData, th
     return thunkAPI.rejectWithValue(getError(error));
   }
 });
+
+export const getTripsParticipatedIn = createAsyncThunk(
+  'trips/participated',
+  async (userId, thunkAPI) => {
+    try {
+      return await tripService.getTripsParticipatedIn(userId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getError(error));
+    }
+  }
+);
 
 export const tripSlice = createSlice({
   name: 'trip',
@@ -214,13 +226,24 @@ export const tripSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.trips = action.payload;
-        state.status = 'search success';
       })
       .addCase(searchTrip.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.status = 'search failed';
+      })
+      .addCase(getTripsParticipatedIn.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTripsParticipatedIn.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.userParticipatedIn = action.payload;
+      })
+      .addCase(getTripsParticipatedIn.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   }
 });
