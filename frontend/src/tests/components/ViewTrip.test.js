@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import * as reactRouter from 'react-router-dom';
 import * as redux from 'react-redux';
-import User from '../../pages/User';
+import ViewTrip from '../../pages/ViewTrip';
 
 let selectorSpy;
 let paramsSpy;
@@ -13,19 +13,30 @@ beforeAll(() => {
   selectorSpy = jest.spyOn(redux, 'useSelector');
   selectorSpy.mockReturnValue({
     user: {
-      id: 1,
-      firstName: 'Test',
-      lastName: 'Test',
-      email: 'email@email.com',
-      password: 'password',
-      role: 'user'
+      id: 1
     },
-    userTrips: [
-      {
+    trip: {
+      id: 1,
+      name: 'Test',
+      user: {
         id: 1,
-        name: 'Test'
-      }
-    ]
+        firstName: 'Ola',
+        lastName: 'Nordmann'
+      },
+      participators: [
+        {
+          id: 1
+        },
+        {
+          id: 2
+        }
+      ]
+    },
+    isSuccess: false,
+    isError: false,
+    isLoading: false,
+    message: '',
+    status: ''
   });
   paramsSpy = jest.spyOn(reactRouter, 'useParams');
   paramsSpy.mockReturnValue({
@@ -34,12 +45,12 @@ beforeAll(() => {
 });
 
 it('should render component', () => {
-  render(<User />);
+  render(<ViewTrip />);
 
-  const name = screen.getByRole('heading', {
-    name: /test test/i
+  const tripName = screen.getByRole('heading', {
+    name: /test/i
   });
 
-  expect(name).not.toBe(null);
-  expect(name).toBeInTheDocument();
+  expect(tripName).not.toBe(null);
+  expect(tripName).toBeInTheDocument();
 });

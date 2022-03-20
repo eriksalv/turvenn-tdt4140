@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import * as redux from 'react-redux';
-import Login from '../../pages/Login';
+import Register from '../../pages/Register';
 
 let selectorSpy;
 
@@ -19,10 +19,10 @@ beforeAll(() => {
 });
 
 it('should render component', () => {
-  render(<Login />);
+  render(<Register />);
 
   const title = screen.getByRole('heading', {
-    name: /logg inn/i
+    name: /bli en turvenn/i
   });
 
   expect(title).not.toBe(null);
