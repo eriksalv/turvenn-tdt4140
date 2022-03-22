@@ -11,10 +11,12 @@ import {
   Typography,
   Button,
   Avatar,
-  TextField
+  TextField,
+  IconButton
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
+import CancelIcon from '@mui/icons-material/Cancel';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -62,6 +64,7 @@ function ViewTrip() {
   ];
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
   const [image, setImage] = useState({});
+  const [selectedImage, setSelectedImage] = useState('');
   const [formData, setFormData] = useState({
     text: ''
   });
@@ -137,7 +140,10 @@ function ViewTrip() {
   };
 
   const onChangePic = (e) => {
-    setImage(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      setSelectedImage(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   const onSubmit = async (e) => {
@@ -328,14 +334,56 @@ function ViewTrip() {
                   >
                     <AddPhotoAlternateIcon />
                     <input
+                      id="imageInput"
                       type="file"
+                      onChange={onChangePic}
                       hidden
                       accept="image/*"
-                      onChange={onChangePic}
-                      name="uploaded_file"
                     />
                   </Button>
                 </Grid>
+                {selectedImage && (
+                  <Paper
+                    sx={{
+                      width: '100%',
+                      padding: '20px',
+                      borderRadius: '10px',
+                      marginTop: '20px',
+                      display: 'flex',
+                      justifyContent: 'flex-end'
+                    }}
+                    elevation={4}
+                  >
+                    <IconButton
+                      component="span"
+                      sx={{
+                        zIndex: '10',
+                        position: 'absolute'
+                      }}
+                      onClick={() => {
+                        setImage({});
+                        setSelectedImage('');
+                        document.getElementById('imageInput').value = '';
+                      }}
+                    >
+                      <CancelIcon
+                        color="primary"
+                        fontSize="large"
+                        sx={{ backgroundColor: 'black', opacity: '0.9', borderRadius: '50%' }}
+                      />
+                    </IconButton>
+                    <Img
+                      src={selectedImage}
+                      sx={{
+                        maxWidth: '100%',
+                        maxHeight: '500px',
+                        objectFit: 'scale-down',
+                        borderRadius: '10px'
+                      }}
+                    />
+                  </Paper>
+                )}
+
                 <Grid
                   item
                   alignItems="center"
@@ -353,6 +401,7 @@ function ViewTrip() {
                     type="submit"
                     variant="contained"
                     endIcon={<PublishIcon />}
+                    disabled={!text}
                   >
                     Publiser innlegg
                   </Button>
