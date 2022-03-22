@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
+import moment from 'moment';
 import Box from '@mui/material/Box';
 import { toast } from 'react-toastify';
 import { Divider, Chip, Typography, Grid, Button, Tooltip } from '@mui/material';
@@ -20,6 +21,7 @@ const Img = styled('img')({
 });
 
 function User() {
+  const today = moment().format();
   const { user: loggedInUser } = useSelector((state) => state.auth);
   const { user, isError, isLoading, message, isSuccess } = useSelector((state) => state.users);
   const {
@@ -30,6 +32,9 @@ function User() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const futureTrips = userTrips.filter((item) => item.date > today);
+  const pastTrips = userTrips.filter((item) => item.date < today);
 
   useEffect(() => {
     if (isSuccess) {
@@ -52,7 +57,6 @@ function User() {
     dispatch(getUser(id));
     dispatch(getUserTrips(id));
   }, [isError, message, id]);
-
   const onAdmin = (role) => {
     const userData = {
       userId: id,
@@ -143,6 +147,32 @@ function User() {
       </Grid>
 
       <Divider sx={{ width: '100%' }}>
+        <Chip label="Kommende turer" />
+      </Divider>
+
+      <Box
+        id="tripComingContainer"
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        {futureTrips.map((item) => (
+          <TripCard
+            id={item.id}
+            title={item.name}
+            difficulty={item.difficulty}
+            duration={item.duration}
+            date={item.date}
+            key={item.id}
+          />
+        ))}
+      </Box>
+
+      <Divider sx={{ width: '100%' }}>
         <Chip label="Turhistorikk" />
       </Divider>
       <Box
@@ -155,7 +185,7 @@ function User() {
           alignItems: 'center'
         }}
       >
-        {userTrips.map((item) => (
+        {pastTrips.map((item) => (
           <TripCard
             id={item.id}
             title={item.name}
