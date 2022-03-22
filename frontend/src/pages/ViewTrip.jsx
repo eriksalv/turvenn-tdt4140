@@ -95,7 +95,6 @@ function ViewTrip() {
       dispatch(reset());
     }
     dispatch(getLogs(id));
-    console.log(logs);
   }, [dispatch, isError]);
 
   useEffect(() => {
