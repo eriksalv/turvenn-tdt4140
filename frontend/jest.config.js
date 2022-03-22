@@ -11,7 +11,9 @@ module.exports = {
     '!**/node_modules/**',
     '!**/*.config.js',
     '!**/coverage/**',
-    '!**/index.js'
+    '!**/index.js',
+    '!**/src/pages/Calendar.jsx',
+    '!**/App.js'
   ],
   moduleFileExtensions: ['js', 'json', 'ts', 'node', 'jsx'],
   transform: {

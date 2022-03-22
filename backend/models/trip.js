@@ -31,13 +31,22 @@ module.exports = (sequelize, DataTypes) => {
   }
   Trip.init(
     {
-      name: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       start: DataTypes.STRING,
       goal: DataTypes.STRING,
-      date: DataTypes.DATE,
+      startDate: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      endDate: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
       difficulty: DataTypes.STRING,
       type: DataTypes.STRING,
-      duration: DataTypes.INTEGER,
       description: DataTypes.STRING,
       userId: DataTypes.INTEGER
     },

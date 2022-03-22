@@ -4,10 +4,12 @@ const {
   getUserTrips,
   signUp,
   signOff,
-  getParticipators,
+  getTripsByParticipator,
   getTrip,
   getTrips,
-  searchTrip
+  searchTrip,
+  deleteTrip,
+  updateTrip
 } = require('../../controllers/tripController');
 
 describe('Trip Controller - Create Trip', () => {
@@ -20,9 +22,9 @@ describe('Trip Controller - Create Trip', () => {
         name: 'En testtur',
         start: 'her',
         goal: 'der',
-        date: 'dato',
+        startDate: 'dato',
+        endDate: 'dato',
         difficulty: 'vasnkelig',
-        duration: '2 dager',
         description: 'vasnkelig tur'
       },
       user: {
@@ -269,6 +271,165 @@ describe('Trip Controller - searchTripByName, searchTripByName', () => {
       }
     };
     await searchTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('Trip Controller - getTripsByParticipator', () => {
+  let req;
+  let res;
+  let next;
+  beforeEach(() => {
+    req = {
+      params: {
+        userId: 1
+      }
+    };
+    res = {
+      status: jest.fn().mockImplementation(() => res),
+      json: jest.fn()
+    };
+    next = jest.fn();
+  });
+
+  it('should return status 404 if user not found', async () => {
+    User.findByPk = jest.fn().mockImplementation(() => null);
+
+    await getTripsByParticipator(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+  });
+
+  it('should return status 200 if successful', async () => {
+    User.findByPk = jest.fn().mockImplementation(() => ({ id: 1 }));
+    Trip.findAll = jest.fn().mockImplementation(() => [{ id: 1 }]);
+
+    await getTripsByParticipator(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('Trip Controller - deleteTrip', () => {
+  let req;
+  let res;
+  let next;
+  beforeEach(() => {
+    req = {
+      params: {
+        tripId: 1
+      },
+      user: {
+        id: 1,
+        role: 'user'
+      }
+    };
+    res = {
+      status: jest.fn().mockImplementation(() => res),
+      json: jest.fn()
+    };
+    next = jest.fn();
+  });
+
+  it('should return status 404 if trip not found', async () => {
+    Trip.findByPk = jest.fn().mockImplementation(() => null);
+
+    await deleteTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+  });
+
+  it('should return status 403 if user is not admin and trip is not by user', async () => {
+    Trip.findByPk = jest.fn().mockImplementation(() => ({ id: 1, userId: 2 }));
+
+    await deleteTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(403);
+  });
+
+  it('should delete trip if user is admin', async () => {
+    req.user.role = 'admin';
+    Trip.findByPk = jest.fn().mockImplementation(() => ({ id: 1, userId: 2, destroy: () => {} }));
+
+    await deleteTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should delete trip if user created trip', async () => {
+    Trip.findByPk = jest.fn().mockImplementation(() => ({ id: 1, userId: 1, destroy: () => {} }));
+
+    await deleteTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('Trip Controller - updateTrip', () => {
+  let req;
+  let res;
+  let next;
+  beforeEach(() => {
+    req = {
+      params: {
+        tripId: 1
+      },
+      user: {
+        id: 1,
+        role: 'user'
+      },
+      body: {
+        name: 'name',
+        start: 'start',
+        goal: 'goal',
+        startDate: 'now',
+        endDate: 'date',
+        difficulty: 'hard',
+        type: 'tur',
+        description: '...'
+      }
+    };
+    res = {
+      status: jest.fn().mockImplementation(() => res),
+      json: jest.fn()
+    };
+    next = jest.fn();
+  });
+
+  it('should return status 404 if trip not found', async () => {
+    Trip.findByPk = jest.fn().mockImplementation(() => null);
+
+    await updateTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+  });
+
+  it('should return status 403 if user is not admin and trip is not by user', async () => {
+    Trip.findByPk = jest.fn().mockImplementation(() => ({ id: 1, userId: 2 }));
+
+    await updateTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(403);
+  });
+
+  it('should delete trip if user is admin', async () => {
+    req.user.role = 'admin';
+    Trip.findByPk = jest
+      .fn()
+      .mockImplementation(() => ({ id: 1, userId: 2, set: () => {}, save: () => {} }));
+
+    await updateTrip(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should delete trip if user created trip', async () => {
+    Trip.findByPk = jest
+      .fn()
+      .mockImplementation(() => ({ id: 1, userId: 1, set: () => {}, save: () => {} }));
+
+    await updateTrip(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(200);
   });

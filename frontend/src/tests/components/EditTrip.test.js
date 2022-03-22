@@ -2,9 +2,9 @@ import React from 'react';
 import 'regenerator-runtime/runtime';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import * as reactRouter from 'react-router-dom';
 import * as redux from 'react-redux';
-import User from '../../pages/User';
+import * as reactRouter from 'react-router-dom';
+import EditTrip from '../../pages/EditTrip';
 
 let selectorSpy;
 let paramsSpy;
@@ -12,6 +12,9 @@ let paramsSpy;
 beforeAll(() => {
   selectorSpy = jest.spyOn(redux, 'useSelector');
   selectorSpy.mockReturnValue({
+    isError: false,
+    isSuccess: false,
+    message: '',
     user: {
       id: 1,
       firstName: 'Test',
@@ -20,12 +23,13 @@ beforeAll(() => {
       password: 'password',
       role: 'user'
     },
-    userTrips: [
-      {
+    trip: {
+      id: 1,
+      user: {
         id: 1,
-        name: 'Test'
+        name: 'hello'
       }
-    ]
+    }
   });
   paramsSpy = jest.spyOn(reactRouter, 'useParams');
   paramsSpy.mockReturnValue({
@@ -34,12 +38,12 @@ beforeAll(() => {
 });
 
 it('should render component', () => {
-  render(<User />);
+  render(<EditTrip />);
 
-  const name = screen.getByRole('heading', {
-    name: /test test/i
+  const title = screen.getByRole('heading', {
+    name: /rediger turarrangement/i
   });
 
-  expect(name).not.toBe(null);
-  expect(name).toBeInTheDocument();
+  expect(title).not.toBe(null);
+  expect(title).toBeInTheDocument();
 });

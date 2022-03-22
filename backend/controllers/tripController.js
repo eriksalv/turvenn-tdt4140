@@ -9,10 +9,10 @@ const getTrips = async (req, res, next) => {
         'name',
         'start',
         'goal',
-        'date',
+        'startDate',
+        'endDate',
         'difficulty',
         'type',
-        'duration',
         'description',
         'createdAt'
       ],
@@ -49,10 +49,57 @@ const getUserTrips = async (req, res, next) => {
         'name',
         'start',
         'goal',
-        'date',
+        'startDate',
+        'endDate',
         'difficulty',
         'type',
-        'duration',
+        'description'
+      ]
+    });
+
+    return res.status(200).json(trips);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
+/**
+ * Gets all trips that a user has partcipated in
+ */
+const getTripsByParticipator = async (req, res, next) => {
+  const { userId } = req.params;
+
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    res.status(404);
+    return next(new Error('User not found'));
+  }
+
+  try {
+    const trips = await Trip.findAll({
+      include: {
+        model: User,
+        as: 'participators',
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+        through: {
+          attributes: []
+        },
+        where: {
+          id: userId
+        }
+      },
+      attributes: [
+        'id',
+        'name',
+        'start',
+        'goal',
+        'startDate',
+        'endDate',
+        'difficulty',
+        'type',
         'description'
       ]
     });
@@ -74,10 +121,10 @@ const getTrip = async (req, res, next) => {
       'name',
       'start',
       'goal',
-      'date',
+      'startDate',
+      'endDate',
       'difficulty',
       'type',
-      'duration',
       'description',
       'createdAt'
     ],
@@ -107,7 +154,7 @@ const getTrip = async (req, res, next) => {
 };
 
 const createTrip = async (req, res, next) => {
-  const { name, start, goal, date, difficulty, type, duration, description } = req.body;
+  const { name, start, goal, startDate, endDate, difficulty, type, description } = req.body;
   const userId = req.user.id;
 
   try {
@@ -115,10 +162,10 @@ const createTrip = async (req, res, next) => {
       name,
       start,
       goal,
-      date,
+      startDate,
+      endDate,
       difficulty,
       type,
-      duration,
       description,
       userId
     });
@@ -128,10 +175,10 @@ const createTrip = async (req, res, next) => {
         name: newTrip.name,
         start: newTrip.start,
         goal: newTrip.goal,
-        date: newTrip.date,
+        startDate: newTrip.endDate,
+        endDate: newTrip.endDate,
         difficulty: newTrip.difficulty,
         type: newTrip.type,
-        duration: newTrip.duration,
         description: newTrip.description
       }
     });
@@ -212,7 +259,7 @@ const deleteTrip = async (req, res, next) => {
 };
 
 const updateTrip = async (req, res, next) => {
-  const { name, start, goal, date, difficulty, type, duration, description } = req.body;
+  const { name, start, goal, startDate, endDate, difficulty, type, description } = req.body;
   const { id, role } = req.user;
   const { tripId } = req.params;
 
@@ -232,10 +279,10 @@ const updateTrip = async (req, res, next) => {
       name: name,
       start: start,
       goal: goal,
-      date: date,
+      startDate: startDate,
+      endDate: endDate,
       difficulty: difficulty,
       type: type,
-      duration: duration,
       description: description
     });
 
@@ -267,17 +314,17 @@ const searchTrip = async (req, res, next) => {
   const trips = await Trip.findAll({
     where: {
       name: { [Op.iLike]: `%${searchWord}%` },
-      date: { [Op.lte]: dateEnd, [Op.gte]: dateStart }
+      startDate: { [Op.lte]: dateEnd, [Op.gte]: dateStart }
     },
     attributes: [
       'id',
       'name',
       'start',
       'goal',
-      'date',
+      'startDate',
+      'endDate',
       'difficulty',
       'type',
-      'duration',
       'description',
       'createdAt'
     ],
@@ -292,41 +339,6 @@ const searchTrip = async (req, res, next) => {
   return res.status(200).json(trips);
 };
 
-const getPreviousUserTrips = async (req, res, next) => {
-  const { userId } = req.params;
-
-  const user = await User.findByPk(userId);
-
-  if (!user) {
-    res.status(404);
-    return next(new Error('User not found'));
-  }
-
-  try {
-    const trips = await user.getTrips({
-      where: {
-        date: { [Op.lte]: new Date() }
-      },
-      attributes: [
-        'id',
-        'name',
-        'start',
-        'goal',
-        'date',
-        'difficulty',
-        'type',
-        'duration',
-        'description'
-      ]
-    });
-
-    return res.status(200).json(trips);
-  } catch (error) {
-    console.log(error);
-    res.status(500);
-    next(new Error('Something went wrong'));
-  }
-};
 module.exports = {
   getTrips,
   createTrip,
@@ -337,5 +349,5 @@ module.exports = {
   deleteTrip,
   updateTrip,
   searchTrip,
-  getPreviousUserTrips
+  getTripsByParticipator
 };

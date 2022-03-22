@@ -3,26 +3,35 @@ import 'regenerator-runtime/runtime';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import * as redux from 'react-redux';
-import Login from '../../pages/Login';
+import Home from '../../pages/Home';
 
 let selectorSpy;
 
 beforeAll(() => {
   selectorSpy = jest.spyOn(redux, 'useSelector');
   selectorSpy.mockReturnValue({
-    user: null,
     isSuccess: false,
     isError: false,
     isLoading: false,
-    message: ''
+    message: '',
+    trips: [
+      {
+        id: 1,
+        name: 'Test',
+        user: {
+          id: 1,
+          firstName: 'Tester'
+        }
+      }
+    ]
   });
 });
 
 it('should render component', () => {
-  render(<Login />);
+  render(<Home />);
 
   const title = screen.getByRole('heading', {
-    name: /logg inn/i
+    name: /hjem/i
   });
 
   expect(title).not.toBe(null);

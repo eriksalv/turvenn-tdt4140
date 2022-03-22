@@ -1,5 +1,5 @@
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { styled, useTheme } from '@mui/material/styles';
@@ -14,6 +14,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import EventIcon from '@mui/icons-material/Event';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import MuiAppBar from '@mui/material/AppBar';
 import HomeIcon from '@mui/icons-material/Home';
@@ -143,6 +144,14 @@ function Header() {
                   <AddCircleIcon />
                 </ListItemIcon>
                 <ListItemText primary="Opprett Tur" />
+              </ListItem>
+            </Link>
+            <Link to="/calendar" style={{ textDecoration: 'none' }}>
+              <ListItem button key="Turkalender">
+                <ListItemIcon>
+                  <EventIcon />
+                </ListItemIcon>
+                <ListItemText primary="Turkalender" />
               </ListItem>
             </Link>
             <Link to={user ? `/users/${user.id}` : '/'} style={{ textDecoration: 'none' }}>

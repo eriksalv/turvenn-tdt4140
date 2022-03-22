@@ -26,19 +26,16 @@ function ProfilePage() {
   const mockData = [
     {
       difficulty: 1,
-      duration: '2 days',
       date: '25.02.2022',
       id: 'dkawdopwa'
     },
     {
       difficulty: 3,
-      duration: '4 days',
       date: '15.03.2022',
       id: 'jdpowadjwpa'
     },
     {
       difficulty: 5,
-      duration: '3 days',
       date: '01.04.2022',
       id: 'jdiwajdipaw'
     }
@@ -123,13 +120,7 @@ function ProfilePage() {
         }}
       >
         {mockData.map((item) => (
-          <TripCard
-            id={item.id}
-            difficulty={item.difficulty}
-            duration={item.duration}
-            date={item.date}
-            key={item.id}
-          />
+          <TripCard id={item.id} difficulty={item.difficulty} date={item.startDate} key={item.id} />
         ))}
       </Box>
 
@@ -147,12 +138,7 @@ function ProfilePage() {
         }}
       >
         {mockData.map((item) => (
-          <TripCard
-            difficulty={item.difficulty}
-            duration={item.duration}
-            date={item.date}
-            key={item.id}
-          />
+          <TripCard difficulty={item.difficulty} date={item.startDate} key={item.id} />
         ))}
       </Box>
     </Box>

@@ -4,14 +4,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Box from '@mui/material/Box';
 import { toast } from 'react-toastify';
-import { Divider, Chip, Typography, Grid, Button, Tooltip } from '@mui/material';
+import { Divider, Chip, Typography, Grid, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import TripCard from '../components/TripCard';
 import { getUser, changeRoleAdmin, reset as userReset } from '../features/users/userSlice';
-import { getUserTrips, reset as tripReset } from '../features/trips/tripSlice';
+import {
+  getTripsParticipatedIn,
+  getUserTrips,
+  reset as tripReset
+} from '../features/trips/tripSlice';
 import Username from '../components/Username';
 
 const Img = styled('img')({
@@ -27,6 +31,7 @@ function User() {
   const { user, isError, isLoading, message, isSuccess } = useSelector((state) => state.users);
   const {
     userTrips,
+    userParticipatedIn,
     isLoading: tripsIsLoading,
     isSuccess: tripsIsSuccess
   } = useSelector((state) => state.trips);
@@ -34,9 +39,8 @@ function User() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // TODO: bytt til turer man er meldt på
-  const futureTrips = userTrips.filter((item) => item.date > today);
-  const pastTrips = userTrips.filter((item) => item.date < today);
+  const futureTrips = userParticipatedIn.filter((item) => item.startDate > today);
+  const pastTrips = userParticipatedIn.filter((item) => item.startDate <= today);
 
   useEffect(() => {
     if (isSuccess) {
@@ -58,6 +62,7 @@ function User() {
 
     dispatch(getUser(id));
     dispatch(getUserTrips(id));
+    dispatch(getTripsParticipatedIn(id));
   }, [isError, message, id]);
   const onAdmin = (role) => {
     const userData = {
@@ -144,7 +149,7 @@ function User() {
           </Typography>
         </Grid>
       </Grid>
-      {futureTrips.length && (
+      {!!futureTrips.length && (
         <>
           <Divider sx={{ width: '100%' }}>
             <Chip label="Kommende turer" />
@@ -166,14 +171,14 @@ function User() {
                 title={item.name}
                 difficulty={item.difficulty}
                 duration={item.duration}
-                date={item.date}
+                date={item.startDate}
                 key={item.id}
               />
             ))}
           </Box>
         </>
       )}
-      {pastTrips.length && (
+      {!!pastTrips.length && (
         <>
           <Divider sx={{ width: '100%' }}>
             <Chip label="Turhistorikk" />
@@ -194,13 +199,42 @@ function User() {
                 title={item.name}
                 difficulty={item.difficulty}
                 duration={item.duration}
-                date={item.date}
+                date={item.startDate}
                 key={item.id}
               />
             ))}
           </Box>
 
           <div id="history" />
+        </>
+      )}
+      {!!userTrips.length && (
+        <>
+          <Divider sx={{ width: '100%' }}>
+            <Chip label="Dine turer" />
+          </Divider>
+
+          <Box
+            id="yourTrips"
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            {userTrips.map((item) => (
+              <TripCard
+                id={item.id}
+                title={item.name}
+                difficulty={item.difficulty}
+                duration={item.duration}
+                date={item.startDate}
+                key={item.id}
+              />
+            ))}
+          </Box>
         </>
       )}
     </Box>
