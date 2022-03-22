@@ -33,6 +33,7 @@ function User() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // TODO: bytt til turer man er meldt på
   const futureTrips = userTrips.filter((item) => item.date > today);
   const pastTrips = userTrips.filter((item) => item.date < today);
 
@@ -145,59 +146,65 @@ function User() {
           </Typography>
         </Grid>
       </Grid>
+      {futureTrips.length && (
+        <>
+          <Divider sx={{ width: '100%' }}>
+            <Chip label="Kommende turer" />
+          </Divider>
 
-      <Divider sx={{ width: '100%' }}>
-        <Chip label="Kommende turer" />
-      </Divider>
+          <Box
+            id="tripComingContainer"
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            {futureTrips.map((item) => (
+              <TripCard
+                id={item.id}
+                title={item.name}
+                difficulty={item.difficulty}
+                duration={item.duration}
+                date={item.date}
+                key={item.id}
+              />
+            ))}
+          </Box>
+        </>
+      )}
+      {pastTrips.length && (
+        <>
+          <Divider sx={{ width: '100%' }}>
+            <Chip label="Turhistorikk" />
+          </Divider>
+          <Box
+            id="tripHistoryContainer"
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            {pastTrips.map((item) => (
+              <TripCard
+                id={item.id}
+                title={item.name}
+                difficulty={item.difficulty}
+                duration={item.duration}
+                date={item.date}
+                key={item.id}
+              />
+            ))}
+          </Box>
 
-      <Box
-        id="tripComingContainer"
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        {futureTrips.map((item) => (
-          <TripCard
-            id={item.id}
-            title={item.name}
-            difficulty={item.difficulty}
-            duration={item.duration}
-            date={item.date}
-            key={item.id}
-          />
-        ))}
-      </Box>
-
-      <Divider sx={{ width: '100%' }}>
-        <Chip label="Turhistorikk" />
-      </Divider>
-      <Box
-        id="tripHistoryContainer"
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        {pastTrips.map((item) => (
-          <TripCard
-            id={item.id}
-            title={item.name}
-            difficulty={item.difficulty}
-            duration={item.duration}
-            date={item.date}
-            key={item.id}
-          />
-        ))}
-      </Box>
-
-      <div id="history" />
+          <div id="history" />
+        </>
+      )}
     </Box>
   );
 }
