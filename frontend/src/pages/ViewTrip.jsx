@@ -45,30 +45,13 @@ const Img = styled('img')({
 });
 
 function ViewTrip() {
-  const mockData = [
-    {
-      text: 'Nydelig tur!',
-      imgurl: '/assets/defaultHike.jpeg',
-      id: 'dkawdopwa'
-    },
-    {
-      text: 'Ut på tur aldri sur!',
-      imgurl: '/assets/defaultHike.jpeg',
-      id: 'bcjhscfre'
-    },
-    {
-      text: 'Utrolig vær og utrolige turkammerater!',
-      imgurl: '/assets/defaultHike.jpeg',
-      id: 'fewjbhjrwfr'
-    }
-  ];
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
   const [image, setImage] = useState({});
   const [selectedImage, setSelectedImage] = useState('');
   const [formData, setFormData] = useState({
     text: ''
   });
-  const { text, imgurl } = formData;
+  const { text } = formData;
 
   const [signedUp, setSignedUp] = useSignedUpStatus()[0];
   const [checkingStatus] = useSignedUpStatus()[1];
@@ -149,10 +132,11 @@ function ViewTrip() {
   const onSubmit = async (e) => {
     e.preventDefault();
     const logData = { text, image: image, tripId: id };
-    console.log(text);
-    console.log(logData);
 
     dispatch(createLog(logData));
+    setFormData({ text: '' });
+    setImage({});
+    setSelectedImage('');
   };
 
   if (isLoading || checkingStatus || !trip) {
@@ -312,6 +296,7 @@ function ViewTrip() {
                     multiline
                     fullWidth
                     size="small"
+                    value={text}
                     onChange={onChangeLog}
                     sx={{ marginRight: '10px' }}
                   />
@@ -414,14 +399,25 @@ function ViewTrip() {
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
+                width: '100%',
                 flexWrap: 'wrap',
                 justifyContant: 'center',
                 alignItems: 'center'
               }}
             >
-              {logs.map((item) => (
-                <LogCard key={item.id} id={item.id} text={item.text} imageUrl={item.imageUrl} />
-              ))}
+              {[...logs]
+                .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                .reverse()
+                .map((item) => (
+                  <LogCard
+                    key={item.id}
+                    id={item.id}
+                    text={item.text}
+                    user={item.user}
+                    imageUrl={item.imageUrl}
+                    createdAt={item.createdAt}
+                  />
+                ))}
             </Box>
             <Divider sx={{ width: '100%' }}>
               <Chip label="Turgåere" />

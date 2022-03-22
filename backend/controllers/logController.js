@@ -26,13 +26,16 @@ const createLog = async (req, res, next) => {
       userId: id,
       tripId
     });
+    const user = await User.findByPk(newLog.userId);
     return res.status(201).json({
       message: 'Log created successfully',
-      trip: {
-        text: newLog.name,
+      log: {
+        id: newLog.id,
+        text: newLog.text,
         imageUrl: newLog.imageUrl,
         userId: newLog.userId,
-        tripId: newLog.id
+        tripId: newLog.id,
+        user
       }
     });
   } catch (error) {
@@ -52,12 +55,12 @@ const getLogs = async (req, res, next) => {
   }
 
   const logs = await trip.getLogs({
-    attributes: ['id', 'text', 'imageUrl', 'userId', 'tripId'],
+    attributes: ['id', 'text', 'imageUrl', 'userId', 'tripId', 'createdAt'],
     include: [
       {
         model: User,
         as: 'user',
-        attributes: ['firstName', 'lastName', 'email']
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role']
       }
     ]
   });

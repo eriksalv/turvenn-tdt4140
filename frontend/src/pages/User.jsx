@@ -11,6 +11,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import TripCard from '../components/TripCard';
 import { getUser, changeRoleAdmin, reset as userReset } from '../features/users/userSlice';
 import { getUserTrips, reset as tripReset } from '../features/trips/tripSlice';
+import Username from '../components/Username';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -85,13 +86,10 @@ function User() {
           alignItems: 'center'
         }}
       >
-        <h1 style={{ width: '100%', textAlign: 'center', marginBottom: '3px' }}>
-          {user.firstName} {user.lastName}&nbsp;
-          {user.role === 'admin' && (
-            <Tooltip title="admin" arrow>
-              <AdminPanelSettingsOutlinedIcon />
-            </Tooltip>
-          )}
+        <h1
+          style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '3px' }}
+        >
+          <Username user={user} />
         </h1>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
         {loggedInUser && loggedInUser.id === user.id && (
