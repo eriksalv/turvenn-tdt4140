@@ -1,4 +1,4 @@
-import { TextField, Grid, Paper, Button } from '@mui/material';
+import { TextField, Paper, Button, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -11,10 +11,11 @@ function Register() {
     lastName: '',
     email: '',
     password: '',
-    confirmedPassword: ''
+    confirmedPassword: '',
+    isCommercial: false
   });
 
-  const { firstName, lastName, email, password, confirmedPassword } = formData;
+  const { firstName, lastName, email, password, confirmedPassword, isCommercial } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,10 +49,18 @@ function Register() {
     }));
   };
 
+  const onCheck = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.checked
+    }));
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log(formData);
 
-    const userData = { email, password, firstName, lastName };
+    const userData = { email, password, firstName, lastName, isCommercial };
 
     if (password !== confirmedPassword) {
       toast.error('Passordene var ikke like');
@@ -120,6 +129,12 @@ function Register() {
             id="confirmedPassword"
             style={inputStyle}
           />
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox id="isCommercial" value={isCommercial} onChange={onCheck} />}
+              label="Kommersiell bruker?"
+            />
+          </FormGroup>
 
           <Button
             style={{ marginBottom: '10px' }}

@@ -51,7 +51,7 @@ const getLogin = async (req, res, next) => {
 };
 
 const registerUser = async (req, res, next) => {
-  const { email, firstName, lastName, password } = req.body;
+  const { email, firstName, lastName, password, isCommercial } = req.body;
 
   const errors = validationResult(req);
 
@@ -69,8 +69,15 @@ const registerUser = async (req, res, next) => {
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const role = isCommercial ? 'commercial' : 'user';
 
-    const newUser = await User.create({ email, firstName, lastName, password: hashedPassword });
+    const newUser = await User.create({
+      email,
+      firstName,
+      lastName,
+      password: hashedPassword,
+      role
+    });
     return res.status(201).json({
       message: 'User created successfully',
       user: {
