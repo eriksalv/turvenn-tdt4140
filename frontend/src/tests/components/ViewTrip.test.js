@@ -13,8 +13,21 @@ beforeAll(() => {
   selectorSpy = jest.spyOn(redux, 'useSelector');
   selectorSpy.mockReturnValue({
     user: {
-      id: 1
+      id: 1,
+      firstName: 'Tester',
+      lastName: 'Doe',
+      role: 'user'
     },
+    logs: [
+      {
+        id: 1,
+        user: {
+          id: 1,
+          firstName: 'Tester',
+          lastName: 'Doe'
+        }
+      }
+    ],
     trip: {
       id: 1,
       name: 'Test',

@@ -25,7 +25,8 @@ beforeAll(() => {
         id: 1,
         name: 'Test'
       }
-    ]
+    ],
+    userParticipatedIn: []
   });
   paramsSpy = jest.spyOn(reactRouter, 'useParams');
   paramsSpy.mockReturnValue({
