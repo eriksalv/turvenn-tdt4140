@@ -11,11 +11,9 @@ import {
   Typography,
   Button,
   Avatar,
-  TextField,
-  IconButton
+  TextField
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import CancelIcon from '@mui/icons-material/Cancel';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -64,8 +62,10 @@ function ViewTrip() {
   ];
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
   const [image, setImage] = useState({});
-  const [selectedImage, setSelectedImage] = useState('');
-  const [text, setText] = useState('');
+  const [formData, setFormData] = useState({
+    text: ''
+  });
+  const { text, imgurl } = formData;
 
   const [signedUp, setSignedUp] = useSignedUpStatus()[0];
   const [checkingStatus] = useSignedUpStatus()[1];
@@ -83,10 +83,20 @@ function ViewTrip() {
   const { trip, isError, message, isLoading, isSuccess, status } = useSelector(
     (state) => state.trips
   );
+  const { logs } = useSelector((state) => state.logs);
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+      dispatch(reset());
+    }
+    dispatch(getLogs(id));
+    console.log(logs);
+  }, [dispatch, isError]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -124,19 +134,18 @@ function ViewTrip() {
   };
 
   const onChangeLog = (e) => {
-    setText(e.target.value);
+    setFormData((prevState) => ({ ...prevState, text: e.target.value }));
   };
 
   const onChangePic = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-      setSelectedImage(URL.createObjectURL(e.target.files[0]));
-    }
+    setImage(e.target.files[0]);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const logData = { text, image, tripId: id };
+    const logData = { text, image: image, tripId: id };
+    console.log(text);
+    console.log(logData);
 
     dispatch(createLog(logData));
   };
@@ -255,7 +264,6 @@ function ViewTrip() {
                 flexDirection: 'row',
                 flexWrap: 'wrap'
               }}
-              elevation={2}
             >
               <Grid
                 container
@@ -321,7 +329,6 @@ function ViewTrip() {
                   >
                     <AddPhotoAlternateIcon />
                     <input
-                      id="imageInput"
                       type="file"
                       hidden
                       accept="image/*"
@@ -330,47 +337,6 @@ function ViewTrip() {
                     />
                   </Button>
                 </Grid>
-                {selectedImage && (
-                  <Paper
-                    sx={{
-                      width: '100%',
-                      padding: '20px',
-                      borderRadius: '10px',
-                      marginTop: '20px',
-                      display: 'flex',
-                      justifyContent: 'flex-end'
-                    }}
-                    elevation={4}
-                  >
-                    <IconButton
-                      component="span"
-                      sx={{
-                        zIndex: '10',
-                        position: 'absolute'
-                      }}
-                      onClick={() => {
-                        setImage({});
-                        setSelectedImage('');
-                        document.getElementById('imageInput').value = '';
-                      }}
-                    >
-                      <CancelIcon
-                        color="primary"
-                        fontSize="large"
-                        sx={{ backgroundColor: 'black', opacity: '0.9', borderRadius: '50%' }}
-                      />
-                    </IconButton>
-                    <Img
-                      src={selectedImage}
-                      sx={{
-                        maxWidth: '100%',
-                        maxHeight: '500px',
-                        objectFit: 'scale-down',
-                        borderRadius: '10px'
-                      }}
-                    />
-                  </Paper>
-                )}
                 <Grid
                   item
                   alignItems="center"
@@ -388,13 +354,13 @@ function ViewTrip() {
                     type="submit"
                     variant="contained"
                     endIcon={<PublishIcon />}
-                    disabled={!text}
                   >
                     Publiser innlegg
                   </Button>
                 </Grid>
               </Grid>
             </Paper>
+
             <Box
               id="logCardContainer"
               sx={{
@@ -405,11 +371,10 @@ function ViewTrip() {
                 alignItems: 'center'
               }}
             >
-              {mockData.map((item) => (
-                <LogCard key={item.id} id={item.id} text={item.text} imgpath={item.imgurl} />
+              {logs.map((item) => (
+                <LogCard key={item.id} id={item.id} text={item.text} imageUrl={item.imageUrl} />
               ))}
             </Box>
-
             <Divider sx={{ width: '100%' }}>
               <Chip label="Turgåere" />
             </Divider>

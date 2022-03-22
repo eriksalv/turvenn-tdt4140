@@ -52,7 +52,7 @@ const getLogs = async (req, res, next) => {
   }
 
   const logs = await trip.getLogs({
-    attributes: ['id', 'text', 'imgUrl', 'UserID', 'TripID'],
+    attributes: ['id', 'text', 'imageUrl', 'userId', 'tripId'],
     include: [
       {
         model: User,

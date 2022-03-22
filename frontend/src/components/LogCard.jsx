@@ -13,9 +13,8 @@ const Img = styled('img')({
   maxHeight: '100%'
 });
 
-export default function LogCard({ id, text, imgpath = '/assets/defaultHike.jpeg' }) {
+export default function LogCard({ id, text, imageUrl }) {
   const navigate = useNavigate();
-
   const onClick = () => {};
 
   return (
@@ -37,7 +36,7 @@ export default function LogCard({ id, text, imgpath = '/assets/defaultHike.jpeg'
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <ButtonBase sx={{ width: 160, height: 120 }}>
-            <Img alt="Nice bilde fra turen" src={imgpath} />
+            <Img alt="Nice bilde fra turen" src={`http://localhost:4000/uploads/${imageUrl}`} />
           </ButtonBase>
         </Grid>
         <Grid item xs={6} sm container>
