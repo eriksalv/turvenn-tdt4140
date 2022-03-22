@@ -49,8 +49,16 @@ function Register() {
     }));
   };
 
+  const onCheck = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.checked
+    }));
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log(formData);
 
     const userData = { email, password, firstName, lastName, isCommercial };
 
@@ -123,7 +131,7 @@ function Register() {
           />
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox id="isCommercial" />}
+              control={<Checkbox id="isCommercial" value={isCommercial} onChange={onCheck} />}
               label="Kommersiell bruker?"
             />
           </FormGroup>
