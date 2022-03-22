@@ -3,6 +3,7 @@ const bodyparser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const { sequelize } = require('./models');
 const { User } = require('./models');
+
 require('dotenv').config();
 
 const { errorHandler } = require('./middleware/errorHandler');
@@ -22,6 +23,8 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
+
+app.use('/uploads', express.static('uploads'));
 
 app.use('/api/users', require('./routes/user'));
 app.use('/api/trips', require('./routes/trip'));

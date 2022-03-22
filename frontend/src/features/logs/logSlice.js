@@ -4,7 +4,6 @@ import getError from '../../util/getError';
 
 const initialState = {
   logs: [],
-  log: null,
   isError: false,
   isSuccess: false,
   isLoading: false
@@ -55,9 +54,10 @@ export const logSlice = createSlice({
       .addCase(createLog.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLog.fulfilled, (state) => {
+      .addCase(createLog.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.logs = [...state.logs, action.payload.log];
       })
       .addCase(createLog.rejected, (state, action) => {
         state.isLoading = false;
