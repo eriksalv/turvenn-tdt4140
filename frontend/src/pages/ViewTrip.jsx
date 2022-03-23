@@ -36,6 +36,7 @@ import PublishIcon from '@mui/icons-material/Publish';
 import useSignedUpStatus from '../hooks/useSignedUpStatus';
 import { getTrip, reset, signUp, signOff, deleteTrip } from '../features/trips/tripSlice';
 import { getLogs, createLog } from '../features/logs/logSlice';
+import { getRatings, getRating, changeRating } from '../features/participation/participationSlice';
 
 import ProfileCard from '../components/ProfileCard';
 import LogCard from '../components/LogCard';
@@ -75,7 +76,14 @@ function ViewTrip() {
   );
   const { logs } = useSelector((state) => state.logs);
   const { user } = useSelector((state) => state.auth);
+  const {
+    participation,
+    participations,
+    isLoading: participationIsLoading,
+    isSuccess: participtionIsSuccess
+  } = useSelector((state) => state.participations);
   const navigate = useNavigate();
+  const [averageRating, setAverageRating] = useState(0);
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -85,7 +93,19 @@ function ViewTrip() {
       dispatch(reset());
     }
     dispatch(getLogs(id));
+    dispatch(getRatings(id));
+    dispatch(getRating({ tripId: id, userId: user.id }));
   }, [dispatch, isError]);
+
+  useEffect(() => {
+    if (participations.length === 0 || !participation) {
+      return;
+    }
+    setAverageRating(
+      participations.map((item) => item.rating).reduce((a, b) => a + b) / participations.length / 2
+    );
+    console.log(averageRating);
+  }, [isSuccess]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -147,11 +167,14 @@ function ViewTrip() {
     setSelectedImage('');
   };
 
-  const onChangeRating = (e) => {
-    console.log(e.target.value);
+  const onSubmitRating = async (e) => {
+    e.preventDefault();
+    const r = e.target.value;
+    const participationData = { tripId: id, userId: trip.user.id, rating: r * 2 };
+    dispatch(changeRating(participationData));
   };
 
-  if (isLoading || checkingStatus || !trip) {
+  if (isLoading || checkingStatus || !trip || participationIsLoading) {
     return <h1>Loading...</h1>;
   }
 
@@ -314,9 +337,9 @@ function ViewTrip() {
                 </Typography>
                 <Rating
                   name="half-rating"
-                  defaultValue={2.5}
+                  defaultValue={participation.rating / 2}
                   precision={0.5}
-                  onChange={onChangeRating}
+                  onChange={onSubmitRating}
                 />
                 <Box>
                   <Typography variant="h6" component="h6" sx={{ marginTop: '10px' }}>
@@ -324,7 +347,8 @@ function ViewTrip() {
                   </Typography>
 
                   <Typography variant="body1" component="h2">
-                    4.5 (34563 vurderinger)
+                    {averageRating} ({participations.length}{' '}
+                    {participations.length === 1 ? 'vurdering' : 'vurderinger'})
                   </Typography>
                 </Box>
               </Stack>
