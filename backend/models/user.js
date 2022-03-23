@@ -55,6 +55,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('user', 'admin', 'commercial'),
         allowNull: false,
         defaultValue: 'user'
+      },
+      experience: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+        validate: {
+          min: 1,
+          max: 3
+        }
       }
     },
     {
