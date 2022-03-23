@@ -46,12 +46,6 @@ const Img = styled('img')({
 
 function ViewTrip() {
   const today = moment().format();
-  const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%'
-  });
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
   const [image, setImage] = useState({});
   const [selectedImage, setSelectedImage] = useState('');
