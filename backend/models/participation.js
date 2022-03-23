@@ -33,6 +33,13 @@ module.exports = (sequelize, DataTypes) => {
       tripId: {
         type: DataTypes.INTEGER,
         primaryKey: true
+      },
+      rating: {
+        type: DataTypes.INTEGER,
+        validate: {
+          min: 1,
+          max: 10
+        }
       }
     },
     {
