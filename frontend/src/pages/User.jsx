@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { Divider, Chip, Typography, Grid, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
+import Avatar from '@mui/material/Avatar';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import TripCard from '../components/TripCard';
@@ -96,11 +97,19 @@ function User() {
           alignItems: 'center'
         }}
       >
+        <Avatar
+          sx={{ width: 200, height: 200, marginTop: '40px' }}
+          alt="En kul tur med gode venner"
+          src="../assets/Turvenn-2.png"
+        />
         <h1
           style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '3px' }}
         >
           <Username user={user} />
         </h1>
+        <Typography variant="p" component="p">
+          Erfaringsnivå
+        </Typography>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
         {loggedInUser && loggedInUser.id === user.id && (
           <Button variant="outlined" onClick={() => navigate('/profile')} endIcon={<EditIcon />}>
@@ -132,29 +141,11 @@ function User() {
             </>
           )}
       </Box>
-      <Grid
-        width="80%"
-        container
-        sx={{ gap: '10px', marginTop: '10px', marginRight: '0px', flexDirection: 'row' }}
-      >
-        <Grid xs={4} flex={1} item>
-          <Img alt="En kul tur med gode venner" src="../assets/Turvenn-2.png" />
-        </Grid>
-        <Grid width="50%" flex={3} item>
-          <Typography className="aboutText" id="outlined-multiline-static">
-            Biografi: her står det noe veldig kult om personene.
-          </Typography>
-          <Typography variant="h5" component="h2" margin="20px auto">
-            Erfaringsnivå
-          </Typography>
-        </Grid>
-      </Grid>
       {!!futureTrips.length && (
         <>
           <Divider sx={{ width: '100%' }}>
             <Chip label="Kommende turer" />
           </Divider>
-
           <Box
             id="tripComingContainer"
             sx={{
@@ -210,10 +201,9 @@ function User() {
       )}
       {!!userTrips.length && (
         <>
-          <Divider sx={{ width: '100%' }}>
+          <Divider sx={{ width: '100%', paddingTop: '10px' }}>
             <Chip label="Dine turer" />
           </Divider>
-
           <Box
             id="yourTrips"
             sx={{

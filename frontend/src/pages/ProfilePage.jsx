@@ -8,6 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Avatar from '@mui/material/Avatar';
 import { Divider, Chip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TripCard from '../components/TripCard';
@@ -66,15 +67,18 @@ function ProfilePage() {
           alignItems: 'center'
         }}
       >
+        <Avatar
+          sx={{ width: 150, height: 150, marginTop: '30px' }}
+          alt="En kul tur med gode venner"
+          src="../assets/Turvenn-2.png"
+        />
         <h1 style={{ width: '100%', textAlign: 'center', marginBottom: '3px' }}>
           {user.firstName} {user.lastName}
         </h1>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
+        
       </Box>
       <div id="information">
-        <div id="profilePic">
-          <Img alt="En kul tur med gode venner" src="../assets/Turvenn-2.png" />
-        </div>
         <form id="about">
           <TextField
             className="aboutText"
