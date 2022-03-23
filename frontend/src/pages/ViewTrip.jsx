@@ -19,6 +19,7 @@ import DialogActions from '@mui/material/DialogActions';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import Stack from '@mui/material/Stack';
 import DialogTitle from '@mui/material/DialogTitle';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -26,6 +27,7 @@ import { toast } from 'react-toastify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 import Fab from '@mui/material/Fab';
+import Rating from '@mui/material/Rating';
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
@@ -46,12 +48,6 @@ const Img = styled('img')({
 
 function ViewTrip() {
   const today = moment().format();
-  const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%'
-  });
   const paperStyle = { padding: 20, maxWidth: 900, margin: '20px auto' };
   const [image, setImage] = useState({});
   const [selectedImage, setSelectedImage] = useState('');
@@ -146,6 +142,10 @@ function ViewTrip() {
     setSelectedImage('');
   };
 
+  const onChangeRating = (e) => {
+    console.log(e.target.value);
+  };
+
   if (isLoading || checkingStatus || !trip) {
     return <h1>Loading...</h1>;
   }
@@ -173,7 +173,7 @@ function ViewTrip() {
               </Grid>
             )}
           </Grid>
-          {trip.date > today && (
+          {trip.startDate > today && (
             <Grid align="left" sx={{ marginBottom: '10px' }}>
               {!signedUp ? (
                 <Button onClick={onSignUp} variant="outlined" startIcon={<GroupAddOutlinedIcon />}>
@@ -241,6 +241,30 @@ function ViewTrip() {
           <Typography variant="body1" component="h2">
             {trip.description}
           </Typography>
+          {trip.endDate > today && (
+            <Grid sx={{ marginTop: '40px' }}>
+              <Stack>
+                <Typography variant="body1" component="h2">
+                  Din anmelding
+                </Typography>
+                <Rating
+                  name="half-rating"
+                  defaultValue={2.5}
+                  precision={0.5}
+                  onChange={onChangeRating}
+                />
+                <Box>
+                  <Typography variant="body1" component="h2" sx={{ marginTop: '10px' }}>
+                    Gjennomsnittlig anmeldelse
+                  </Typography>
+
+                  <Typography variant="body1" component="h2">
+                    4.5 (34563 anmeldelser)
+                  </Typography>
+                </Box>
+              </Stack>
+            </Grid>
+          )}
           <Grid
             container
             alignItems="flex-start"
