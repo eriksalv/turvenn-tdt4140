@@ -1,3 +1,4 @@
+const moment = require('moment');
 const { User, Trip } = require('../../models');
 const {
   createTrip,
@@ -149,6 +150,30 @@ describe('Trip Controller - signup/signoff', () => {
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(next).toHaveBeenCalledWith(new Error('Trip not found'));
+  });
+
+  it('should set status to 400 if signoff after startdate (signoff)', async () => {
+    Trip.findByPk = jest
+      .fn()
+      .mockImplementation(() => ({ startDate: moment().subtract(10, 'days').calendar() }));
+    User.findByPk = jest.fn().mockImplementation(() => null);
+
+    await signOff(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(next).toHaveBeenCalledWith(new Error('Trip has already begun'));
+  });
+
+  it('should set status to 400 if signup after startdate (signup)', async () => {
+    Trip.findByPk = jest
+      .fn()
+      .mockImplementation(() => ({ startDate: moment().subtract(10, 'days').calendar() }));
+    User.findByPk = jest.fn().mockImplementation(() => null);
+
+    await signUp(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(next).toHaveBeenCalledWith(new Error('Trip has already begun'));
   });
 
   it('should return a message with status 201 if successful (signup)', async () => {

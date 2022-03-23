@@ -1,4 +1,5 @@
 const { Op } = require('@sequelize/core');
+const moment = require('moment');
 const { Trip, User, sequelize } = require('../models');
 
 const getTrips = async (req, res, next) => {
@@ -189,6 +190,7 @@ const createTrip = async (req, res, next) => {
 };
 
 const signUp = async (req, res, next) => {
+  const today = moment().format();
   const { tripId } = req.params;
   const userId = req.user.id;
 
@@ -199,18 +201,24 @@ const signUp = async (req, res, next) => {
     res.status(404);
     return next(new Error('Trip not found'));
   }
-
-  try {
-    await user.addParticipatedTrip(trip);
-    return res.status(201).json({ message: 'Successfully signed up' });
-  } catch (error) {
-    console.log(error);
-    res.status(500);
-    next(new Error('Something went wrong'));
+  if (today > trip.startDate) {
+    res.status(400);
+    return next(new Error('Trip has already begun'));
   }
+
+  if (trip)
+    try {
+      await user.addParticipatedTrip(trip);
+      return res.status(201).json({ message: 'Successfully signed up' });
+    } catch (error) {
+      console.log(error);
+      res.status(500);
+      next(new Error('Something went wrong'));
+    }
 };
 
 const signOff = async (req, res, next) => {
+  const today = moment().format();
   const { tripId } = req.params;
   const userId = req.user.id;
 
@@ -220,6 +228,10 @@ const signOff = async (req, res, next) => {
   if (!trip) {
     res.status(404);
     return next(new Error('Trip not found'));
+  }
+  if (today > trip.startDate) {
+    res.status(400);
+    return next(new Error('Trip has already begun'));
   }
 
   try {
