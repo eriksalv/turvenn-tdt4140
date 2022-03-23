@@ -33,7 +33,7 @@ const getRating = async (req, res, next) => {
   }
 
   try {
-    const participation = Participation.findOne({
+    const participation = await Participation.findOne({
       where: { tripId, userId },
       attributes: ['rating']
     });
@@ -53,10 +53,11 @@ const getRating = async (req, res, next) => {
 
 const changeRating = async (req, res, next) => {
   const today = moment().format();
-  const { tripId, userId } = req.params;
+  const { tripId } = req.params;
   const { rating } = req.body;
+  const { id } = req.user;
 
-  if (rating * 2 > 10 || rating * 2 < 1) {
+  if (rating > 10 || rating < 1) {
     res.status(400);
     return next(new Error('Rating must be between 1 and 10'));
   }
@@ -75,7 +76,7 @@ const changeRating = async (req, res, next) => {
 
   const participation = await Participation.findOne({
     where: {
-      userId,
+      userId: id,
       tripId
     }
   });
@@ -85,10 +86,11 @@ const changeRating = async (req, res, next) => {
     return next(new Error('Could not find signed up user'));
   }
   try {
-    participation.update({ rating });
+    await participation.update({ rating });
     return res.status(200).json(participation);
   } catch (error) {
     res.status(500);
+    next(new Error('Something went wrong'));
   }
 };
 

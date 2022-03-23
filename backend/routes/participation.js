@@ -6,7 +6,7 @@ const router = express.Router({ mergeParams: true });
 
 const { changeRating, getRating, getRatings } = require('../controllers/participationController');
 
-router.post('/:userId', protect, changeRating);
+router.put('/:userId', protect, changeRating);
 
 router.get('/', getRatings);
 
