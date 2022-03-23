@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -132,6 +133,10 @@ function ViewTrip() {
     }
   };
 
+  const handleGoTripCreator = () => {
+    navigate(`/users/${trip.user.id}`);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const logData = { text, image: image, tripId: id };
@@ -155,26 +160,35 @@ function ViewTrip() {
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid container alignItems="flex-start" justifyContent="space-between">
-            <h2>{trip.name}</h2>
-            {user && (trip.user.id === user.id || user.role === 'admin') && (
-              <Grid>
-                <Fab
-                  sx={{ mr: 1 }}
-                  size="small"
-                  color="secondary"
-                  aria-label="delete"
-                  onClick={() => navigate(`/trips/${id}/edit`)}
-                >
-                  <EditIcon />
-                </Fab>
-                <Fab size="small" color="primary" aria-label="edit" onClick={handleOpen}>
-                  <DeleteIcon />
-                </Fab>
-              </Grid>
-            )}
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Avatar
+                sx={{ height: 150, width: 150, marginRight: '10px', marginBottom: '10px' }}
+                alt="logo"
+                src="../Turvenn-logo.png"
+              />
+              <Typography variant="h4" component="h4" sx={{ textAlign: 'center' }}>
+                {trip.name}
+              </Typography>
+            </Box>
           </Grid>
+          {user && (trip.user.id === user.id || user.role === 'admin') && (
+            <Grid sx={{ ml: 3, mb: 2 }}>
+              <Fab
+                sx={{ mr: 2 }}
+                size="small"
+                color="secondary"
+                aria-label="delete"
+                onClick={() => navigate(`/trips/${id}/edit`)}
+              >
+                <EditIcon />
+              </Fab>
+              <Fab size="small" color="primary" aria-label="edit" onClick={handleOpen}>
+                <DeleteIcon />
+              </Fab>
+            </Grid>
+          )}
           {trip.startDate > today && (
-            <Grid align="left" sx={{ marginBottom: '10px' }}>
+            <Grid align="left" sx={{ mb: '10px' }}>
               {!signedUp ? (
                 <Button onClick={onSignUp} variant="outlined" startIcon={<GroupAddOutlinedIcon />}>
                   Meld deg på
@@ -186,66 +200,117 @@ function ViewTrip() {
               )}
             </Grid>
           )}
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <Img alt="logo" src="../Turvenn-logo.png" />
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h6" component="h6">
-                Mål
+          <Grid container>
+            <Paper elevation={3} style={paperStyle} sx={{ width: '320px' }}>
+              <Typography variant="h5" component="h5">
+                Hvor?
               </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.goal}
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Startpunkt
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.start}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Mål
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.goal}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper elevation={3} style={paperStyle} sx={{ width: '320px' }}>
+              <Typography variant="h5" component="h5">
+                Når?
               </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Startpunkt
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Fra
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {moment(trip.startDate).format('yyyy-MM-DD HH:mm')}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Til
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {moment(trip.endDate).format('yyyy-MM-DD HH:mm')}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper elevation={3} style={paperStyle} sx={{ width: '320px' }}>
+              <Typography variant="h5" component="h5">
+                Om turen
               </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.start}
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Vanskelighetsgrad
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.difficulty}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Type
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.type}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper
+              elevation={3}
+              style={paperStyle}
+              sx={{ width: '320px', cursor: 'pointer' }}
+              onClick={handleGoTripCreator}
+            >
+              <Typography variant="h5" component="h5">
+                Turansvarlig
               </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Startdato
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {moment(trip.startDate).format('yyyy-MM-DD HH:mm')}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Sluttdato
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {moment(trip.endDate).format('yyyy-MM-DD HH:mm')}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Vanskelighetsgrad
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.difficulty}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Type
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.type}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Opprettet av
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.user.firstName} {trip.user.lastName} <br /> {trip.user.email}
-              </Typography>
-            </Grid>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                    <Avatar
+                      sx={{ height: 50, width: 50, float: 'left', marginRight: '10px' }}
+                      alt="profilbilde"
+                      src="../Turvenn-logo.png"
+                    />
+                    <Box sx={{ display: 'inline' }}>
+                      <Typography variant="h6" component="h6">
+                        {trip.user.firstName} {trip.user.lastName}
+                      </Typography>
+                      <Typography variant="body1" component="h2">
+                        {trip.user.email}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Paper>
           </Grid>
           <Typography variant="h6" component="h6">
-            Om turen
+            Beskrivelse
           </Typography>
           <Typography variant="body1" component="h2">
             {trip.description}
           </Typography>
           {trip.endDate > today && (
-            <Grid sx={{ marginTop: '40px' }}>
+            <Grid sx={{ marginTop: '10px' }}>
               <Stack>
-                <Typography variant="body1" component="h2">
-                  Din anmelding
+                <Typography variant="h6" component="h6">
+                  Din vurdering
                 </Typography>
                 <Rating
                   name="half-rating"
@@ -254,12 +319,12 @@ function ViewTrip() {
                   onChange={onChangeRating}
                 />
                 <Box>
-                  <Typography variant="body1" component="h2" sx={{ marginTop: '10px' }}>
-                    Gjennomsnittlig anmeldelse
+                  <Typography variant="h6" component="h6" sx={{ marginTop: '10px' }}>
+                    Gjennomsnittlig vurdering
                   </Typography>
 
                   <Typography variant="body1" component="h2">
-                    4.5 (34563 anmeldelser)
+                    4.5 (34563 vurderinger)
                   </Typography>
                 </Box>
               </Stack>
@@ -269,7 +334,7 @@ function ViewTrip() {
             container
             alignItems="flex-start"
             justifyContent="flex-start"
-            sx={{ mt: '4rem', mb: '0.5rem' }}
+            sx={{ mt: '1rem', mb: '0.5rem' }}
           >
             <Divider sx={{ width: '100%' }}>
               <Chip label="Innlegg" />
