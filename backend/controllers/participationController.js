@@ -1,0 +1,99 @@
+const moment = require('moment');
+const { Trip, Participation } = require('../models');
+
+const getRatings = async (req, res, next) => {
+  const { tripId } = req.params;
+  const trip = await Trip.findByPk(tripId);
+
+  if (!trip) {
+    res.status(404);
+    return next(new Error('Could not find trip.'));
+  }
+
+  try {
+    const ratings = await trip.getParticipations({
+      attributes: ['rating']
+    });
+
+    return res.status(200).json(ratings);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
+const getRating = async (req, res, next) => {
+  const { tripId, userId } = req.params;
+  const trip = await Trip.findByPk(tripId);
+
+  if (!trip) {
+    res.status(500);
+    return next(new Error('Could not find trip'));
+  }
+
+  try {
+    const participation = Participation.findOne({
+      where: { tripId, userId },
+      attributes: ['rating']
+    });
+
+    if (!participation) {
+      res.status(404);
+      return next(new Error('Could not find participation'));
+    }
+
+    return res.status(200).json(participation);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
+const changeRating = async (req, res, next) => {
+  const today = moment().format();
+  const { tripId, userId } = req.params;
+  const { rating } = req.body;
+
+  if (rating * 2 > 10 || rating * 2 < 1) {
+    res.status(400);
+    return next(new Error('Rating must be between 1 and 10'));
+  }
+
+  const trip = await Trip.findByPk(tripId);
+
+  if (!trip) {
+    res.status(404);
+    return next(new Error('Could not find trip'));
+  }
+
+  if (trip.endDate < today) {
+    res.status(400);
+    return next(new Error('Cannot give rating before trip is over'));
+  }
+
+  const participation = await Participation.findOne({
+    where: {
+      userId,
+      tripId
+    }
+  });
+
+  if (!participation) {
+    res.status(404);
+    return next(new Error('Could not find signed up user'));
+  }
+  try {
+    participation.update({ rating });
+    return res.status(200).json(participation);
+  } catch (error) {
+    res.status(500);
+  }
+};
+
+module.exports = {
+  getRatings,
+  getRating,
+  changeRating
+};

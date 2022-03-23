@@ -306,7 +306,7 @@ function ViewTrip() {
           <Typography variant="body1" component="h2">
             {trip.description}
           </Typography>
-          {trip.endDate > today && (
+          {trip.endDate < today && (
             <Grid sx={{ marginTop: '10px' }}>
               <Stack>
                 <Typography variant="h6" component="h6">
