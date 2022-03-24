@@ -25,6 +25,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip';
+import VerifiedIcon from '@mui/icons-material/Verified';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PublishIcon from '@mui/icons-material/Publish';
@@ -144,7 +146,13 @@ function ViewTrip() {
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid container alignItems="flex-start" justifyContent="space-between">
-            <h2>{trip.name}</h2>
+            <h2>{trip.name}&nbsp;
+            {trip.user.role === 'commercial' && (
+            <Tooltip title="Turen er laget av kommersiell bruker" arrow>
+              <VerifiedIcon />
+            </Tooltip>
+          )}
+            </h2>
             {user && (trip.user.id === user.id || user.role === 'admin') && (
               <Grid>
                 <Fab
@@ -219,7 +227,11 @@ function ViewTrip() {
                 Opprettet av
               </Typography>
               <Typography variant="body1" component="h2">
-                {trip.user.firstName} {trip.user.lastName} <br /> {trip.user.email}
+                {trip.user.firstName} {trip.user.lastName} {trip.user.role === 'commercial' && (
+            <Tooltip title="Commercial" arrow>
+              <VerifiedIcon style = {{fontSize: '15px',verticalAlign: 'middle'}} />
+            </Tooltip>
+          )} <br /> {trip.user.email}
               </Typography>
             </Grid>
           </Grid>
