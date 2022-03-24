@@ -172,7 +172,7 @@ function User() {
       )}
       {!!pastTrips.length && (
         <>
-          <Divider sx={{ width: '100%' }}>
+          <Divider sx={{ width: '100%', mt: 2 }}>
             <Chip label="Turhistorikk" />
           </Divider>
           <Box
