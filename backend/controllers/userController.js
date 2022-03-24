@@ -24,7 +24,7 @@ const getUsers = async (req, res, next) => {
 const getUser = async (req, res) => {
   const { userId } = req.params;
   const user = await User.findByPk(userId, {
-    attributes: ['id', 'email', 'firstName', 'lastName', 'role']
+    attributes: ['id', 'email', 'firstName', 'lastName', 'role', 'experience']
   });
 
   if (!user) {
@@ -45,7 +45,8 @@ const getLogin = async (req, res, next) => {
     email: req.user.email,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
-    role: req.user.role
+    role: req.user.role,
+    experience: req.user.experience
   };
   res.status(200).json(user);
 };
