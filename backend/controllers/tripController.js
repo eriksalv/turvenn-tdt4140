@@ -1,6 +1,6 @@
 const { Op } = require('@sequelize/core');
 const moment = require('moment');
-const { Trip, User, sequelize } = require('../models');
+const { Trip, User, sequelize, Participation } = require('../models');
 
 const getTrips = async (req, res, next) => {
   try {
@@ -351,6 +351,15 @@ const searchTrip = async (req, res, next) => {
   return res.status(200).json(trips);
 };
 
+const getAverageRatings = async (req, res) => {
+  const participations = await Participation.findAll({
+    attributes: ['tripId', 'rating'],
+    group: 'tripId'
+  });
+
+  return res.status(200).json(participations);
+};
+
 module.exports = {
   getTrips,
   createTrip,
@@ -361,5 +370,6 @@ module.exports = {
   deleteTrip,
   updateTrip,
   searchTrip,
-  getTripsByParticipator
+  getTripsByParticipator,
+  getAverageRatings
 };

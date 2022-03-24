@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
+import Radio from '@mui/material/Radio';
 import TripCard from '../components/TripCard';
 import { getTrips, reset, searchTrip } from '../features/trips/tripSlice';
 
@@ -17,6 +18,7 @@ function Home() {
   });
   const { searchWord, dateStart, dateEnd } = formData;
 
+  const [selectedValue, setSelectedValue] = React.useState('b');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,6 +44,12 @@ function Home() {
       [e.target.id]: e.target.value
     }));
   };
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+    console.log(selectedValue);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const searchData = { searchWord, dateStart, dateEnd };
@@ -116,6 +124,26 @@ function Home() {
           />
         </Box>
       </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+        <Typography sx={{ marginRight: '20px' }}>Sorter på rangering</Typography>
+        <Typography>På</Typography>
+        <Radio
+          checked={selectedValue === 'a'}
+          onChange={handleChange}
+          value="a"
+          name="radio-buttons"
+          inputProps={{ 'aria-label': 'A' }}
+        />
+        <Typography>Av</Typography>
+        <Radio
+          checked={selectedValue === 'b'}
+          onChange={handleChange}
+          value="b"
+          name="radio-buttons"
+          inputProps={{ 'aria-label': 'B' }}
+        />
+      </Box>
+
       <Box
         sx={{
           width: '500px',
