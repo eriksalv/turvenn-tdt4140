@@ -19,22 +19,28 @@ export const getRatings = createAsyncThunk('/participations/getAll', async (trip
   }
 });
 
-export const getRating = createAsyncThunk('/trips/create', async (participationData, thunkAPI) => {
-  try {
-    return await participationService.getRating(participationData);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(getError(error));
+export const getRating = createAsyncThunk(
+  '/participations/get',
+  async (participationData, thunkAPI) => {
+    try {
+      return await participationService.getRating(participationData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getError(error));
+    }
   }
-});
+);
 
-export const changeRating = createAsyncThunk('/trips/edit', async (participationData, thunkAPI) => {
-  try {
-    const { accessToken } = thunkAPI.getState().auth.user;
-    return await participationService.changeRating(participationData, accessToken);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(getError(error));
+export const changeRating = createAsyncThunk(
+  '/participations/change',
+  async (participationData, thunkAPI) => {
+    try {
+      const { accessToken } = thunkAPI.getState().auth.user;
+      return await participationService.changeRating(participationData, accessToken);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getError(error));
+    }
   }
-});
+);
 
 export const participationSlice = createSlice({
   name: 'participation',

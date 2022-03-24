@@ -13,7 +13,8 @@ import {
   Button,
   Avatar,
   TextField,
-  IconButton
+  IconButton,
+  LinearProgress
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -35,9 +36,15 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PublishIcon from '@mui/icons-material/Publish';
 import useSignedUpStatus from '../hooks/useSignedUpStatus';
 import { getTrip, reset, signUp, signOff, deleteTrip } from '../features/trips/tripSlice';
-import { getLogs, createLog } from '../features/logs/logSlice';
-import { getRatings, getRating, changeRating } from '../features/participation/participationSlice';
+import { getLogs, createLog, reset as logReset } from '../features/logs/logSlice';
+import {
+  getRatings,
+  getRating,
+  changeRating,
+  reset as participationReset
+} from '../features/participation/participationSlice';
 
+import Spinner from '../components/Spinner';
 import ProfileCard from '../components/ProfileCard';
 import LogCard from '../components/LogCard';
 
@@ -74,38 +81,52 @@ function ViewTrip() {
   const { trip, isError, message, isLoading, isSuccess, status } = useSelector(
     (state) => state.trips
   );
-  const { logs } = useSelector((state) => state.logs);
+  const {
+    logs,
+    isError: logsIsError,
+    isLoading: logsIsLoading,
+    isSuccess: logsIsSuccess
+  } = useSelector((state) => state.logs);
   const { user } = useSelector((state) => state.auth);
   const {
     participation,
     participations,
     isLoading: participationIsLoading,
-    isSuccess: participtionIsSuccess
+    isSuccess: participationIsSuccess,
+    isError: participationIsError
   } = useSelector((state) => state.participations);
   const navigate = useNavigate();
-  const [averageRating, setAverageRating] = useState(0);
   const { id } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (isError) {
       toast.error(message);
+      if (status === '') navigate('/notfound');
       dispatch(reset());
-    }
-    dispatch(getLogs(id));
-    dispatch(getRatings(id));
-    dispatch(getRating({ tripId: id, userId: user.id }));
-  }, [dispatch, isError]);
-
-  useEffect(() => {
-    if (participations.length === 0 || !participation) {
+      dispatch(logReset());
+      dispatch(participationReset());
       return;
     }
-    setAverageRating(
-      participations.map((item) => item.rating).reduce((a, b) => a + b) / participations.length / 2
-    );
-    console.log(averageRating);
-  }, [isSuccess]);
+    if (logsIsError || participationIsError) {
+      toast.error('Noe gikk galt');
+      dispatch(reset());
+      dispatch(logReset());
+      dispatch(participationReset());
+      navigate('/home');
+      return;
+    }
+
+    dispatch(getTrip(id));
+    dispatch(getLogs(id));
+    dispatch(getRatings(id));
+  }, [isError, message, id, logsIsError, participationIsError]);
+
+  useEffect(async () => {
+    if (signedUp && !checkingStatus) {
+      dispatch(getRating({ tripId: id, userId: user.id }));
+    }
+  }, [signedUp, checkingStatus, id, user]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -118,15 +139,16 @@ function ViewTrip() {
   }, [dispatch, isSuccess]);
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
-      if (status === '') navigate('/notfound');
-      dispatch(reset());
-      return;
+    if (participationIsSuccess) {
+      dispatch(participationReset());
     }
+  }, [dispatch, participationIsSuccess]);
 
-    dispatch(getTrip(id));
-  }, [isError, message, id, signedUp]);
+  useEffect(() => {
+    if (logsIsSuccess) {
+      dispatch(logReset());
+    }
+  }, [dispatch, logsIsSuccess]);
 
   const onSignUp = async () => {
     await Promise.resolve(dispatch(signUp(trip.id)));
@@ -171,11 +193,12 @@ function ViewTrip() {
     e.preventDefault();
     const r = e.target.value;
     const participationData = { tripId: id, userId: trip.user.id, rating: r * 2 };
-    dispatch(changeRating(participationData));
+    await Promise.resolve(dispatch(changeRating(participationData)));
+    dispatch(getRatings(id));
   };
 
-  if (isLoading || checkingStatus || !trip || participationIsLoading) {
-    return <h1>Loading...</h1>;
+  if (isLoading || checkingStatus || !trip) {
+    return <Spinner />;
   }
 
   return (
@@ -183,19 +206,68 @@ function ViewTrip() {
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid container alignItems="flex-start" justifyContent="space-between">
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                flexWrap: 'wrap'
+              }}
+            >
               <Avatar
                 sx={{ height: 150, width: 150, marginRight: '10px', marginBottom: '10px' }}
                 alt="logo"
                 src="../Turvenn-logo.png"
               />
-              <Typography variant="h4" component="h4" sx={{ textAlign: 'center' }}>
+              <Typography variant="h4" component="h4" sx={{ textAlign: 'left', flex: 3 }}>
                 {trip.name}
               </Typography>
+              {trip.endDate < today && (
+                <Grid sx={{ marginTop: '10px' }}>
+                  <Stack>
+                    {signedUp && participation && participation.rating && (
+                      // eslint-disable-next-line react/jsx-no-useless-fragment
+                      <>
+                        <Typography variant="h6" component="h6">
+                          Din vurdering
+                        </Typography>
+                        {participationIsLoading ? (
+                          <LinearProgress color="secondary" sx={{ height: '10px' }} />
+                        ) : (
+                          <Rating
+                            name="half-rating"
+                            defaultValue={0}
+                            value={participation.rating / 2}
+                            precision={0.5}
+                            onChange={onSubmitRating}
+                            sx={{ height: '10px' }}
+                          />
+                        )}
+                      </>
+                    )}
+                    <Box>
+                      <Typography variant="h6" component="h6" sx={{ marginTop: '10px' }}>
+                        Gjennomsnittlig vurdering
+                      </Typography>
+
+                      {participationIsLoading ? (
+                        <LinearProgress sx={{ height: '10px' }} />
+                      ) : (
+                        <Typography variant="body1" component="h2" sx={{ height: '10px' }}>
+                          {participations.averageRating / 2} ({participations.ratings.length}{' '}
+                          {participations.ratings.length === 1 ? 'vurdering' : 'vurderinger'})
+                        </Typography>
+                      )}
+                    </Box>
+                  </Stack>
+                </Grid>
+              )}
             </Box>
           </Grid>
           {user && (trip.user.id === user.id || user.role === 'admin') && (
-            <Grid sx={{ ml: 3, mb: 2 }}>
+            <Grid sx={{ ml: 3, mb: 2, mt: 3 }}>
               <Fab
                 sx={{ mr: 2 }}
                 size="small"
@@ -329,31 +401,6 @@ function ViewTrip() {
           <Typography variant="body1" component="h2">
             {trip.description}
           </Typography>
-          {trip.endDate < today && (
-            <Grid sx={{ marginTop: '10px' }}>
-              <Stack>
-                <Typography variant="h6" component="h6">
-                  Din vurdering
-                </Typography>
-                <Rating
-                  name="half-rating"
-                  defaultValue={participation.rating / 2}
-                  precision={0.5}
-                  onChange={onSubmitRating}
-                />
-                <Box>
-                  <Typography variant="h6" component="h6" sx={{ marginTop: '10px' }}>
-                    Gjennomsnittlig vurdering
-                  </Typography>
-
-                  <Typography variant="body1" component="h2">
-                    {averageRating} ({participations.length}{' '}
-                    {participations.length === 1 ? 'vurdering' : 'vurderinger'})
-                  </Typography>
-                </Box>
-              </Stack>
-            </Grid>
-          )}
           <Grid
             container
             alignItems="flex-start"
@@ -526,6 +573,7 @@ function ViewTrip() {
                 alignItems: 'center'
               }}
             >
+              {logsIsLoading && <Spinner />}
               {[...logs]
                 .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
                 .reverse()
@@ -540,6 +588,7 @@ function ViewTrip() {
                   />
                 ))}
             </Box>
+
             <Divider sx={{ width: '100%' }}>
               <Chip label="Turgåere" />
             </Divider>

@@ -21,7 +21,7 @@ const changeRating = async ({ tripId, userId, rating }, token) => {
     }
   };
   const res = await axios.put(`${baseUrl}/${tripId}/participations/${userId}`, { rating }, config);
-  console.log(res.data);
+
   return res.data;
 };
 

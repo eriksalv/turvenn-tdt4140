@@ -15,7 +15,12 @@ const getRatings = async (req, res, next) => {
       attributes: ['rating']
     });
 
-    return res.status(200).json(ratings);
+    const filteredRatings = ratings.length ? ratings.filter((item) => item.rating) : [];
+    const averageRating = filteredRatings.length
+      ? filteredRatings.map((item) => item.rating).reduce((a, b) => a + b) / filteredRatings.length
+      : null;
+
+    return res.status(200).json({ ratings: filteredRatings, averageRating });
   } catch (error) {
     console.log(error);
     res.status(500);
@@ -39,8 +44,7 @@ const getRating = async (req, res, next) => {
     });
 
     if (!participation) {
-      res.status(404);
-      return next(new Error('Could not find participation'));
+      return res.status(200).json(null);
     }
 
     return res.status(200).json(participation);
