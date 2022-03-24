@@ -47,7 +47,7 @@ function EditTrip() {
   });
 
   useEffect(() => {
-    if (trip && trip.user.id !== user.id) {
+    if (trip && trip.user.id !== user.id && user.role !== 'admin') {
       toast.error('Du kan bare redigere dine egne turer');
       navigate('/home');
       dispatch(reset());

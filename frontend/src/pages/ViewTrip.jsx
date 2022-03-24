@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -12,13 +13,15 @@ import {
   Button,
   Avatar,
   TextField,
-  IconButton
+  IconButton,
+  LinearProgress
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import Stack from '@mui/material/Stack';
 import DialogTitle from '@mui/material/DialogTitle';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -26,14 +29,22 @@ import { toast } from 'react-toastify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 import Fab from '@mui/material/Fab';
+import Rating from '@mui/material/Rating';
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PublishIcon from '@mui/icons-material/Publish';
 import useSignedUpStatus from '../hooks/useSignedUpStatus';
 import { getTrip, reset, signUp, signOff, deleteTrip } from '../features/trips/tripSlice';
-import { getLogs, createLog } from '../features/logs/logSlice';
+import { getLogs, createLog, reset as logReset } from '../features/logs/logSlice';
+import {
+  getRatings,
+  getRating,
+  changeRating,
+  reset as participationReset
+} from '../features/participation/participationSlice';
 
+import Spinner from '../components/Spinner';
 import ProfileCard from '../components/ProfileCard';
 import LogCard from '../components/LogCard';
 
@@ -70,8 +81,20 @@ function ViewTrip() {
   const { trip, isError, message, isLoading, isSuccess, status } = useSelector(
     (state) => state.trips
   );
-  const { logs } = useSelector((state) => state.logs);
+  const {
+    logs,
+    isError: logsIsError,
+    isLoading: logsIsLoading,
+    isSuccess: logsIsSuccess
+  } = useSelector((state) => state.logs);
   const { user } = useSelector((state) => state.auth);
+  const {
+    participation,
+    participations,
+    isLoading: participationIsLoading,
+    isSuccess: participationIsSuccess,
+    isError: participationIsError
+  } = useSelector((state) => state.participations);
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -79,10 +102,31 @@ function ViewTrip() {
   useEffect(() => {
     if (isError) {
       toast.error(message);
+      if (status === '') navigate('/notfound');
       dispatch(reset());
+      dispatch(logReset());
+      dispatch(participationReset());
+      return;
     }
+    if (logsIsError || participationIsError) {
+      toast.error('Noe gikk galt');
+      dispatch(reset());
+      dispatch(logReset());
+      dispatch(participationReset());
+      navigate('/home');
+      return;
+    }
+
+    dispatch(getTrip(id));
     dispatch(getLogs(id));
-  }, [dispatch, isError]);
+    dispatch(getRatings(id));
+  }, [isError, message, id, logsIsError, participationIsError]);
+
+  useEffect(async () => {
+    if (signedUp && !checkingStatus) {
+      dispatch(getRating({ tripId: id, userId: user.id }));
+    }
+  }, [signedUp, checkingStatus, id, user]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -95,15 +139,16 @@ function ViewTrip() {
   }, [dispatch, isSuccess]);
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
-      if (status === '') navigate('/notfound');
-      dispatch(reset());
-      return;
+    if (participationIsSuccess) {
+      dispatch(participationReset());
     }
+  }, [dispatch, participationIsSuccess]);
 
-    dispatch(getTrip(id));
-  }, [isError, message, id, signedUp]);
+  useEffect(() => {
+    if (logsIsSuccess) {
+      dispatch(logReset());
+    }
+  }, [dispatch, logsIsSuccess]);
 
   const onSignUp = async () => {
     await Promise.resolve(dispatch(signUp(trip.id)));
@@ -130,6 +175,10 @@ function ViewTrip() {
     }
   };
 
+  const handleGoTripCreator = () => {
+    navigate(`/users/${trip.user.id}`);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const logData = { text, image: image, tripId: id };
@@ -140,8 +189,16 @@ function ViewTrip() {
     setSelectedImage('');
   };
 
+  const onSubmitRating = async (e) => {
+    e.preventDefault();
+    const r = e.target.value;
+    const participationData = { tripId: id, userId: trip.user.id, rating: r * 2 };
+    await Promise.resolve(dispatch(changeRating(participationData)));
+    dispatch(getRatings(id));
+  };
+
   if (isLoading || checkingStatus || !trip) {
-    return <h1>Loading...</h1>;
+    return <Spinner />;
   }
 
   return (
@@ -149,26 +206,84 @@ function ViewTrip() {
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid container alignItems="flex-start" justifyContent="space-between">
-            <h2>{trip.name}</h2>
-            {user && (trip.user.id === user.id || user.role === 'admin') && (
-              <Grid>
-                <Fab
-                  sx={{ mr: 1 }}
-                  size="small"
-                  color="secondary"
-                  aria-label="delete"
-                  onClick={() => navigate(`/trips/${id}/edit`)}
-                >
-                  <EditIcon />
-                </Fab>
-                <Fab size="small" color="primary" aria-label="edit" onClick={handleOpen}>
-                  <DeleteIcon />
-                </Fab>
-              </Grid>
-            )}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                flexWrap: 'wrap'
+              }}
+            >
+              <Avatar
+                sx={{ height: 150, width: 150, marginRight: '10px', marginBottom: '10px' }}
+                alt="logo"
+                src="../Turvenn-logo.png"
+              />
+              <Typography variant="h4" component="h4" sx={{ textAlign: 'left', flex: 3 }}>
+                {trip.name}
+              </Typography>
+              {trip.endDate < today && (
+                <Grid sx={{ marginTop: '10px' }}>
+                  <Stack>
+                    {signedUp && participation && participation.rating && (
+                      // eslint-disable-next-line react/jsx-no-useless-fragment
+                      <>
+                        <Typography variant="h6" component="h6">
+                          Din vurdering
+                        </Typography>
+                        {participationIsLoading ? (
+                          <LinearProgress color="secondary" sx={{ height: '10px' }} />
+                        ) : (
+                          <Rating
+                            name="half-rating"
+                            defaultValue={0}
+                            value={participation.rating / 2}
+                            precision={0.5}
+                            onChange={onSubmitRating}
+                            sx={{ height: '10px' }}
+                          />
+                        )}
+                      </>
+                    )}
+                    <Box>
+                      <Typography variant="h6" component="h6" sx={{ marginTop: '10px' }}>
+                        Gjennomsnittlig vurdering
+                      </Typography>
+
+                      {participationIsLoading ? (
+                        <LinearProgress sx={{ height: '10px' }} />
+                      ) : (
+                        <Typography variant="body1" component="h2" sx={{ height: '10px' }}>
+                          {participations.averageRating / 2} ({participations.ratings.length}{' '}
+                          {participations.ratings.length === 1 ? 'vurdering' : 'vurderinger'})
+                        </Typography>
+                      )}
+                    </Box>
+                  </Stack>
+                </Grid>
+              )}
+            </Box>
           </Grid>
-          {trip.date > today && (
-            <Grid align="left" sx={{ marginBottom: '10px' }}>
+          {user && (trip.user.id === user.id || user.role === 'admin') && (
+            <Grid sx={{ ml: 3, mb: 2, mt: 3 }}>
+              <Fab
+                sx={{ mr: 2 }}
+                size="small"
+                color="secondary"
+                aria-label="delete"
+                onClick={() => navigate(`/trips/${id}/edit`)}
+              >
+                <EditIcon />
+              </Fab>
+              <Fab size="small" color="primary" aria-label="edit" onClick={handleOpen}>
+                <DeleteIcon />
+              </Fab>
+            </Grid>
+          )}
+          {trip.startDate > today && (
+            <Grid align="left" sx={{ mb: '10px' }}>
               {!signedUp ? (
                 <Button onClick={onSignUp} variant="outlined" startIcon={<GroupAddOutlinedIcon />}>
                   Meld deg på
@@ -180,57 +295,108 @@ function ViewTrip() {
               )}
             </Grid>
           )}
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <Img alt="logo" src="../Turvenn-logo.png" />
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h6" component="h6">
-                Mål
+          <Grid container>
+            <Paper elevation={3} style={paperStyle} sx={{ width: '320px' }}>
+              <Typography variant="h5" component="h5">
+                Hvor?
               </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.goal}
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Startpunkt
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.start}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Mål
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.goal}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper elevation={3} style={paperStyle} sx={{ width: '320px' }}>
+              <Typography variant="h5" component="h5">
+                Når?
               </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Startpunkt
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Fra
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {moment(trip.startDate).format('yyyy-MM-DD HH:mm')}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Til
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {moment(trip.endDate).format('yyyy-MM-DD HH:mm')}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper elevation={3} style={paperStyle} sx={{ width: '320px' }}>
+              <Typography variant="h5" component="h5">
+                Om turen
               </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.start}
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Vanskelighetsgrad
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.difficulty}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6" component="h6">
+                    Type
+                  </Typography>
+                  <Typography variant="body1" component="h2">
+                    {trip.type}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper
+              elevation={3}
+              style={paperStyle}
+              sx={{ width: '320px', cursor: 'pointer' }}
+              onClick={handleGoTripCreator}
+            >
+              <Typography variant="h5" component="h5">
+                Turansvarlig
               </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Startdato
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {moment(trip.startDate).format('yyyy-MM-DD HH:mm')}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Sluttdato
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {moment(trip.endDate).format('yyyy-MM-DD HH:mm')}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Vanskelighetsgrad
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.difficulty}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Type
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.type}
-              </Typography>
-              <Typography variant="h6" component="h6" marginTop="20px">
-                Opprettet av
-              </Typography>
-              <Typography variant="body1" component="h2">
-                {trip.user.firstName} {trip.user.lastName} <br /> {trip.user.email}
-              </Typography>
-            </Grid>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                    <Avatar
+                      sx={{ height: 50, width: 50, float: 'left', marginRight: '10px' }}
+                      alt="profilbilde"
+                      src="../Turvenn-logo.png"
+                    />
+                    <Box sx={{ display: 'inline' }}>
+                      <Typography variant="h6" component="h6">
+                        {trip.user.firstName} {trip.user.lastName}
+                      </Typography>
+                      <Typography variant="body1" component="h2">
+                        {trip.user.email}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Paper>
           </Grid>
           <Typography variant="h6" component="h6">
-            Om turen
+            Beskrivelse
           </Typography>
           <Typography variant="body1" component="h2">
             {trip.description}
@@ -239,7 +405,7 @@ function ViewTrip() {
             container
             alignItems="flex-start"
             justifyContent="flex-start"
-            sx={{ mt: '4rem', mb: '0.5rem' }}
+            sx={{ mt: '1rem', mb: '0.5rem' }}
           >
             <Divider sx={{ width: '100%' }}>
               <Chip label="Innlegg" />
@@ -407,6 +573,7 @@ function ViewTrip() {
                 alignItems: 'center'
               }}
             >
+              {logsIsLoading && <Spinner />}
               {[...logs]
                 .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
                 .reverse()
@@ -421,6 +588,7 @@ function ViewTrip() {
                   />
                 ))}
             </Box>
+
             <Divider sx={{ width: '100%' }}>
               <Chip label="Turgåere" />
             </Divider>

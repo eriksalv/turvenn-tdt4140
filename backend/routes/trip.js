@@ -18,7 +18,11 @@ const router = express.Router();
 // Re-route into note router
 const logRouter = require('./log');
 
+const participationRouter = require('./participation');
+
 router.get('/search', searchTrip);
+
+router.use('/:tripId/participations', participationRouter);
 
 router.use('/:tripId/logs', logRouter);
 
