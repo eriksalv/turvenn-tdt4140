@@ -31,6 +31,8 @@ import moment from 'moment';
 import Fab from '@mui/material/Fab';
 import Rating from '@mui/material/Rating';
 import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip';
+import VerifiedIcon from '@mui/icons-material/Verified';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PublishIcon from '@mui/icons-material/Publish';
@@ -227,7 +229,7 @@ function ViewTrip() {
               {trip.endDate < today && (
                 <Grid sx={{ marginTop: '10px' }}>
                   <Stack>
-                    {signedUp && participation && participation.rating && (
+                    {signedUp && (
                       // eslint-disable-next-line react/jsx-no-useless-fragment
                       <>
                         <Typography variant="h6" component="h6">
@@ -239,7 +241,9 @@ function ViewTrip() {
                           <Rating
                             name="half-rating"
                             defaultValue={0}
-                            value={participation.rating / 2}
+                            value={
+                              participation && participation.rating ? participation.rating / 2 : 0
+                            }
                             precision={0.5}
                             onChange={onSubmitRating}
                             sx={{ height: '10px' }}
@@ -384,7 +388,12 @@ function ViewTrip() {
                     />
                     <Box sx={{ display: 'inline' }}>
                       <Typography variant="h6" component="h6">
-                        {trip.user.firstName} {trip.user.lastName}
+                        {trip.user.firstName} {trip.user.lastName}{' '}
+                        {trip.user.role === 'commercial' && (
+                          <Tooltip title="Commercial" arrow>
+                            <VerifiedIcon style={{ fontSize: '15px', verticalAlign: 'middle' }} />
+                          </Tooltip>
+                        )}
                       </Typography>
                       <Typography variant="body1" component="h2">
                         {trip.user.email}

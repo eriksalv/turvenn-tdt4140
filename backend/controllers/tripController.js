@@ -1,6 +1,6 @@
 const { Op } = require('@sequelize/core');
 const moment = require('moment');
-const { Trip, User, sequelize } = require('../models');
+const { Trip, User } = require('../models');
 
 const getTrips = async (req, res, next) => {
   try {
@@ -21,7 +21,7 @@ const getTrips = async (req, res, next) => {
         {
           model: User,
           as: 'user',
-          attributes: ['firstName', 'lastName', 'email']
+          attributes: ['firstName', 'lastName', 'email', 'role']
         }
       ]
     });
@@ -308,7 +308,7 @@ const updateTrip = async (req, res, next) => {
   }
 };
 
-const searchTrip = async (req, res, next) => {
+const searchTrip = async (req, res) => {
   let { searchWord, dateStart, dateEnd } = req.query;
 
   if (!dateStart) {
@@ -344,7 +344,7 @@ const searchTrip = async (req, res, next) => {
       {
         model: User,
         as: 'user',
-        attributes: ['firstName', 'lastName', 'email']
+        attributes: ['firstName', 'lastName', 'email', 'role']
       }
     ]
   });

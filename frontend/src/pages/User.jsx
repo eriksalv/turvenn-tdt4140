@@ -10,6 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Avatar from '@mui/material/Avatar';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import VerifiedIcon from '@mui/icons-material/Verified';
 import TripCard from '../components/TripCard';
 import { getUser, changeRoleAdmin, reset as userReset } from '../features/users/userSlice';
 import {

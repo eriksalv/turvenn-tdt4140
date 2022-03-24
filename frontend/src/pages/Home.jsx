@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
+import Tooltip from '@mui/material/Tooltip';
+import VerifiedIcon from '@mui/icons-material/Verified';
 import TripCard from '../components/TripCard';
 import { getTrips, reset, searchTrip } from '../features/trips/tripSlice';
 
@@ -133,7 +135,15 @@ function Home() {
           .map((item) => (
             <div key={item.id}>
               <Typography sx={{ display: 'inline' }} variant="p">
-                <b>{item.user.firstName}</b> publiserte en ny tur
+                <b>
+                  {item.user.firstName}&nbsp;
+                  {item.user.role === 'commercial' && (
+                    <Tooltip title="Commercial" arrow>
+                      <VerifiedIcon style={{ fontSize: '15px', verticalAlign: 'middle' }} />
+                    </Tooltip>
+                  )}
+                </b>{' '}
+                publiserte en ny tur
               </Typography>
               <Typography
                 sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }}
