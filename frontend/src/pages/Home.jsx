@@ -123,27 +123,26 @@ function Home() {
             onChange={onChange}
           />
         </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%'}}>
+          <Typography sx={{ marginRight: '20px' }}>Sorter på rangering</Typography>
+          <Typography>På</Typography>
+          <Radio
+            checked={selectedValue === 'a'}
+            onChange={handleChange}
+            value="a"
+            name="radio-buttons"
+            inputProps={{ 'aria-label': 'A' }}
+          />
+          <Typography>Av</Typography>
+          <Radio
+            checked={selectedValue === 'b'}
+            onChange={handleChange}
+            value="b"
+            name="radio-buttons"
+            inputProps={{ 'aria-label': 'B' }}
+          />
+        </Box>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-        <Typography sx={{ marginRight: '20px' }}>Sorter på rangering</Typography>
-        <Typography>På</Typography>
-        <Radio
-          checked={selectedValue === 'a'}
-          onChange={handleChange}
-          value="a"
-          name="radio-buttons"
-          inputProps={{ 'aria-label': 'A' }}
-        />
-        <Typography>Av</Typography>
-        <Radio
-          checked={selectedValue === 'b'}
-          onChange={handleChange}
-          value="b"
-          name="radio-buttons"
-          inputProps={{ 'aria-label': 'B' }}
-        />
-      </Box>
-
       <Box
         sx={{
           width: '500px',
