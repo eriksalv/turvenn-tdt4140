@@ -7,7 +7,8 @@ const {
   loginUser,
   getLogin,
   getUser,
-  changeRoleAdmin
+  changeRoleAdmin,
+  editUser
 } = require('../controllers/userController');
 const { protect } = require('../middleware/authHandler');
 
@@ -25,6 +26,8 @@ router.get('/', getUsers);
 
 // GET /api/users/:userId
 router.get('/:userId', getUser);
+
+router.put('/edit', protect, editUser);
 
 // GET /api/users/login
 router.get('/login', protect, getLogin);

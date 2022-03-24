@@ -148,11 +148,59 @@ const changeRoleAdmin = async (req, res, next) => {
   }
 };
 
+const editUser = async (req, res, next) => {
+  const { email, firstName, lastName, password, isCommercial } = req.body;
+  const user = {
+    id: req.user.id,
+    email: req.user.email,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    role: req.user.role
+  };
+
+  if (user.email === 'turvenn.turvenn@gmail.com') {
+    res.status(403);
+    return next(new Error('Turvenn cannot be altered'));
+  }
+
+  if (!email || !firstName || !lastName || !password) {
+    res.status(400);
+    return next(new Error('Bad request data'));
+  }
+
+  const userExists = await User.findOne({ where: { email } });
+
+  if (userExists) {
+    res.status(403);
+    return next(new Error('Email is unavailable'));
+  }
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const role = isCommercial ? 'commercial' : 'user';
+
+    const updatedUser = await req.user.update({
+      email,
+      firstName,
+      lastName,
+      hashedPassword,
+      role
+    });
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
 module.exports = {
   getUsers,
   registerUser,
   loginUser,
   getLogin,
   getUser,
-  changeRoleAdmin
+  changeRoleAdmin,
+  editUser
 };

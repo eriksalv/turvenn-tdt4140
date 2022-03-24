@@ -4,7 +4,8 @@ const {
   getLogin,
   getUsers,
   registerUser,
-  changeRoleAdmin
+  changeRoleAdmin,
+  editUser
 } = require('../../controllers/userController');
 
 describe('User Controller - Login', () => {
@@ -257,5 +258,60 @@ describe('User Controller - changeRoleAdmin', () => {
     await changeRoleAdmin(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('User Controller - editUser', () => {
+  let req;
+  let res;
+  let next;
+  beforeEach(() => {
+    req = {
+      user: {
+        id: 1,
+        email: 'user@gmail.com',
+        firstName: 'Turvenn',
+        lastName: 'Turvenn',
+        role: 'admin',
+        password: '123456',
+        update: () => {}
+      },
+      body: {
+        email: 'test@test.com',
+        password: 'password',
+        isCommercial: false,
+        firstName: 'Test',
+        lastName: 'Test'
+      }
+    };
+    res = {
+      status: jest.fn().mockImplementation(() => res),
+      json: jest.fn()
+    };
+    next = jest.fn();
+  });
+
+  it('should return status 200 if successful', async () => {
+    User.findOne = jest.fn().mockImplementation(() => null);
+
+    await editUser(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should return status 400 if validation fails', async () => {
+    req.body.email = '';
+
+    await editUser(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it('should return status 403 if email is unavailable', async () => {
+    User.findOne = jest.fn().mockImplementation(() => ({ id: 1 }));
+
+    await editUser(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(403);
   });
 });
