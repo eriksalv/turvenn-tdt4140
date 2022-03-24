@@ -94,6 +94,13 @@ const searchTrip = async (searchData) => {
   return res.data;
 };
 
+// det går kanskje ikke at det er to get-requests med samme argument?
+const getAverageRatings = async () => {
+  const res = await axios.get(baseUrl);
+
+  return res.data;
+};
+
 const tripService = {
   getTrips,
   getTrip,
@@ -104,7 +111,8 @@ const tripService = {
   editTrip,
   deleteTrip,
   searchTrip,
-  getTripsParticipatedIn
+  getTripsParticipatedIn,
+  getAverageRatings
 };
 
 export default tripService;

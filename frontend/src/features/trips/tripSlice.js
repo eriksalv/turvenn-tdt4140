@@ -102,6 +102,17 @@ export const getTripsParticipatedIn = createAsyncThunk(
   }
 );
 
+export const getAverageRatings = createAsyncThunk(
+  '/trips/getAverageRatings',
+  async (_, thunkAPI) => {
+    try {
+      return await tripService.getAverageRatings();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getError(error));
+    }
+  }
+);
+
 export const tripSlice = createSlice({
   name: 'trip',
   initialState,
@@ -241,6 +252,19 @@ export const tripSlice = createSlice({
         state.userParticipatedIn = action.payload;
       })
       .addCase(getTripsParticipatedIn.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAverageRatings.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAverageRatings.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        // state.userParticipatedIn = action.payload;
+      })
+      .addCase(getAverageRatings.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

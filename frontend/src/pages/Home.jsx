@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import Radio from '@mui/material/Radio';
 import TripCard from '../components/TripCard';
-import { getTrips, reset, searchTrip } from '../features/trips/tripSlice';
+import { getTrips, reset, searchTrip, getAverageRatings } from '../features/trips/tripSlice';
 
 function Home() {
   const { trips, isSuccess, isLoading, isError, message } = useSelector((state) => state.trips);
@@ -123,7 +123,7 @@ function Home() {
             onChange={onChange}
           />
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%'}}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
           <Typography sx={{ marginRight: '20px' }}>Sorter på rangering</Typography>
           <Typography>På</Typography>
           <Radio
