@@ -24,23 +24,6 @@ const Img = styled('img')({
 });
 
 function ProfilePage() {
-  const mockData = [
-    {
-      difficulty: 1,
-      date: '25.02.2022',
-      id: 'dkawdopwa'
-    },
-    {
-      difficulty: 3,
-      date: '15.03.2022',
-      id: 'jdpowadjwpa'
-    },
-    {
-      difficulty: 5,
-      date: '01.04.2022',
-      id: 'jdiwajdipaw'
-    }
-  ];
 
   // Burde hente fra en userSlice i redux med alle brukere, men dette fungerer foreløpig
   const { user } = useSelector((state) => state.auth);
@@ -76,74 +59,29 @@ function ProfilePage() {
           {user.firstName} {user.lastName}
         </h1>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
-        
-      </Box>
-      <div id="information">
-        <form id="about">
-          <TextField
-            className="aboutText"
-            id="outlined-multiline-static"
-            label="Biografi"
-            multiline
-            rows={4}
-            defaultValue="Skriv noe om deg selv"
-          />
-          <LoadingButton id="aboutSave" loading="false" startIcon={<SaveIcon />} variant="outlined">
-            {' '}
-            Lagre
-          </LoadingButton>
-          <Box sx={{ minWidth: 120 }} className="experienceBox">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Erfaringsnivå</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={20}
-                label="Erfaringsnivå"
-              >
-                <MenuItem value={10}>Nybegynner</MenuItem>
-                <MenuItem value={20}>Erfaren</MenuItem>
-                <MenuItem value={30}>Ekspert</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </form>
-      </div>
-
-      <Divider sx={{ width: '100%' }}>
-        <Chip label="Kommende turer" />
-      </Divider>
-      <Box
-        id="tripHistoryContainer"
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        {mockData.map((item) => (
-          <TripCard id={item.id} difficulty={item.difficulty} date={item.startDate} key={item.id} />
-        ))}
-      </Box>
-
-      <Divider sx={{ width: '100%' }}>
-        <Chip label="Turhistorikk" />
-      </Divider>
-      <Box
-        id="tripHistoryContainer"
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        {mockData.map((item) => (
-          <TripCard difficulty={item.difficulty} date={item.startDate} key={item.id} />
-        ))}
+        <Box sx={{ width: '500px' }}>
+          <form id="about" sx={{ width: '100%' }}>
+            <Box sx={{ minWidth: 120, ml: 1 }} className="experienceBox">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Erfaringsnivå</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={20}
+                  label="Erfaringsnivå"
+                >
+                  <MenuItem value={10}>Nybegynner</MenuItem>
+                  <MenuItem value={20}>Erfaren</MenuItem>
+                  <MenuItem value={30}>Ekspert</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <LoadingButton id="aboutSave" loading="false" startIcon={<SaveIcon />} variant="outlined">
+              {' '}
+              Lagre
+            </LoadingButton>
+          </form>
+        </Box>
       </Box>
     </Box>
   );
