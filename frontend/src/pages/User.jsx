@@ -4,13 +4,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Box from '@mui/material/Box';
 import { toast } from 'react-toastify';
-import { Divider, Chip, Typography, Grid, Button } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Divider, Chip, Typography, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Avatar from '@mui/material/Avatar';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import VerifiedIcon from '@mui/icons-material/Verified';
 import TripCard from '../components/TripCard';
 import { getUser, changeRoleAdmin, reset as userReset } from '../features/users/userSlice';
 import {
@@ -19,13 +17,7 @@ import {
   reset as tripReset
 } from '../features/trips/tripSlice';
 import Username from '../components/Username';
-
-const Img = styled('img')({
-  margin: 'auto',
-  display: 'block',
-  maxWidth: '100%',
-  maxHeight: '100%'
-});
+import Spinner from '../components/Spinner';
 
 function User() {
   const today = moment().format();
@@ -74,8 +66,21 @@ function User() {
     dispatch(changeRoleAdmin(userData));
   };
 
-  if (isLoading || tripsIsLoading) {
-    return <h1>Loading...</h1>;
+  const renderExperience = () => {
+    switch (user.experience) {
+      case 1:
+        return 'Nybegynner';
+      case 2:
+        return 'Erfaren';
+      case 3:
+        return 'Ekspert';
+      default:
+        return 'Erfaringsnivå';
+    }
+  };
+
+  if (!user || isLoading || tripsIsLoading) {
+    return <Spinner />;
   }
 
   return (
@@ -101,7 +106,10 @@ function User() {
         <Avatar
           sx={{ width: 200, height: 200, marginTop: '40px' }}
           alt="En kul tur med gode venner"
-          src="../assets/Turvenn-2.png"
+          src={
+            (user.profilePic && `http://localhost:4000/uploads/${user.profilePic}`) ||
+            '../assets/Turvenn-2.png'
+          }
         />
         <h1
           style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '3px' }}
@@ -109,17 +117,22 @@ function User() {
           <Username user={user} />
         </h1>
         <Typography variant="p" component="p">
-          Erfaringsnivå
+          {renderExperience()}
         </Typography>
         <p style={{ width: '100%', textAlign: 'center' }}>{user.email}</p>
-        {loggedInUser && loggedInUser.id === user.id && (
-          <Button variant="outlined" onClick={() => navigate('/profile')} endIcon={<EditIcon />}>
+        {loggedInUser && loggedInUser.id === user.id && user.email !== 'turvenn.turvenn@gmail.com' && (
+          <Button
+            variant="outlined"
+            onClick={() => navigate(`/users/${id}/edit`)}
+            endIcon={<EditIcon />}
+          >
             Rediger Profil
           </Button>
         )}
         {loggedInUser &&
           user.email !== 'turvenn.turvenn@gmail.com' &&
-          loggedInUser.email === 'turvenn.turvenn@gmail.com' && (
+          loggedInUser.email === 'turvenn.turvenn@gmail.com' &&
+          user.role !== 'commercial' && (
             // eslint-disable-next-line react/jsx-no-useless-fragment
             <>
               {user.role !== 'admin' ? (

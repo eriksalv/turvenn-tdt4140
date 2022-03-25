@@ -272,16 +272,17 @@ describe('User Controller - editUser', () => {
         email: 'user@gmail.com',
         firstName: 'Turvenn',
         lastName: 'Turvenn',
+        profilePic: 'nice.jpg',
         role: 'admin',
-        password: '123456',
+        experience: 1,
         update: () => {}
       },
       body: {
+        id: 1,
         email: 'test@test.com',
-        password: 'password',
-        isCommercial: false,
         firstName: 'Test',
-        lastName: 'Test'
+        lastName: 'Test',
+        experience: 2
       }
     };
     res = {
