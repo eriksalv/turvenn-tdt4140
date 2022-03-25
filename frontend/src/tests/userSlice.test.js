@@ -10,11 +10,12 @@ let store;
 beforeEach(() => {
   initialState = {
     users: [],
-    user: {},
+    user: null,
     isLoading: false,
     isError: false,
     isSuccess: false,
-    message: ''
+    message: '',
+    status: ''
   };
   store = configureStore({ reducer: { user: userReducer }, initialState });
 });
@@ -47,11 +48,12 @@ describe('UserSlice - getUsers', () => {
     expect(mock.history.get[0].url).toEqual(`/api/users`);
     expect(user).toEqual({
       users: [],
-      user: {},
+      user: null,
       isLoading: false,
       isError: true,
       isSuccess: false,
-      message: 'Rejected'
+      message: 'Rejected',
+      status: ''
     });
   });
 
@@ -74,11 +76,12 @@ describe('UserSlice - getUsers', () => {
     expect(mock.history.get[0].url).toEqual(`/api/users`);
     expect(user).toEqual({
       users: users,
-      user: {},
+      user: null,
       isLoading: false,
       isError: false,
       isSuccess: true,
-      message: ''
+      message: '',
+      status: ''
     });
   });
 });
@@ -96,11 +99,12 @@ describe('UserSlice - getUser', () => {
     expect(mock.history.get[0].url).toEqual(`/api/users/${id}`);
     expect(user).toEqual({
       users: [],
-      user: {},
+      user: null,
       isLoading: false,
       isError: true,
       isSuccess: false,
-      message: 'Rejected'
+      message: 'Rejected',
+      status: ''
     });
   });
 
@@ -123,7 +127,8 @@ describe('UserSlice - getUser', () => {
       isLoading: false,
       isError: false,
       isSuccess: true,
-      message: ''
+      message: '',
+      status: ''
     });
   });
 });

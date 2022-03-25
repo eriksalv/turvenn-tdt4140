@@ -50,11 +50,11 @@ function App() {
           <Route path="/create-trip" element={<PrivateRoute />}>
             <Route path="/create-trip" element={<CreateTrip />} />
           </Route>
-          <Route path="/profile" element={<PrivateRoute />}>
-            <Route path="/profile" element={<ProfilePage />} />
-          </Route>
           <Route path="/home" element={<Home />} />
           <Route path="/users/:id" element={<User />} />
+          <Route path="/users/:id/edit" element={<PrivateRoute />}>
+            <Route path="/users/:id/edit" element={<ProfilePage />} />
+          </Route>
           <Route path="/trips/:id" element={<ViewTrip />} />
           <Route path="/trips/:id/edit" element={<PrivateRoute />}>
             <Route path="/trips/:id/edit" element={<EditTrip />} />

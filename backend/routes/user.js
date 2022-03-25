@@ -7,8 +7,10 @@ const {
   loginUser,
   getLogin,
   getUser,
-  changeRoleAdmin
+  changeRoleAdmin,
+  editUser
 } = require('../controllers/userController');
+const { uploadFile } = require('../middleware/uploadHandler');
 const { protect } = require('../middleware/authHandler');
 
 const router = express.Router();
@@ -25,6 +27,8 @@ router.get('/', getUsers);
 
 // GET /api/users/:userId
 router.get('/:userId', getUser);
+
+router.put('/edit', protect, uploadFile, editUser);
 
 // GET /api/users/login
 router.get('/login', protect, getLogin);

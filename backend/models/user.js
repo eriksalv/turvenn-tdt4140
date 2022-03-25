@@ -64,7 +64,8 @@ module.exports = (sequelize, DataTypes) => {
           min: 1,
           max: 3
         }
-      }
+      },
+      profilePic: DataTypes.STRING
     },
     {
       sequelize,

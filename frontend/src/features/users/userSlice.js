@@ -5,11 +5,12 @@ import userService from './userService';
 
 const initialState = {
   users: [],
-  user: {},
+  user: null,
   isLoading: false,
   isError: false,
   isSuccess: false,
-  message: ''
+  message: '',
+  status: ''
 };
 
 export const getUsers = createAsyncThunk('/users/getAll', async (_, thunkAPI) => {
@@ -37,6 +38,15 @@ export const changeRoleAdmin = createAsyncThunk('/users/role', async (userData, 
   }
 });
 
+export const editProfile = createAsyncThunk('/users/edit', async (userData, thunkAPI) => {
+  try {
+    const { accessToken } = thunkAPI.getState().auth.user;
+    return await userService.editProfile(userData, accessToken);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(getError(error));
+  }
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -46,6 +56,7 @@ export const userSlice = createSlice({
       state.isSuccess = false;
       state.isLoading = false;
       state.message = '';
+      state.status = '';
     }
   },
   extraReducers: (builder) => {
@@ -88,6 +99,21 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(editProfile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.status = 'updated';
+      })
+      .addCase(editProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.status = 'update failed';
       });
   }
 });

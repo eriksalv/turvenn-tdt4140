@@ -12,7 +12,7 @@ const generateToken = (id) => {
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.findAll({
-      attributes: ['id', 'email', 'firstName', 'lastName', 'role']
+      attributes: ['id', 'email', 'firstName', 'lastName', 'role', 'profilePic']
     });
     return res.status(200).json(users);
   } catch (error) {
@@ -24,7 +24,7 @@ const getUsers = async (req, res, next) => {
 const getUser = async (req, res) => {
   const { userId } = req.params;
   const user = await User.findByPk(userId, {
-    attributes: ['id', 'email', 'firstName', 'lastName', 'role']
+    attributes: ['id', 'email', 'firstName', 'lastName', 'role', 'experience', 'profilePic']
   });
 
   if (!user) {
@@ -45,7 +45,8 @@ const getLogin = async (req, res, next) => {
     email: req.user.email,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
-    role: req.user.role
+    role: req.user.role,
+    experience: req.user.experience
   };
   res.status(200).json(user);
 };
@@ -124,6 +125,11 @@ const changeRoleAdmin = async (req, res, next) => {
     return next(new Error('Not authorized to make admin'));
   }
 
+  if (req.user.role === 'commercial') {
+    res.status(403);
+    return next(new Error('Cannot give admin privileges to commercial user'));
+  }
+
   const { userId } = req.params;
   const { role } = req.body;
 
@@ -148,11 +154,66 @@ const changeRoleAdmin = async (req, res, next) => {
   }
 };
 
+const editUser = async (req, res, next) => {
+  const { id, email, firstName, lastName, experience } = req.body;
+
+  const user = {
+    id: req.user.id,
+    email: req.user.email,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    experience: req.user.experience,
+    profilePic: req.user.profilePic
+  };
+
+  if (+id !== +user.id) {
+    res.status(403);
+    return next(new Error('Cannot edit another user'));
+  }
+
+  if (user.email === 'turvenn.turvenn@gmail.com') {
+    res.status(403);
+    return next(new Error('Turvenn cannot be altered'));
+  }
+
+  if (!email || !firstName || !lastName || !experience) {
+    res.status(400);
+    return next(new Error('Bad request data'));
+  }
+
+  if (user.email !== email) {
+    const userExists = await User.findOne({ where: { email } });
+
+    if (userExists) {
+      res.status(403);
+      return next(new Error('Email is unavailable'));
+    }
+  }
+
+  const profilePic = (req.file && req.file.filename) || user.profilePic;
+
+  try {
+    const updatedUser = await req.user.update({
+      email,
+      firstName,
+      lastName,
+      experience,
+      profilePic
+    });
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500);
+    next(new Error('Something went wrong'));
+  }
+};
+
 module.exports = {
   getUsers,
   registerUser,
   loginUser,
   getLogin,
   getUser,
-  changeRoleAdmin
+  changeRoleAdmin,
+  editUser
 };
