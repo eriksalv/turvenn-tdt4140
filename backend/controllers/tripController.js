@@ -15,15 +15,21 @@ const getTrips = async (req, res, next) => {
         'difficulty',
         'type',
         'description',
-        'createdAt'
+        'createdAt',
+        [sequelize.fn('AVG', sequelize.col('Participations.rating')), 'averageRating']
       ],
       include: [
         {
           model: User,
           as: 'user',
-          attributes: ['firstName', 'lastName', 'email']
+          attributes: ['id', 'firstName', 'lastName', 'email']
+        },
+        {
+          model: Participation,
+          attributes: []
         }
-      ]
+      ],
+      group: ['Trip.id', 'user.id']
     });
     return res.status(200).json(trips);
   } catch (error) {
@@ -351,15 +357,6 @@ const searchTrip = async (req, res, next) => {
   return res.status(200).json(trips);
 };
 
-const getAverageRatings = async (req, res) => {
-  const participations = await Participation.findAll({
-    attributes: ['tripId', 'rating'],
-    group: 'tripId'
-  });
-
-  return res.status(200).json(participations);
-};
-
 module.exports = {
   getTrips,
   createTrip,
@@ -370,6 +367,5 @@ module.exports = {
   deleteTrip,
   updateTrip,
   searchTrip,
-  getTripsByParticipator,
-  getAverageRatings
+  getTripsByParticipator
 };

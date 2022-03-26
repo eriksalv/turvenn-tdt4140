@@ -10,8 +10,7 @@ const {
   signOff,
   updateTrip,
   deleteTrip,
-  searchTrip,
-  getAverageRatings
+  searchTrip
 } = require('../controllers/tripController');
 
 const router = express.Router();
@@ -47,8 +46,5 @@ router.delete('/:tripId', protect, deleteTrip);
 
 // DELETE /api/trips/:tripId/signup
 router.delete('/:tripId/signup', protect, signOff);
-
-// GET /api/trips
-router.get('/', getAverageRatings);
 
 module.exports = router;

@@ -227,7 +227,7 @@ function ViewTrip() {
               {trip.endDate < today && (
                 <Grid sx={{ marginTop: '10px' }}>
                   <Stack>
-                    {signedUp && participation && participation.rating && (
+                    {signedUp && (
                       // eslint-disable-next-line react/jsx-no-useless-fragment
                       <>
                         <Typography variant="h6" component="h6">
@@ -239,7 +239,9 @@ function ViewTrip() {
                           <Rating
                             name="half-rating"
                             defaultValue={0}
-                            value={participation.rating / 2}
+                            value={
+                              participation && participation.rating ? participation.rating / 2 : 0
+                            }
                             precision={0.5}
                             onChange={onSubmitRating}
                             sx={{ height: '10px' }}
