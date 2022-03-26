@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import Tooltip from '@mui/material/Tooltip';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import Radio from '@mui/material/Radio';
 import TripCard from '../components/TripCard';
 import { getTrips, reset, searchTrip } from '../features/trips/tripSlice';
 
@@ -19,6 +20,7 @@ function Home() {
   });
   const { searchWord, dateStart, dateEnd } = formData;
 
+  const [selectedValue, setSelectedValue] = useState('b');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,6 +46,12 @@ function Home() {
       [e.target.id]: e.target.value
     }));
   };
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+    console.log(selectedValue);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const searchData = { searchWord, dateStart, dateEnd };
@@ -117,6 +125,27 @@ function Home() {
             onChange={onChange}
           />
         </Box>
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center', width: '100%', alignItems: 'center' }}
+        >
+          <Typography sx={{ marginRight: '20px' }}>Sorter på rangering</Typography>
+          <Typography>På</Typography>
+          <Radio
+            checked={selectedValue === 'a'}
+            onChange={handleChange}
+            value="a"
+            name="radio-buttons"
+            inputProps={{ 'aria-label': 'A' }}
+          />
+          <Typography>Av</Typography>
+          <Radio
+            checked={selectedValue === 'b'}
+            onChange={handleChange}
+            value="b"
+            name="radio-buttons"
+            inputProps={{ 'aria-label': 'B' }}
+          />
+        </Box>
       </Box>
       <Box
         sx={{
@@ -129,37 +158,63 @@ function Home() {
           marginTop: '20px'
         }}
       >
-        {[...trips]
-          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-          .reverse()
-          .map((item) => (
-            <div key={item.id}>
-              <Typography sx={{ display: 'inline' }} variant="p">
-                <b>
-                  {item.user.firstName}&nbsp;
-                  {item.user.role === 'commercial' && (
-                    <Tooltip title="Commercial" arrow>
-                      <VerifiedIcon style={{ fontSize: '15px', verticalAlign: 'middle' }} />
-                    </Tooltip>
-                  )}
-                </b>{' '}
-                publiserte en ny tur
-              </Typography>
-              <Typography
-                sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }}
-                variant="p"
-              >
-                <Moment format="Do MMMM YYYY, HH:mm">{item.createdAt}</Moment>
-              </Typography>
-              <TripCard
-                id={item.id}
-                title={item.name}
-                difficulty={item.difficulty}
-                date={item.startDate}
-                key={item.id}
-              />
-            </div>
-          ))}
+        {selectedValue === 'b'
+          ? [...trips]
+              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+              .reverse()
+              .map((item) => (
+                <div key={item.id}>
+                  <Typography sx={{ display: 'inline' }} variant="p">
+                    <b>
+                      {item.user.firstName}&nbsp;
+                      {item.user.role === 'commercial' && (
+                        <Tooltip title="Commercial" arrow>
+                          <VerifiedIcon style={{ fontSize: '15px', verticalAlign: 'middle' }} />
+                        </Tooltip>
+                      )}
+                    </b>{' '}
+                    publiserte en ny tur
+                  </Typography>
+                  <Typography
+                    sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }}
+                    variant="p"
+                  >
+                    <Moment format="Do MMMM YYYY, HH:mm">{item.createdAt}</Moment>
+                  </Typography>
+                  <TripCard
+                    id={item.id}
+                    title={item.name}
+                    difficulty={item.difficulty}
+                    date={item.startDate}
+                    key={item.id}
+                    rating={item.averageRating}
+                  />
+                </div>
+              ))
+          : [...trips]
+              .sort((a, b) => a.averageRating - b.averageRating)
+              .reverse()
+              .map((item) => (
+                <div key={item.id}>
+                  <Typography sx={{ display: 'inline' }} variant="p">
+                    <b>{item.user.firstName}</b> publiserte en ny tur
+                  </Typography>
+                  <Typography
+                    sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }}
+                    variant="p"
+                  >
+                    <Moment format="Do MMMM YYYY, HH:mm">{item.createdAt}</Moment>
+                  </Typography>
+                  <TripCard
+                    id={item.id}
+                    title={item.name}
+                    difficulty={item.difficulty}
+                    date={item.startDate}
+                    key={item.id}
+                    rating={item.averageRating}
+                  />
+                </div>
+              ))}
       </Box>
     </Box>
   );

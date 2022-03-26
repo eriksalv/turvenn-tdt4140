@@ -1,6 +1,6 @@
 const { Op } = require('@sequelize/core');
 const moment = require('moment');
-const { Trip, User } = require('../models');
+const { Trip, User, sequelize, Participation } = require('../models');
 
 const getTrips = async (req, res, next) => {
   try {
@@ -15,15 +15,21 @@ const getTrips = async (req, res, next) => {
         'difficulty',
         'type',
         'description',
-        'createdAt'
+        'createdAt',
+        [sequelize.fn('AVG', sequelize.col('Participations.rating')), 'averageRating']
       ],
       include: [
         {
           model: User,
           as: 'user',
-          attributes: ['firstName', 'lastName', 'email', 'role']
+          attributes: ['id', 'firstName', 'lastName', 'role', 'email']
+        },
+        {
+          model: Participation,
+          attributes: []
         }
-      ]
+      ],
+      group: ['Trip.id', 'user.id']
     });
     return res.status(200).json(trips);
   } catch (error) {
@@ -54,8 +60,16 @@ const getUserTrips = async (req, res, next) => {
         'endDate',
         'difficulty',
         'type',
-        'description'
-      ]
+        'description',
+        [sequelize.fn('AVG', sequelize.col('Participations.rating')), 'averageRating']
+      ],
+      include: [
+        {
+          model: Participation,
+          attributes: []
+        }
+      ],
+      group: ['Trip.id']
     });
 
     return res.status(200).json(trips);
@@ -81,17 +95,6 @@ const getTripsByParticipator = async (req, res, next) => {
 
   try {
     const trips = await Trip.findAll({
-      include: {
-        model: User,
-        as: 'participators',
-        attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
-        through: {
-          attributes: []
-        },
-        where: {
-          id: userId
-        }
-      },
       attributes: [
         'id',
         'name',
@@ -101,8 +104,27 @@ const getTripsByParticipator = async (req, res, next) => {
         'endDate',
         'difficulty',
         'type',
-        'description'
-      ]
+        'description',
+        [sequelize.fn('AVG', sequelize.col('Participations.rating')), 'averageRating']
+      ],
+      include: [
+        {
+          model: User,
+          as: 'participators',
+          attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+          through: {
+            attributes: []
+          },
+          where: {
+            id: userId
+          }
+        },
+        {
+          model: Participation,
+          attributes: []
+        }
+      ],
+      group: ['Trip.id', 'participators.id']
     });
 
     return res.status(200).json(trips);
@@ -338,15 +360,21 @@ const searchTrip = async (req, res) => {
       'difficulty',
       'type',
       'description',
-      'createdAt'
+      'createdAt',
+      [sequelize.fn('AVG', sequelize.col('Participations.rating')), 'averageRating']
     ],
     include: [
       {
         model: User,
         as: 'user',
-        attributes: ['firstName', 'lastName', 'email', 'role']
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role']
+      },
+      {
+        model: Participation,
+        attributes: []
       }
-    ]
+    ],
+    group: ['Trip.id', 'user.id']
   });
   return res.status(200).json(trips);
 };

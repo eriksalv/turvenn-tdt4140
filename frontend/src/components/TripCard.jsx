@@ -3,14 +3,10 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { Rating } from '@mui/material';
 import ButtonBase from '@mui/material/ButtonBase';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import Fab from '@mui/material/Fab';
-// import EditIcon from '@mui/icons-material/Edit';
-
-// import { mdiClock } from '@mdi/js';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -24,6 +20,7 @@ export default function TripCard({
   title,
   difficulty,
   date,
+  rating,
   imagePath = '/assets/defaultHike.jpeg',
   iconPath = '/assets/clock.png'
 }) {
@@ -61,6 +58,14 @@ export default function TripCard({
               <Typography gutterBottom variant="subtitle1" component="div">
                 {title}
               </Typography>
+              <Rating
+                readOnly
+                name="half-rating"
+                defaultValue={0}
+                value={rating / 2}
+                precision={0.5}
+                sx={{ height: '10px' }}
+              />
               <Typography variant="body2" gutterBottom>
                 {difficulty}
               </Typography>
@@ -69,20 +74,6 @@ export default function TripCard({
               </Typography>
             </Grid>
           </Grid>
-          {/* <Grid item>
-            <Fab // Navigerer til både /trips/id/edit og /trips/id, siden hele komponenten også har en onclick, så fjerner dette foreløpig
-              sx={{ mr: 1, mt: '2rem' }}
-              size="small"
-              color="secondary"
-              aria-label="delete"
-              onClick={() => navigate(`/trips/${id}/edit`)}
-            >
-              <EditIcon />
-            </Fab>
-            <Fab sx={{ mt: '2rem' }} size="small" color="primary" aria-label="edit">
-              <DeleteIcon />
-            </Fab> 
-          </Grid> */}
         </Grid>
       </Grid>
     </Paper>

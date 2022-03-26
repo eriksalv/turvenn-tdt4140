@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import LoadingButton from '@mui/material/Button';
-import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -10,9 +8,8 @@ import FormControl from '@mui/material/FormControl';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import Select from '@mui/material/Select';
 import Avatar from '@mui/material/Avatar';
-import { styled } from '@mui/material/styles';
-import { Paper, Button, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-import { useNavigate, Link, useParams } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getUser, editProfile, reset } from '../features/users/userSlice';
 

@@ -178,6 +178,7 @@ function User() {
                 duration={item.duration}
                 date={item.startDate}
                 key={item.id}
+                rating={item.averageRating}
               />
             ))}
           </Box>
@@ -206,6 +207,7 @@ function User() {
                 duration={item.duration}
                 date={item.startDate}
                 key={item.id}
+                rating={item.averageRating}
               />
             ))}
           </Box>
@@ -236,6 +238,7 @@ function User() {
                 duration={item.duration}
                 date={item.startDate}
                 key={item.id}
+                rating={item.averageRating}
               />
             ))}
           </Box>
