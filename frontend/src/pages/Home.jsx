@@ -123,7 +123,9 @@ function Home() {
             onChange={onChange}
           />
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center', width: '100%', alignItems: 'center' }}
+        >
           <Typography sx={{ marginRight: '20px' }}>Sorter på rangering</Typography>
           <Typography>På</Typography>
           <Radio
