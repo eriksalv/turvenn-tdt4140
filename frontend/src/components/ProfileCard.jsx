@@ -16,7 +16,7 @@ const Img = styled('img')({
   maxHeight: '100%'
 });
 
-export default function ProfileCard({ id, name, experience, role, profilePic }) {
+export default function ProfileCard({ id, name, role, profilePic }) {
   const navigate = useNavigate();
 
   return (
@@ -67,9 +67,6 @@ export default function ProfileCard({ id, name, experience, role, profilePic }) 
                     <VerifiedIcon />
                   </Tooltip>
                 )}
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Erfaringsnivå: {experience}
               </Typography>
             </Grid>
           </Grid>

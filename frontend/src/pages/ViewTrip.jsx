@@ -256,13 +256,13 @@ function ViewTrip() {
                         Gjennomsnittlig vurdering
                       </Typography>
 
-                      {participationIsLoading ? (
-                        <LinearProgress sx={{ height: '10px' }} />
-                      ) : (
+                      {!participationIsLoading && participations && participations.ratings ? (
                         <Typography variant="body1" component="h2" sx={{ height: '10px' }}>
                           {participations.averageRating / 2} ({participations.ratings.length}{' '}
                           {participations.ratings.length === 1 ? 'vurdering' : 'vurderinger'})
                         </Typography>
+                      ) : (
+                        <LinearProgress sx={{ height: '10px' }} />
                       )}
                     </Box>
                   </Stack>
