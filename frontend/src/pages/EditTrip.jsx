@@ -17,6 +17,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { getTrip, editTrip, reset } from '../features/trips/tripSlice';
+import Spinner from '../components/Spinner';
 
 function EditTrip() {
   const [formData, setFormData] = useState({
@@ -32,7 +33,9 @@ function EditTrip() {
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { trip, isError, isSuccess, message, status } = useSelector((state) => state.trips);
+  const { trip, isError, isSuccess, message, status, isLoading } = useSelector(
+    (state) => state.trips
+  );
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -117,6 +120,10 @@ function EditTrip() {
   const onChangeType = (e) => {
     setFormData((prevState) => ({ ...prevState, type: e.target.value }));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <main>

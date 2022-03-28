@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { login, reset } from '../features/auth/authSlice';
+import Spinner from '../components/Spinner';
 
 const paperStyle = {
   padding: 20,
@@ -55,8 +56,7 @@ function Login() {
   };
 
   if (isLoading) {
-    // TODO: Erstatt med spinner
-    return <h1>Loading...</h1>;
+    return <Spinner />;
   }
 
   return (

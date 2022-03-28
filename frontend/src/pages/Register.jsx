@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
 import { register, reset } from '../features/auth/authSlice';
 
 function Register() {
@@ -69,7 +70,7 @@ function Register() {
     }
   };
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Spinner />;
 
   return (
     <main>
