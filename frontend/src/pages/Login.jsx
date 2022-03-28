@@ -76,6 +76,7 @@ function Login() {
             label="Email"
             placeholder="Skriv inn Email"
             variant="outlined"
+            value={email}
             onChange={onChange}
             style={inputStyle}
           />
@@ -87,6 +88,7 @@ function Login() {
             id="password"
             label="Passord"
             type="password"
+            value={password}
             style={inputStyle}
             onChange={onChange}
           />
@@ -98,6 +100,7 @@ function Login() {
             id="onSubmit"
             color="success"
             onClick={onSubmit}
+            disabled={!(email && password)}
           >
             Logg inn
           </Button>

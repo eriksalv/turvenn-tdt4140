@@ -125,7 +125,7 @@ function ViewTrip() {
   }, [isError, message, id, logsIsError, participationIsError]);
 
   useEffect(async () => {
-    if (signedUp && !checkingStatus) {
+    if (user && signedUp && !checkingStatus) {
       dispatch(getRating({ tripId: id, userId: user.id }));
     }
   }, [signedUp, checkingStatus, id, user]);

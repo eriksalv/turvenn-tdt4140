@@ -50,7 +50,7 @@ function EditTrip() {
   });
 
   useEffect(() => {
-    if (trip && trip.user.id !== user.id && user.role !== 'admin') {
+    if (trip && user && trip.user.id !== user.id && user.role !== 'admin') {
       toast.error('Du kan bare redigere dine egne turer');
       navigate('/home');
       dispatch(reset());
@@ -146,6 +146,7 @@ function EditTrip() {
                   value={name}
                   margin="normal"
                   onChange={onChange}
+                  error={!name}
                 />
                 <TextField
                   id="goal"
@@ -155,6 +156,7 @@ function EditTrip() {
                   value={goal}
                   margin="normal"
                   onChange={onChange}
+                  error={!goal}
                 />
                 <TextField
                   id="start"
@@ -164,6 +166,7 @@ function EditTrip() {
                   value={start}
                   margin="normal"
                   onChange={onChange}
+                  error={!start}
                 />
                 <TextField
                   id="startDate"
@@ -177,6 +180,7 @@ function EditTrip() {
                     shrink: true
                   }}
                   onChange={onChange}
+                  error={!startDate}
                 />
                 <TextField
                   id="endDate"
@@ -190,6 +194,7 @@ function EditTrip() {
                     shrink: true
                   }}
                   onChange={onChange}
+                  error={!endDate}
                 />
                 <FormControl id="difficulty" fullWidth>
                   <InputLabel>Vanskelighetsgrad</InputLabel>
@@ -257,6 +262,7 @@ function EditTrip() {
               type="submit"
               variant="contained"
               endIcon={<SaveIcon />}
+              disabled={!(name && start && goal && startDate && endDate)}
             >
               Lagre endringer
             </Button>

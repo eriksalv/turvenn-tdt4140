@@ -205,6 +205,7 @@ function CreateTrip() {
               className="btn btn-success"
               type="submit"
               variant="contained"
+              disabled={!(name && start && goal && startDate && endDate)}
             >
               Opprett turarrangement
             </Button>
