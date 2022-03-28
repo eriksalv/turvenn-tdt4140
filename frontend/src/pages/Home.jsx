@@ -10,6 +10,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import Radio from '@mui/material/Radio';
 import TripCard from '../components/TripCard';
 import { getTrips, reset, searchTrip } from '../features/trips/tripSlice';
+import Spinner from '../components/Spinner';
 
 function Home() {
   const { trips, isSuccess, isLoading, isError, message } = useSelector((state) => state.trips);
@@ -37,9 +38,6 @@ function Home() {
     dispatch(getTrips());
   }, [dispatch, isError]);
 
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -57,6 +55,10 @@ function Home() {
     const searchData = { searchWord, dateStart, dateEnd };
     dispatch(searchTrip(searchData));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <Box
@@ -197,7 +199,15 @@ function Home() {
               .map((item) => (
                 <div key={item.id}>
                   <Typography sx={{ display: 'inline' }} variant="p">
-                    <b>{item.user.firstName}</b> publiserte en ny tur
+                    <b>
+                      {item.user.firstName}&nbsp;
+                      {item.user.role === 'commercial' && (
+                        <Tooltip title="Commercial" arrow>
+                          <VerifiedIcon style={{ fontSize: '15px', verticalAlign: 'middle' }} />
+                        </Tooltip>
+                      )}
+                    </b>{' '}
+                    publiserte en ny tur
                   </Typography>
                   <Typography
                     sx={{ display: 'inline', fontSize: 12, color: '#b5b5b5', marginLeft: '5px' }}

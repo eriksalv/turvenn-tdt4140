@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { login, reset } from '../features/auth/authSlice';
+import Spinner from '../components/Spinner';
 
 const paperStyle = {
   padding: 20,
@@ -55,8 +56,7 @@ function Login() {
   };
 
   if (isLoading) {
-    // TODO: Erstatt med spinner
-    return <h1>Loading...</h1>;
+    return <Spinner />;
   }
 
   return (
@@ -76,6 +76,7 @@ function Login() {
             label="Email"
             placeholder="Skriv inn Email"
             variant="outlined"
+            value={email}
             onChange={onChange}
             style={inputStyle}
           />
@@ -87,6 +88,7 @@ function Login() {
             id="password"
             label="Passord"
             type="password"
+            value={password}
             style={inputStyle}
             onChange={onChange}
           />
@@ -98,6 +100,7 @@ function Login() {
             id="onSubmit"
             color="success"
             onClick={onSubmit}
+            disabled={!(email && password)}
           >
             Logg inn
           </Button>

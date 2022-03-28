@@ -16,13 +16,7 @@ const Img = styled('img')({
   maxHeight: '100%'
 });
 
-export default function ProfileCard({
-  id,
-  name,
-  experienceLevel,
-  role,
-  profilepicPath = '/assets/defaultProfilepic.jpeg'
-}) {
+export default function ProfileCard({ id, name, role, profilePic }) {
   const navigate = useNavigate();
 
   return (
@@ -44,7 +38,13 @@ export default function ProfileCard({
       <Grid container spacing={2}>
         <Grid item>
           <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="Profilbilde" src={profilepicPath} /> {/* kan heller bruke avatar fra mui */}
+            <Img
+              alt="Profilbilde"
+              src={
+                (profilePic && `http://localhost:4000/uploads/${profilePic}`) ||
+                '/assets/defaultProfilepic.jpeg'
+              }
+            />
           </ButtonBase>
         </Grid>
         <Grid item xs={12} sm container>
@@ -54,23 +54,20 @@ export default function ProfileCard({
                 gutterBottom
                 variant="subtitle1"
                 component="div"
-                sx={{ display: 'flex', alignItems: 'center'}}
+                sx={{ display: 'flex', alignItems: 'center' }}
               >
                 {name}&nbsp;
                 {role === 'admin' && (
                   <Tooltip title="admin" arrow>
                     <AdminPanelSettingsOutlinedIcon />
-                  </Tooltip> 
+                  </Tooltip>
                 )}
                 {role === 'commercial' && (
                   <Tooltip title="commercial" arrow>
                     <VerifiedIcon />
-                  </Tooltip> 
+                  </Tooltip>
                 )}
               </Typography>
-              {/* <Typography variant="body2" gutterBottom> // Har ikke erfaringsnivå enda
-                Erfaringsnivå: {experienceLevel}
-              </Typography> */}
             </Grid>
           </Grid>
         </Grid>

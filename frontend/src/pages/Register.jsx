@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
 import { register, reset } from '../features/auth/authSlice';
 
 function Register() {
@@ -69,7 +70,7 @@ function Register() {
     }
   };
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Spinner />;
 
   return (
     <main>
@@ -85,6 +86,7 @@ function Register() {
             placeholder="Skriv inn fornavn"
             required
             onChange={onChange}
+            value={firstName}
             fullWidth
             id="firstName"
             style={inputStyle}
@@ -96,6 +98,7 @@ function Register() {
             label="Etternavn"
             placeholder="Skriv inn etternavn"
             variant="outlined"
+            value={lastName}
             onChange={onChange}
             style={inputStyle}
           />
@@ -105,6 +108,7 @@ function Register() {
             placeholder="Skriv inn email"
             required
             onChange={onChange}
+            value={email}
             fullWidth
             id="email"
             style={inputStyle}
@@ -115,6 +119,7 @@ function Register() {
             placeholder="Velg passord"
             required
             onChange={onChange}
+            value={password}
             fullWidth
             id="password"
             style={inputStyle}
@@ -127,6 +132,7 @@ function Register() {
             onChange={onChange}
             fullWidth
             id="confirmedPassword"
+            value={confirmedPassword}
             style={inputStyle}
           />
           <FormGroup>
@@ -143,6 +149,7 @@ function Register() {
             fullWidth
             color="success"
             onClick={onSubmit}
+            disabled={!(firstName && lastName && email && password && confirmedPassword)}
           >
             Registrer deg
           </Button>

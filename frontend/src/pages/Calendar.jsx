@@ -19,6 +19,7 @@ import Room from '@mui/icons-material/Room';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import { getTripsParticipatedIn, reset } from '../features/trips/tripSlice';
+import Spinner from '../components/Spinner';
 
 const PREFIX = 'Demo';
 
@@ -122,7 +123,7 @@ function Calendar() {
   }));
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <Spinner />;
   }
 
   return (

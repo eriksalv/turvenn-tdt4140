@@ -22,7 +22,7 @@ const getTrips = async (req, res, next) => {
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'firstName', 'lastName', 'role', 'email']
+          attributes: ['id', 'firstName', 'lastName', 'role', 'email', 'experience', 'profilePic']
         },
         {
           model: Participation,
@@ -111,7 +111,7 @@ const getTripsByParticipator = async (req, res, next) => {
         {
           model: User,
           as: 'participators',
-          attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+          attributes: ['id', 'firstName', 'lastName', 'email', 'role', 'experience', 'profilePic'],
           through: {
             attributes: []
           },
@@ -155,12 +155,12 @@ const getTrip = async (req, res, next) => {
       {
         model: User,
         as: 'user',
-        attributes: ['id', 'firstName', 'lastName', 'email', 'role']
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role', 'experience', 'profilePic']
       },
       {
         model: User,
         as: 'participators',
-        attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role', 'experience', 'profilePic'],
         through: {
           attributes: []
         }
@@ -367,7 +367,7 @@ const searchTrip = async (req, res) => {
       {
         model: User,
         as: 'user',
-        attributes: ['id', 'firstName', 'lastName', 'email', 'role']
+        attributes: ['id', 'firstName', 'lastName', 'email', 'role', 'experience', 'profilePic']
       },
       {
         model: Participation,

@@ -17,6 +17,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { getTrip, editTrip, reset } from '../features/trips/tripSlice';
+import Spinner from '../components/Spinner';
 
 function EditTrip() {
   const [formData, setFormData] = useState({
@@ -32,7 +33,9 @@ function EditTrip() {
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { trip, isError, isSuccess, message, status } = useSelector((state) => state.trips);
+  const { trip, isError, isSuccess, message, status, isLoading } = useSelector(
+    (state) => state.trips
+  );
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -47,7 +50,7 @@ function EditTrip() {
   });
 
   useEffect(() => {
-    if (trip && trip.user.id !== user.id && user.role !== 'admin') {
+    if (trip && user && trip.user.id !== user.id && user.role !== 'admin') {
       toast.error('Du kan bare redigere dine egne turer');
       navigate('/home');
       dispatch(reset());
@@ -118,6 +121,10 @@ function EditTrip() {
     setFormData((prevState) => ({ ...prevState, type: e.target.value }));
   };
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <main>
       <Grid>
@@ -139,6 +146,7 @@ function EditTrip() {
                   value={name}
                   margin="normal"
                   onChange={onChange}
+                  error={!name}
                 />
                 <TextField
                   id="goal"
@@ -148,6 +156,7 @@ function EditTrip() {
                   value={goal}
                   margin="normal"
                   onChange={onChange}
+                  error={!goal}
                 />
                 <TextField
                   id="start"
@@ -157,6 +166,7 @@ function EditTrip() {
                   value={start}
                   margin="normal"
                   onChange={onChange}
+                  error={!start}
                 />
                 <TextField
                   id="startDate"
@@ -170,6 +180,7 @@ function EditTrip() {
                     shrink: true
                   }}
                   onChange={onChange}
+                  error={!startDate}
                 />
                 <TextField
                   id="endDate"
@@ -183,6 +194,7 @@ function EditTrip() {
                     shrink: true
                   }}
                   onChange={onChange}
+                  error={!endDate}
                 />
                 <FormControl id="difficulty" fullWidth>
                   <InputLabel>Vanskelighetsgrad</InputLabel>
@@ -250,6 +262,7 @@ function EditTrip() {
               type="submit"
               variant="contained"
               endIcon={<SaveIcon />}
+              disabled={!(name && start && goal && startDate && endDate)}
             >
               Lagre endringer
             </Button>
