@@ -384,7 +384,11 @@ function ViewTrip() {
                     <Avatar
                       sx={{ height: 50, width: 50, float: 'left', marginRight: '10px' }}
                       alt="profilbilde"
-                      src="../Turvenn-logo.png"
+                      src={
+                        (trip.user.profilePic &&
+                          `http://localhost:4000/uploads/${trip.user.profilePic}`) ||
+                        '../assets/Turvenn-2.png'
+                      }
                     />
                     <Box sx={{ display: 'inline' }}>
                       <Typography variant="h6" component="h6">
@@ -618,6 +622,8 @@ function ViewTrip() {
                     name={`${item.firstName} ${item.lastName}`}
                     role={item.role}
                     key={item.id}
+                    experience={item.experience}
+                    profilePic={item.profilePic}
                   />
                 ))
               ) : (

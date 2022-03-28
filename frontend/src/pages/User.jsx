@@ -100,7 +100,8 @@ function User() {
           flexDirection: 'row',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginBottom: '20px'
         }}
       >
         <Avatar
@@ -186,7 +187,7 @@ function User() {
       )}
       {!!pastTrips.length && (
         <>
-          <Divider sx={{ width: '100%', mt: 2 }}>
+          <Divider sx={{ width: '100%' }}>
             <Chip label="Turhistorikk" />
           </Divider>
           <Box
@@ -217,7 +218,7 @@ function User() {
       )}
       {!!userTrips.length && (
         <>
-          <Divider sx={{ width: '100%', paddingTop: '10px' }}>
+          <Divider sx={{ width: '100%' }}>
             <Chip label="Dine turer" />
           </Divider>
           <Box
